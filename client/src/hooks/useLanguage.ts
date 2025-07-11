@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 
-export type Language = 'ko' | 'en';
+export type Language = 'ko' | 'en' | 'ja' | 'zh';
 
 interface LanguageText {
   ko: string;
   en: string;
+  ja?: string;
+  zh?: string;
 }
 
 export function useLanguage() {
@@ -18,12 +20,19 @@ export function useLanguage() {
   }, []);
 
   const toggleLanguage = () => {
-    const newLanguage: Language = language === 'ko' ? 'en' : 'ko';
+    const languages: Language[] = ['ko', 'en', 'ja', 'zh'];
+    const currentIndex = languages.indexOf(language);
+    const newLanguage = languages[(currentIndex + 1) % languages.length];
     setLanguage(newLanguage);
     localStorage.setItem('language', newLanguage);
   };
 
-  const t = (text: LanguageText) => text[language];
+  const setSpecificLanguage = (lang: Language) => {
+    setLanguage(lang);
+    localStorage.setItem('language', lang);
+  };
 
-  return { language, toggleLanguage, t };
+  const t = (text: LanguageText) => text[language] || text.ko;
+
+  return { language, toggleLanguage, setSpecificLanguage, t };
 }
