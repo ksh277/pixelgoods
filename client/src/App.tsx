@@ -10,6 +10,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Products from "@/pages/Products";
 import ProductDetail from "@/pages/ProductDetail";
+import CategoryPage from "@/pages/CategoryPage";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Cart from "@/pages/Cart";
@@ -23,6 +24,11 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/products" component={Products} />
       <Route path="/product/:id" component={ProductDetail} />
+      
+      {/* Category routes */}
+      <Route path="/category/:category/:subcategory" component={CategoryPage} />
+      <Route path="/category/:category" component={CategoryPage} />
+      
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/cart" component={Cart} />
