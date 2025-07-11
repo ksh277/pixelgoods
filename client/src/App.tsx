@@ -45,6 +45,7 @@ function Router() {
       <Route path="/community/question" component={CommunityQuestion} />
       <Route path="/editor" component={Editor} />
       <Route path="/inquiry" component={Inquiry} />
+      <Route path="/support" component={Inquiry} />
       
       {/* Category and section routes */}
       <Route path="/popular" component={Products} />
