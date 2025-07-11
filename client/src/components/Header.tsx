@@ -93,6 +93,9 @@ export function Header() {
               <Link href="/community" className="text-foreground hover:text-muted-foreground transition-colors font-medium">
                 {t({ ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" })}
               </Link>
+              <Link href="/editor" className="text-foreground hover:text-muted-foreground transition-colors font-medium">
+                {t({ ko: "굿즈 에디터", en: "Goods Editor", ja: "グッズエディタ", zh: "商品编辑器" })}
+              </Link>
             </div>
 
             {/* Desktop Navigation */}
@@ -182,6 +185,9 @@ export function Header() {
                     </Link>
                     <Link href="/community" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
                       {t({ ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" })}
+                    </Link>
+                    <Link href="/editor" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
+                      {t({ ko: "굿즈 에디터", en: "Goods Editor", ja: "グッズエディタ", zh: "商品编辑器" })}
                     </Link>
                   </div>
 

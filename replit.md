@@ -149,3 +149,27 @@ Preferred communication style: Simple, everyday language.
 - **Grid System**: 4-column product grids as per Korean e-commerce standards
 - **Language Toggle**: Complete Korean/English internationalization
 - **Performance**: Lazy loading, staggered animations, and optimized rendering
+
+## Recent Changes
+
+### 2025-01-11: Advanced Web Editor Implementation
+- **Comprehensive Goods Editor**: Built full-featured web editor for custom goods customization
+- **Product Selection System**: Interactive product type selector with 8 different goods categories
+- **Professional Canvas Editor**: Desktop-optimized editing interface with left sidebar controls
+- **Advanced Customization Features**:
+  - Image upload and manipulation (drag, resize, rotate)
+  - Size control (width × height in mm)
+  - Ring position and size settings
+  - White area adjustment with slider
+  - Double-sided editing capability
+  - Background removal functionality
+- **Korean Design Patterns**: Clean gray background, professional icons, Korean/English/Japanese/Chinese support
+- **Responsive Design**: Desktop-first with mobile-optimized views
+- **Complete UI Components**: Added Radix UI Slider, Dialog, Select components
+- **Navigation Integration**: Added "굿즈 에디터" to main navigation and mobile menu
+- **Editor Features**:
+  - Product types: 키링, 스탠드, 코롯토, 포카홀더, 스마트톡, 뱃지, 자석/문구류, 카라비너
+  - Canvas tools: Upload, move, resize, delete, save, PDF export
+  - Professional toolbar with ring positioning and size controls
+  - Help system with production guidelines
+  - Fixed editor button on all pages
