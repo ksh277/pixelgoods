@@ -13,16 +13,34 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/useLanguage";
 import type { Product, Category } from "@shared/schema";
 
 export default function Products() {
   const [location, setLocation] = useLocation();
   const { toast } = useToast();
+  const { language, t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000]);
   const [sortBy, setSortBy] = useState<string>("popular");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  
+  // Get page title based on current route
+  const getPageTitle = () => {
+    switch (location) {
+      case "/popular": return { ko: "인기상품", en: "Popular Items" };
+      case "/new": return { ko: "신상품", en: "New Arrivals" };
+      case "/trending": return { ko: "인기급상승", en: "Trending Now" };
+      case "/picks": return { ko: "올댓추천", en: "Staff Picks" };
+      case "/material": return { ko: "자재별 추천", en: "Material Recommendations" };
+      case "/brand": return { ko: "브랜드 굿즈", en: "Brand Custom Goods" };
+      case "/benefits": return { ko: "고객 혜택", en: "Customer Benefits" };
+      default: return { ko: "전체 상품", en: "All Products" };
+    }
+  };
+
+  const pageTitle = getPageTitle();
 
   const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ["/api/categories"],
@@ -75,10 +93,10 @@ export default function Products() {
       <div className="bg-muted/50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            커스텀 제품
+            {t(pageTitle)}
           </h1>
           <p className="text-lg text-muted-foreground">
-            나만의 디자인으로 특별한 굿즈를 만들어보세요
+            {t({ ko: "나만의 디자인으로 특별한 굿즈를 만들어보세요", en: "Create special custom goods with your own design" })}
           </p>
         </div>
       </div>

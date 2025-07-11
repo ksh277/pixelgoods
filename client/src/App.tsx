@@ -25,6 +25,18 @@ function Router() {
       <Route path="/register" component={Register} />
       <Route path="/cart" component={Cart} />
       <Route path="/community" component={Community} />
+      
+      {/* Category and section routes */}
+      <Route path="/popular" component={Products} />
+      <Route path="/new" component={Products} />
+      <Route path="/reviews" component={Community} />
+      <Route path="/showcase" component={Community} />
+      <Route path="/material" component={Products} />
+      <Route path="/trending" component={Products} />
+      <Route path="/picks" component={Products} />
+      <Route path="/brand" component={Products} />
+      <Route path="/benefits" component={Products} />
+      
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
