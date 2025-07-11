@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Heart, MessageCircle, ChevronLeft, ChevronRight, User, Star, TrendingUp } from "lucide-react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -154,48 +155,54 @@ export default function Community() {
                       {bestContent
                         .slice(slideIndex * itemsPerView, (slideIndex + 1) * itemsPerView)
                         .map((item) => (
-                          <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
-                            <div className="relative aspect-square">
-                              <img
-                                src={item.image}
-                                alt={item.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              />
-                              <Badge className="absolute top-3 left-3 bg-orange-500 text-white font-bold text-xs px-2 py-1">
-                                BEST
-                              </Badge>
-                              <div className="absolute top-3 right-3 bg-black/60 text-white px-2 py-1 rounded text-xs">
-                                {item.category}
-                              </div>
-                            </div>
-                            <CardContent className="p-4">
-                              <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
-                                {item.title}
-                              </h3>
-                              <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                                {item.description}
-                              </p>
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                                  <User className="h-4 w-4" />
-                                  <span>{item.author}</span>
+                          <Link key={item.id} href={`/reviews/${item.id}`}>
+                            <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer">
+                              <div className="relative aspect-square">
+                                <img
+                                  src={item.image}
+                                  alt={item.title}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <Badge className="absolute top-3 left-3 bg-orange-500 text-white font-bold text-xs px-2 py-1">
+                                  BEST
+                                </Badge>
+                                <div className="absolute top-3 right-3 bg-black/60 text-white px-2 py-1 rounded text-xs">
+                                  {item.category}
                                 </div>
-                                <div className="flex items-center space-x-4">
-                                  <button
-                                    onClick={() => handleLike(item.id)}
-                                    className="flex items-center space-x-1 text-muted-foreground hover:text-red-500 transition-colors"
-                                  >
-                                    <Heart className="h-4 w-4" />
-                                    <span className="text-sm">{item.likes}</span>
-                                  </button>
-                                  <div className="flex items-center space-x-1 text-muted-foreground">
-                                    <MessageCircle className="h-4 w-4" />
-                                    <span className="text-sm">{item.comments}</span>
+                              </div>
+                              <CardContent className="p-4">
+                                <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+                                  {item.title}
+                                </h3>
+                                <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                                  {item.description}
+                                </p>
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                                    <User className="h-4 w-4" />
+                                    <span>{item.author}</span>
+                                  </div>
+                                  <div className="flex items-center space-x-4">
+                                    <button
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleLike(item.id);
+                                      }}
+                                      className="flex items-center space-x-1 text-muted-foreground hover:text-red-500 transition-colors"
+                                    >
+                                      <Heart className="h-4 w-4" />
+                                      <span className="text-sm">{item.likes}</span>
+                                    </button>
+                                    <div className="flex items-center space-x-1 text-muted-foreground">
+                                      <MessageCircle className="h-4 w-4" />
+                                      <span className="text-sm">{item.comments}</span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </CardContent>
-                          </Card>
+                              </CardContent>
+                            </Card>
+                          </Link>
                         ))}
                     </div>
                   </div>
@@ -289,42 +296,48 @@ export default function Community() {
           ) : posts && posts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {posts.slice(0, 4).map((post: CommunityPost) => (
-                <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow group">
-                  <div className="aspect-square bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
-                    <img 
-                      src="/api/placeholder/300/300" 
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                      {post.content}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                        <User className="h-4 w-4" />
-                        <span>익명***</span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <button
-                          onClick={() => handleLike(post.id)}
-                          className="flex items-center space-x-1 text-muted-foreground hover:text-red-500 transition-colors"
-                        >
-                          <Heart className="h-4 w-4" />
-                          <span className="text-sm">{post.likes}</span>
-                        </button>
-                        <div className="flex items-center space-x-1 text-muted-foreground">
-                          <MessageCircle className="h-4 w-4" />
-                          <span className="text-sm">0</span>
+                <Link key={post.id} href={`/reviews/${post.id}`}>
+                  <Card className="overflow-hidden hover:shadow-lg transition-shadow group cursor-pointer">
+                    <div className="aspect-square bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
+                      <img 
+                        src="/api/placeholder/300/300" 
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <CardContent className="p-4">
+                      <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                        {post.content}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                          <User className="h-4 w-4" />
+                          <span>익명***</span>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleLike(post.id);
+                            }}
+                            className="flex items-center space-x-1 text-muted-foreground hover:text-red-500 transition-colors"
+                          >
+                            <Heart className="h-4 w-4" />
+                            <span className="text-sm">{post.likes}</span>
+                          </button>
+                          <div className="flex items-center space-x-1 text-muted-foreground">
+                            <MessageCircle className="h-4 w-4" />
+                            <span className="text-sm">0</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
           ) : (

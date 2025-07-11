@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Heart, ShoppingCart, Star, Eye } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,29 +26,34 @@ export function ProductCard({
   const [isLiked, setIsLiked] = useState(isFavorite);
   const { language, t } = useLanguage();
 
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsLiked(!isLiked);
     setLikes(prev => isLiked ? prev - 1 : prev + 1);
     onToggleFavorite?.(product);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onAddToCart?.(product);
   };
 
   const formattedPrice = parseInt(product.basePrice).toLocaleString();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      className="h-full"
-    >
-      <Card className="group cursor-pointer overflow-hidden hover-lift bg-white shadow-sm border border-gray-200 h-full flex flex-col">
-        <div className="relative">
+    <Link href={`/product/${product.id}`} className="block h-full">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        className="h-full"
+      >
+        <Card className="group cursor-pointer overflow-hidden hover-lift bg-white shadow-sm border border-gray-200 h-full flex flex-col">
+          <div className="relative">
           <motion.div className="aspect-[3/4] bg-gray-100 overflow-hidden">
             <motion.img
               src={product.imageUrl}
@@ -158,7 +164,8 @@ export function ProductCard({
             </Button>
           </div>
         </CardContent>
-      </Card>
-    </motion.div>
+        </Card>
+      </motion.div>
+    </Link>
   );
 }

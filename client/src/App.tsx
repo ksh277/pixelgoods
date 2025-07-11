@@ -17,6 +17,7 @@ import Cart from "@/pages/Cart";
 import Community from "@/pages/Community";
 import Editor from "@/pages/Editor";
 import Inquiry from "@/pages/Inquiry";
+import ReviewDetail from "@/pages/ReviewDetail";
 
 function Router() {
   return (
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/register" component={Register} />
       <Route path="/cart" component={Cart} />
       <Route path="/community" component={Community} />
+      <Route path="/reviews/:id" component={ReviewDetail} />
       <Route path="/editor" component={Editor} />
       <Route path="/inquiry" component={Inquiry} />
       
