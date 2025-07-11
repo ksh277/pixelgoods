@@ -312,59 +312,75 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <SectionHeader
-            emoji="🤗"
-            title={{ ko: "창작자들의 소중한 리뷰", en: "Precious Reviews from Creators" }}
-            subtitle={{ ko: "실제 창작자들이 남긴 생생한 후기를 확인해보세요", en: "Check out vivid reviews from real creators" }}
-            seeMoreLink="/reviews"
-          />
+          {/* Mobile-Optimized Section Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">🤗</span>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                  {t({ ko: "창작자들의 소중한 리뷰", en: "Precious Reviews from Creators" })}
+                </h2>
+                <p className="text-sm text-muted-foreground hidden sm:block">
+                  {t({ ko: "실제 창작자들이 남긴 생생한 후기를 확인해보세요", en: "Check out vivid reviews from real creators" })}
+                </p>
+              </div>
+            </div>
+            <Link href="/reviews">
+              <Button variant="ghost" size="sm" className="text-primary">
+                {t({ ko: "더보기", en: "View More" })} <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </Link>
+          </div>
+
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
             variants={containerVariants}
           >
             {creatorReviews.map((review) => (
               <motion.div key={review.id} variants={itemVariants}>
-                <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="relative">
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
+                  <div className="relative aspect-square">
+                    {/* HOT Badge */}
+                    <div className="absolute top-2 left-2 z-10">
+                      <Badge className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        HOT
+                      </Badge>
+                    </div>
+                    
                     <img
                       src={review.productImage}
                       alt={review.productName}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
                     />
+                    
                     <div className="absolute top-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-xs">
                       {review.reviewCount}개 리뷰
                     </div>
                   </div>
-                  <CardContent className="p-4">
-                    <div className="flex items-center mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`h-4 w-4 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                        />
-                      ))}
-                      <span className="ml-2 text-sm text-muted-foreground">{review.date}</span>
-                    </div>
-                    <h3 className="font-semibold text-foreground mb-2">
-                      {review.productName}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                      {review.comment}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-foreground">
-                        {review.userName}
-                      </span>
-                      <div className="flex flex-wrap gap-1">
-                        {review.tags.slice(0, 2).map((tag, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">
-                            #{tag}
-                          </Badge>
+                  
+                  <div className="p-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center mb-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                          />
                         ))}
                       </div>
+                      <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
+                        {review.productName}
+                      </h3>
+                      <p className="text-xs text-gray-600 line-clamp-1">
+                        {review.comment}
+                      </p>
+                      <div className="text-xs text-gray-500">
+                        {review.userName} • {review.date}
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -377,60 +393,78 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="flex items-center justify-between mb-8">
-            <SectionHeader
-              emoji="🔥"
-              title={{ ko: "굿즈 자랑 커뮤니티", en: "Goods Showcase Community" }}
-              subtitle={{ ko: "멋진 굿즈들을 자랑해보세요", en: "Show off your amazing goods" }}
-            />
-            <Button variant="outline" size="sm">
-              {t({ ko: "더보기", en: "More" })}
-              <ArrowRight className="h-4 w-4 ml-1" />
-            </Button>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">🔥</span>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                  {t({ ko: "굿즈 자랑 커뮤니티", en: "Goods Showcase Community" })}
+                </h2>
+                <p className="text-sm text-muted-foreground hidden sm:block">
+                  {t({ ko: "멋진 굿즈들을 자랑해보세요", en: "Show off your amazing goods" })}
+                </p>
+              </div>
+            </div>
+            <Link href="/community">
+              <Button variant="ghost" size="sm" className="text-primary">
+                {t({ ko: "더보기", en: "View More" })} <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </Link>
           </div>
+
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
             variants={containerVariants}
           >
             {communityShowcase.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
-                <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
                   <div className="relative aspect-square">
+                    <div className="absolute top-2 left-2 z-10">
+                      <Badge className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        인기
+                      </Badge>
+                    </div>
+                    
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
-                      {item.title}
-                    </h3>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm text-muted-foreground">
-                        {item.author}
-                      </span>
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-1">
-                          <Heart className="h-4 w-4 text-red-500" />
-                          <span className="text-sm">{item.likes}</span>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <Heart className="h-3 w-3 text-red-400" />
+                          <span className="text-xs">{item.likes}</span>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <MessageCircle className="h-4 w-4 text-blue-500" />
-                          <span className="text-sm">{item.comments}</span>
+                        <div className="flex items-center space-x-2">
+                          <MessageCircle className="h-3 w-3 text-blue-400" />
+                          <span className="text-xs">{item.comments}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-1">
-                      {item.tags.map((tag, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">
-                          #{tag}
-                        </Badge>
-                      ))}
+                  </div>
+                  
+                  <div className="p-3">
+                    <div className="space-y-1">
+                      <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
+                        {item.title}
+                      </h3>
+                      <div className="text-xs text-gray-500">
+                        {item.author}
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {item.tags.slice(0, 2).map((tag, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">
+                            #{tag}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -443,71 +477,83 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <SectionHeader
-            emoji="✨"
-            title={{ ko: "자재별 추천", en: "Material-Based Recommendations" }}
-            subtitle={{ ko: "원하는 재질의 완벽한 굿즈를 찾아보세요", en: "Find perfect goods with your desired materials" }}
-            seeMoreLink="/products"
-          />
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">✨</span>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                  {t({ ko: "자재별 추천", en: "Material-Based Recommendations" })}
+                </h2>
+                <p className="text-sm text-muted-foreground hidden sm:block">
+                  {t({ ko: "원하는 재질의 완벽한 굿즈를 찾아보세요", en: "Find perfect goods with your desired materials" })}
+                </p>
+              </div>
+            </div>
+            <Link href="/products">
+              <Button variant="ghost" size="sm" className="text-primary">
+                {t({ ko: "더보기", en: "View More" })} <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </Link>
+          </div>
+
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
             variants={containerVariants}
           >
             {materialRecommendations.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
-                <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
                   <div className="relative aspect-square">
+                    <Badge className={`absolute top-2 left-2 z-10 ${
+                      item.badge === 'HIT' ? 'bg-red-500' : 
+                      item.badge === 'NEW' ? 'bg-green-500' : 'bg-orange-500'
+                    } text-white text-xs font-bold px-2 py-1 rounded`}>
+                      {item.badge}
+                    </Badge>
+                    
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
                     />
-                    <Badge className={`absolute top-2 left-2 ${
-                      item.badge === 'HIT' ? 'bg-red-500' : 
-                      item.badge === 'NEW' ? 'bg-green-500' : 'bg-orange-500'
-                    } text-white`}>
-                      {item.badge}
-                    </Badge>
+                    
+                    {/* Heart Button - Top Right */}
+                    <button className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors">
+                      <Heart className="w-3 h-3 text-gray-600" />
+                    </button>
+                    
                     {item.discount > 0 && (
-                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+                      <div className="absolute top-10 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
                         -{item.discount}%
                       </div>
                     )}
                   </div>
-                  <CardContent className="p-4">
-                    <div className="mb-2">
-                      <Badge variant="outline" className="text-xs mb-2">
+                  
+                  <div className="p-3">
+                    <div className="space-y-1">
+                      <Badge variant="outline" className="text-xs mb-1">
                         {item.material}
                       </Badge>
-                    </div>
-                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
-                      {item.title}
-                    </h3>
-                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
+                        {item.title}
+                      </h3>
                       <div className="flex items-center space-x-2">
-                        <span className="text-lg font-bold text-foreground">
-                          ₩{item.price.toLocaleString()}
+                        <span className="text-sm font-medium text-gray-900">
+                          {item.price.toLocaleString()} won
                         </span>
                         {item.originalPrice && (
-                          <span className="text-sm text-muted-foreground line-through">
-                            ₩{item.originalPrice.toLocaleString()}
+                          <span className="text-xs text-gray-500 line-through">
+                            {item.originalPrice.toLocaleString()}
                           </span>
                         )}
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-1">
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm text-muted-foreground">
-                          리뷰 {item.reviewCount}개
-                        </span>
+                      <div className="text-xs text-gray-500">
+                        {t({ ko: "리뷰", en: "Reviews" })} {item.reviewCount}개
                       </div>
-                      <Button size="sm" variant="outline">
-                        <ShoppingCart className="h-4 w-4" />
-                      </Button>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -520,13 +566,22 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <SectionHeader
-            emoji="📸"
-            title={{ ko: "인스타그램 피드", en: "Instagram Feed" }}
-            subtitle={{ ko: "@allthatprinting_ 최신 소식을 확인해보세요", en: "Check out the latest from @allthatprinting_" }}
-          />
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">📸</span>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                  {t({ ko: "인스타그램 피드", en: "Instagram Feed" })}
+                </h2>
+                <p className="text-sm text-muted-foreground hidden sm:block">
+                  {t({ ko: "@allthatprinting_ 최신 소식을 확인해보세요", en: "Check out the latest from @allthatprinting_" })}
+                </p>
+              </div>
+            </div>
+          </div>
+
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4"
             variants={containerVariants}
           >
             {instagramFeed.map((post) => (
@@ -535,18 +590,19 @@ export default function Home() {
                   <img
                     src={post.image}
                     alt={`Instagram post ${post.id}`}
-                    className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover rounded-lg"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors rounded-lg" />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="flex items-center space-x-4 text-white">
                       <div className="flex items-center space-x-1">
-                        <Heart className="h-5 w-5" />
-                        <span className="font-medium">{post.likes}</span>
+                        <Heart className="h-4 w-4" />
+                        <span className="text-sm font-medium">{post.likes}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <MessageCircle className="h-5 w-5" />
-                        <span className="font-medium">{post.comments}</span>
+                        <MessageCircle className="h-4 w-4" />
+                        <span className="text-sm font-medium">{post.comments}</span>
                       </div>
                     </div>
                   </div>

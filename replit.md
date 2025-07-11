@@ -152,6 +152,25 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+### 2025-01-11: Complete Mobile-First Korean E-commerce Layout
+- **Universal Mobile-First Design**: All homepage product sections now use 2-column mobile layout (grid-cols-2)
+- **Responsive Grid System**: 2-column mobile → 3-column tablet → 4-column desktop progression
+- **Korean E-commerce Card Pattern**: Applied to all sections (Popular Products, Creator Reviews, Community Showcase, Material Recommendations, Instagram Feed)
+- **Consistent Design Elements**:
+  - HOT/인기 badges in top-left corner with section-specific colors
+  - Heart icons in top-right corner for favoriting
+  - Clean white cards with subtle shadows and rounded corners
+  - Korean typography with proper sizing (14px bold titles, 13px prices)
+  - "won" format pricing display
+  - Review counts in lighter gray
+- **Section-Specific Enhancements**:
+  - Creator Reviews: Blue HOT badges, star ratings, review counts
+  - Community Showcase: Green 인기 badges, interaction stats overlay
+  - Material Recommendations: Badge color coding (HIT/NEW/SALE), material tags
+  - Instagram Feed: Hover interaction stats, clean grid layout
+- **Mobile CSS Optimization**: Added Korean e-commerce specific mobile styling classes
+- **Performance**: Lazy loading images, optimized touch targets, smooth hover transitions
+
 ### 2025-01-11: Advanced Web Editor Implementation
 - **Comprehensive Goods Editor**: Built full-featured web editor for custom goods customization
 - **Product Selection System**: Interactive product type selector with 8 different goods categories
