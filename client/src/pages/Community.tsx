@@ -22,11 +22,11 @@ export default function Community() {
 
   // Navigation menu items
   const navItems = [
-    { id: 'showcase', label: { ko: "내가만든거보여줄게", en: "Show My Creation" }, active: true },
-    { id: 'design', label: { ko: "도안공유", en: "Design Share" }, active: false },
-    { id: 'qa', label: { ko: "궁금햄물어바", en: "Q&A" }, active: false },
-    { id: 'events', label: { ko: "도전!행사/공모전", en: "Events/Contest" }, active: false },
-    { id: 'notes', label: { ko: "올댓노트", en: "AllThat Notes" }, active: false },
+    { id: 'showcase', label: { ko: "내가만든거보여줄게", en: "Show My Creation" }, active: true, href: '/community' },
+    { id: 'design', label: { ko: "도안공유", en: "Design Share" }, active: false, href: '/community/share' },
+    { id: 'qa', label: { ko: "궁금햄물어바", en: "Q&A" }, active: false, href: '/community/question' },
+    { id: 'events', label: { ko: "도전!행사/공모전", en: "Events/Contest" }, active: false, href: '/events' },
+    { id: 'notes', label: { ko: "올댓노트", en: "AllThat Notes" }, active: false, href: '/resources' },
   ];
 
   // Mock best content data
@@ -112,8 +112,9 @@ export default function Community() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center space-x-8 py-4 overflow-x-auto">
             {navItems.map((item) => (
-              <button
+              <Link
                 key={item.id}
+                href={item.href}
                 className={`whitespace-nowrap text-sm font-medium transition-colors pb-2 border-b-2 ${
                   item.active
                     ? 'text-foreground border-orange-500'
@@ -121,7 +122,7 @@ export default function Community() {
                 }`}
               >
                 {t(item.label)}
-              </button>
+              </Link>
             ))}
           </nav>
         </div>

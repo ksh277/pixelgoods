@@ -18,6 +18,10 @@ import Community from "@/pages/Community";
 import Editor from "@/pages/Editor";
 import Inquiry from "@/pages/Inquiry";
 import ReviewDetail from "@/pages/ReviewDetail";
+import Resources from "@/pages/Resources";
+import Events from "@/pages/Events";
+import CommunityShare from "@/pages/CommunityShare";
+import CommunityQuestion from "@/pages/CommunityQuestion";
 
 function Router() {
   return (
@@ -35,6 +39,10 @@ function Router() {
       <Route path="/cart" component={Cart} />
       <Route path="/community" component={Community} />
       <Route path="/reviews/:id" component={ReviewDetail} />
+      <Route path="/resources" component={Resources} />
+      <Route path="/events" component={Events} />
+      <Route path="/community/share" component={CommunityShare} />
+      <Route path="/community/question" component={CommunityQuestion} />
       <Route path="/editor" component={Editor} />
       <Route path="/inquiry" component={Inquiry} />
       
