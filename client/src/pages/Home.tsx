@@ -210,71 +210,95 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <SectionHeader
-            emoji="🔥"
-            title={{ ko: "인기상품", en: "Popular Items" }}
-            subtitle={{ ko: "지금 가장 핫한 아이템들을 만나보세요", en: "Meet the hottest items right now" }}
-            seeMoreLink="/products"
-          />
+          {/* Mobile-Optimized Section Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">🔥</span>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                  {t({ ko: "인기상품", en: "Popular Items" })}
+                </h2>
+                <p className="text-sm text-muted-foreground hidden sm:block">
+                  {t({ ko: "지금 가장 핫한 아이템들을 만나보세요", en: "Meet the hottest items right now" })}
+                </p>
+              </div>
+            </div>
+            <Link href="/products">
+              <Button variant="ghost" size="sm" className="text-primary">
+                {t({ ko: "더보기", en: "View More" })} <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </Link>
+          </div>
+
+          {/* Mobile-First 2-Column Product Grid */}
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
             variants={containerVariants}
           >
             {isLoading ? (
               Array.from({ length: 4 }).map((_, i) => (
                 <motion.div key={i} variants={itemVariants}>
-                  <Card className="overflow-hidden">
-                    <div className="aspect-square bg-muted animate-pulse" />
-                    <CardContent className="p-4">
+                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
+                    <div className="aspect-square bg-gray-200 animate-pulse" />
+                    <div className="p-3">
                       <div className="space-y-2">
-                        <div className="h-4 bg-muted animate-pulse rounded" />
-                        <div className="h-4 bg-muted animate-pulse rounded w-2/3" />
+                        <div className="h-4 bg-gray-200 animate-pulse rounded" />
+                        <div className="h-3 bg-gray-200 animate-pulse rounded w-2/3" />
+                        <div className="h-2 bg-gray-200 animate-pulse rounded w-1/2" />
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </motion.div>
               ))
             ) : (
               products?.slice(0, 4).map((product: Product) => (
                 <motion.div key={product.id} variants={itemVariants}>
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
+                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
                     <div className="relative aspect-square">
+                      {/* HOT Badge - Top Left */}
+                      <div className="absolute top-2 left-2 z-10">
+                        <Badge className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                          HOT
+                        </Badge>
+                      </div>
+                      
+                      {/* Product Image */}
                       <img
                         src="/api/placeholder/300/300"
                         alt={product.nameKo || product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+                        }}
                       />
-                      <Badge className="absolute top-2 left-2 bg-red-500 text-white">
-                        HOT
-                      </Badge>
+                      
+                      {/* Like Button - Top Right */}
+                      <button
+                        onClick={() => handleToggleFavorite(product)}
+                        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors"
+                      >
+                        <Heart 
+                          className={`w-3 h-3 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+                        />
+                      </button>
                     </div>
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
-                        {product.nameKo || product.name}
-                      </h3>
-                      <div className="flex items-center justify-between">
-                        <span className="text-lg font-bold text-foreground">
-                          ₩{product.price?.toLocaleString() || 0}
-                        </span>
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => handleToggleFavorite(product)}
-                            className="p-1 hover:bg-muted rounded"
-                          >
-                            <Heart 
-                              className={`h-4 w-4 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
-                            />
-                          </button>
-                          <button
-                            onClick={() => handleAddToCart(product)}
-                            className="p-1 hover:bg-muted rounded"
-                          >
-                            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
-                          </button>
+                    
+                    {/* Product Info */}
+                    <div className="p-3">
+                      <div className="space-y-1">
+                        <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
+                          {product.nameKo || product.name}
+                        </h3>
+                        <div className="text-sm font-medium text-gray-900">
+                          {parseInt(product.basePrice).toLocaleString()} won
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {t({ ko: "리뷰", en: "Reviews" })} {Math.floor(Math.random() * 10000) + 1000}
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </motion.div>
               ))
             )}
