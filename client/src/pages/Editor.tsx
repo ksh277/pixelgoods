@@ -22,7 +22,9 @@ import {
   RotateCcw,
   Scissors,
   HelpCircle,
-  Settings
+  Settings,
+  MessageCircle,
+  Puzzle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -266,14 +268,38 @@ export default function Editor() {
           </DialogContent>
         </Dialog>
 
-        {/* Fixed Editor Button */}
-        <div className="fixed bottom-6 right-6">
+        {/* Fixed Floating Buttons */}
+        <div className="fixed bottom-6 right-6 flex flex-col items-end space-y-4 z-50">
+          {/* Inquiry Button (Top) */}
+          <Button
+            variant="outline"
+            size="lg"
+            className="bg-white hover:bg-gray-50 text-gray-700 shadow-lg border border-gray-200 rounded-full px-4 sm:px-6 py-3 flex items-center space-x-2 transition-all hover:shadow-xl"
+            onClick={() => {
+              // Navigate to inquiry or chat
+              window.open('/inquiry', '_blank');
+            }}
+          >
+            <div className="flex items-center space-x-2">
+              <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
+              <span className="font-medium text-xs sm:text-sm">
+                {t({ ko: '문의하기', en: 'Inquiry', ja: 'お問い合わせ', zh: '咨询' })}
+              </span>
+            </div>
+          </Button>
+
+          {/* Editor Button (Bottom) */}
           <Button
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+            className="bg-black hover:bg-gray-800 text-white shadow-lg rounded-full px-4 sm:px-6 py-3 flex items-center space-x-2 transition-all hover:shadow-xl"
             onClick={() => setShowProductSelector(false)}
           >
-            {t({ ko: '굿즈 에디터', en: 'Goods Editor', ja: 'グッズエディタ', zh: '商品编辑器' })}
+            <div className="flex items-center space-x-2">
+              <Puzzle className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="font-medium text-xs sm:text-sm">
+                {t({ ko: '🧩 올댓에디터', en: '🧩 AllThat Editor', ja: '🧩 オールザットエディタ', zh: '🧩 全能编辑器' })}
+              </span>
+            </div>
           </Button>
         </div>
       </div>
@@ -552,14 +578,38 @@ export default function Editor() {
         </div>
       </div>
 
-      {/* Fixed Editor Button */}
-      <div className="fixed bottom-6 right-6">
+      {/* Fixed Floating Buttons */}
+      <div className="fixed bottom-6 right-6 flex flex-col items-end space-y-4 z-50">
+        {/* Inquiry Button (Top) */}
+        <Button
+          variant="outline"
+          size="lg"
+          className="bg-white hover:bg-gray-50 text-gray-700 shadow-lg border border-gray-200 rounded-full px-6 py-3 flex items-center space-x-2 transition-all hover:shadow-xl"
+          onClick={() => {
+            // Navigate to inquiry or chat
+            window.open('/inquiry', '_blank');
+          }}
+        >
+          <div className="flex items-center space-x-2">
+            <MessageCircle className="h-5 w-5 text-blue-500" />
+            <span className="font-medium text-sm sm:text-base">
+              {t({ ko: '문의하기', en: 'Inquiry', ja: 'お問い合わせ', zh: '咨询' })}
+            </span>
+          </div>
+        </Button>
+
+        {/* Editor Button (Bottom) */}
         <Button
           size="lg"
-          className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+          className="bg-black hover:bg-gray-800 text-white shadow-lg rounded-full px-6 py-3 flex items-center space-x-2 transition-all hover:shadow-xl"
           onClick={() => setShowProductSelector(true)}
         >
-          {t({ ko: '굿즈 에디터', en: 'Goods Editor', ja: 'グッズエディタ', zh: '商品编辑器' })}
+          <div className="flex items-center space-x-2">
+            <Puzzle className="h-5 w-5" />
+            <span className="font-medium text-sm sm:text-base">
+              {t({ ko: '🧩 올댓에디터', en: '🧩 AllThat Editor', ja: '🧩 オールザットエディタ', zh: '🧩 全能编辑器' })}
+            </span>
+          </div>
         </Button>
       </div>
     </div>

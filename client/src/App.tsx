@@ -15,6 +15,7 @@ import Register from "@/pages/Register";
 import Cart from "@/pages/Cart";
 import Community from "@/pages/Community";
 import Editor from "@/pages/Editor";
+import Inquiry from "@/pages/Inquiry";
 
 function Router() {
   return (
@@ -27,6 +28,7 @@ function Router() {
       <Route path="/cart" component={Cart} />
       <Route path="/community" component={Community} />
       <Route path="/editor" component={Editor} />
+      <Route path="/inquiry" component={Inquiry} />
       
       {/* Category and section routes */}
       <Route path="/popular" component={Products} />
