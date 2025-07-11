@@ -112,17 +112,23 @@ export function Hero() {
                   >
                     <Button
                       size="lg"
-                      className="bg-white text-black hover:bg-white/90 font-bold py-3 px-6 rounded-xl text-base hover-scale text-korean shadow-lg"
+                      className="bg-white text-gray-900 hover:bg-gray-100 font-bold py-3 px-6 rounded-xl text-base hover-scale text-korean shadow-lg border-0"
+                      style={{ color: '#1a1a1a' }}
                     >
-                      {t(heroSlides[currentSlide].ctaText)}
+                      <span className="text-gray-900 font-bold">
+                        {t(heroSlides[currentSlide].ctaText)}
+                      </span>
                     </Button>
                     <Button
                       size="lg"
                       variant="outline"
-                      className="border-white border-2 text-white hover:bg-white hover:text-black font-semibold py-3 px-6 rounded-xl text-base text-korean shadow-lg"
+                      className="border-white border-2 text-white hover:bg-white hover:text-gray-900 font-semibold py-3 px-6 rounded-xl text-base text-korean shadow-lg bg-transparent"
+                      style={{ color: 'white', borderColor: 'white' }}
                     >
-                      <Play className="h-4 w-4 mr-2" />
-                      {t({ ko: "작업 과정 보기", en: "Watch Process" })}
+                      <Play className="h-4 w-4 mr-2 text-white" />
+                      <span className="text-white font-semibold">
+                        {t({ ko: "작업 과정 보기", en: "Watch Process" })}
+                      </span>
                     </Button>
                   </motion.div>
                 </motion.div>

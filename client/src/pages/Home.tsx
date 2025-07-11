@@ -71,10 +71,6 @@ export default function Home() {
     queryFn: () => api.getProducts({ featured: true }),
   });
 
-  // Debug logging
-  console.log("Featured Products:", featuredProducts);
-  console.log("Products Loading:", productsLoading);
-
   const { data: communityPosts, isLoading: communityLoading } = useQuery({
     queryKey: ["/api/community/posts"],
     queryFn: () => api.getCommunityPosts(),
