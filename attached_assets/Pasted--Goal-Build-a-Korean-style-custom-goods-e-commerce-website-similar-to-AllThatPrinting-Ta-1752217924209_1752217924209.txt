@@ -1,0 +1,104 @@
+🎯 Goal:  
+Build a Korean-style custom goods e-commerce website similar to [AllThatPrinting].  
+Target users are creators and fans who want to make acrylic keychains, stands, stickers, and small-batch custom merchandise.
+
+---
+
+🧩 Main Homepage Structure:
+
+Please create a clean and modern landing page consisting of the following **distinct content sections**, each separated with margin/padding and a section title.  
+Each section displays products **in a 4-column grid layout**, and includes a **“See More >”** button on the top-right.
+
+Each section should have:
+- A Korean section title + Emoji (as shown below)
+- A subtitle (description line)
+- Four product cards per row
+- “See More >” link navigates to respective routes
+
+Sections:
+
+① 🔥 인기상품 ("Popular Items Loved by Creators")
+→ Sorted by highest likes and reviews
+
+② 🧡 따끈따끈한 신상품 ("Fresh New Arrivals")
+→ Sorted by latest product upload time
+
+③ 🤗 창작자들의 소중한 리뷰 ("Creator Reviews")
+→ Displays review highlights, star ratings
+
+④ 🔥 굿즈 자랑 커뮤니티 ("Community Showcase")
+→ User-generated goods photos and showcase posts
+
+⑤ ✨ 자재별 추천 ("Material-Based Recommendations")
+→ Top items by material (transparent, hologram, mirror, etc.)
+
+⑥ ❤️ 인기급상승 아이템 ("Trending Now")
+→ Based on rapidly increasing likes or views
+
+⑦ 🎯 올댓추천 ("Staff Picks / Recommended Items")
+
+⑧ 🏷️ 브랜드 굿즈 안내 ("Brand Custom Goods")
+→ Banner section for B2B clients (e.g., custom goods for companies or creators)
+
+⑨ 🎁 고객 맞춤 혜택 배너 ("Personalized Benefits")
+→ Event banners with different content based on login state
+
+yaml
+복사
+편집
+
+---
+
+🧱 Product Card Component (Required):
+
+Each product card includes:
+
+- Thumbnail image  
+- Product name  
+- Price (e.g., `1,700 won`)  
+- Review count (e.g., `리뷰 452`)  
+- LIKE count (e.g., `LIKE 35`)  
+- Optional badge (`NEW`, `HIT`, `추천`, `UPGRADE`)  
+- On hover: slight scale up + shadow transition effect
+
+---
+
+🎨 Design System:
+
+- **Page background: white (#ffffff)**  
+- Font: Pretendard or Noto Sans KR (Korean UI style)  
+- Layout: max-width 1200px, centered  
+- Fully responsive for mobile and desktop  
+- Section titles in Korean (styled with Emoji as per sample site)
+
+---
+
+🧭 Routing & Navigation:
+
+Each section's "See More >" button links to:
+- `/popular` for popular items
+- `/new` for new arrivals
+- `/community` for user showcase
+- `/materials` for material-based categories
+- `/recommendations` for staff picks, etc.
+
+---
+
+⚙️ Optional Features:
+
+- Dark mode toggle with sun/moon icon
+- Lazy loading for images
+- Scroll reveal animations for each section
+- Section and card components should be modular and reusable
+- Hero banner (slide or scroll format is acceptable)
+
+---
+
+✅ Summary of Request:
+
+Please generate the homepage of a Korean-style custom goods e-commerce website (inspired by *AllThatPrinting*)  
+— using clean UI components for each section described above.  
+Focus on modern Korean e-commerce UX, with precise layout, cards per row (4), emoji titles, and smooth grid organization.  
+Preferably use React + Tailwind CSS or any frontend framework you're comfortable with.
+
+If available, output the code in components or sections (you can organize by layout first).
