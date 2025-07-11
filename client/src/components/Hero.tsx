@@ -1,77 +1,214 @@
-import { ArrowRight, Palette, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, Play, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { useLanguage } from "@/hooks/useLanguage";
+
+const heroSlides = [
+  {
+    id: 1,
+    title: { ko: "나만의 특별한 디자인을 만들어보세요", en: "Create Your Own Special Design" },
+    subtitle: { ko: "고품질 아크릴 키링부터 맞춤 스티커까지", en: "From high-quality acrylic keychains to custom stickers" },
+    image: "/api/placeholder/800/600",
+    ctaText: { ko: "디자인 시작하기", en: "Start Designing" },
+    bgColor: "from-blue-400 to-purple-600"
+  },
+  {
+    id: 2,
+    title: { ko: "최고의 프린팅 기술로 제작합니다", en: "Made with the Best Printing Technology" },
+    subtitle: { ko: "내구성과 선명함을 동시에 만족하는 제품", en: "Products that satisfy both durability and clarity" },
+    image: "/api/placeholder/800/600",
+    ctaText: { ko: "제품 보기", en: "View Products" },
+    bgColor: "from-green-400 to-blue-500"
+  },
+  {
+    id: 3,
+    title: { ko: "빠른 배송, 확실한 품질보장", en: "Fast Delivery, Quality Guaranteed" },
+    subtitle: { ko: "3일 이내 제작완료, 무료배송 서비스", en: "Completed within 3 days, free shipping service" },
+    image: "/api/placeholder/800/600",
+    ctaText: { ko: "주문하기", en: "Order Now" },
+    bgColor: "from-pink-400 to-red-500"
+  }
+];
 
 export function Hero() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const { t } = useLanguage();
+
+  // Auto-advance slides
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
+
   return (
-    <section className="relative min-h-screen hero-gradient overflow-hidden">
-      {/* Background Decorative Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-20 h-20 bg-primary/10 rounded-full animate-pulse-slow"></div>
-        <div className="absolute bottom-20 right-20 w-32 h-32 bg-accent/10 rounded-full animate-pulse-delay"></div>
-        <div className="absolute top-1/2 left-10 w-16 h-16 bg-purple-300/20 rounded-full animate-pulse-delay-2"></div>
-        <div className="absolute top-1/4 right-1/4 w-24 h-24 bg-blue-300/20 rounded-full animate-pulse-slow"></div>
-      </div>
-
-      {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen">
-        <div className="text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center mb-6">
-            <Sparkles className="h-8 w-8 text-primary mr-2" />
-            <span className="text-sm font-medium text-muted-foreground bg-white/80 dark:bg-gray-800/80 px-4 py-2 rounded-full">
-              새로운 커스텀 프린팅 경험
-            </span>
-          </div>
-
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
-            나만의 <span className="text-gradient">커스텀</span> 굿즈
-          </h1>
+    <section className="relative h-[50vh] min-h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-blue-900">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.7 }}
+          className={`absolute inset-0 bg-gradient-to-br ${heroSlides[currentSlide].bgColor}`}
+        >
+          <div className="absolute inset-0 bg-black/20" />
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            아크릴 키링, 스티커, 머그컵까지 다양한 제품을 
-            <br className="hidden sm:block" />
-            원하는 디자인으로 제작하세요
-          </p>
+          <div className="relative h-full flex items-center justify-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                {/* Content */}
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="text-white z-10"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
+                    className="flex items-center gap-2 mb-4"
+                  >
+                    <Sparkles className="h-6 w-6 text-yellow-300" />
+                    <span className="text-sm font-medium text-yellow-300 text-korean">
+                      {t({ ko: "올댓프린팅 특별 서비스", en: "AllThatPrinting Special Service" })}
+                    </span>
+                  </motion.div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link href="/products">
-              <Button size="lg" className="btn-primary text-lg group">
-                지금 커스터마이즈하기
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
-            <Link href="/community">
-              <Button size="lg" variant="outline" className="btn-secondary text-lg group">
-                <Palette className="mr-2 h-5 w-5" />
-                템플릿 보기
-              </Button>
-            </Link>
-          </div>
+                  <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-korean text-tight leading-tight"
+                  >
+                    {t(heroSlides[currentSlide].title)}
+                  </motion.h1>
 
-          {/* Trust Indicators */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span>무료 배송 (3만원 이상)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span>고품질 프린팅</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-              <span>빠른 제작 (2-3일)</span>
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.6 }}
+                    className="text-lg md:text-xl mb-6 text-white/90 text-korean leading-relaxed"
+                  >
+                    {t(heroSlides[currentSlide].subtitle)}
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6, duration: 0.6 }}
+                    className="flex flex-col sm:flex-row gap-4"
+                  >
+                    <Button
+                      size="lg"
+                      className="bg-white text-primary hover:bg-white/90 font-bold py-3 px-6 rounded-xl text-base hover-scale text-korean"
+                    >
+                      {t(heroSlides[currentSlide].ctaText)}
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="border-white text-white hover:bg-white hover:text-primary font-semibold py-3 px-6 rounded-xl text-base text-korean"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      {t({ ko: "작업 과정 보기", en: "Watch Process" })}
+                    </Button>
+                  </motion.div>
+                </motion.div>
+
+                {/* Image */}
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  className="relative"
+                >
+                  <motion.img
+                    src={heroSlides[currentSlide].image}
+                    alt="Hero"
+                    className="w-full h-60 md:h-72 object-cover rounded-2xl shadow-2xl"
+                    whileHover={{ scale: 1.05, rotate: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-2xl" />
+                </motion.div>
+              </div>
             </div>
           </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Navigation */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-4 z-20">
+        <button
+          onClick={prevSlide}
+          className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+
+        <div className="flex gap-2">
+          {heroSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-colors ${
+                index === currentSlide ? 'bg-white' : 'bg-white/50'
+              }`}
+            />
+          ))}
         </div>
+
+        <button
+          onClick={nextSlide}
+          className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-muted-foreground rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-muted-foreground rounded-full mt-2"></div>
-        </div>
-      </div>
+      {/* Floating elements */}
+      <motion.div
+        animate={{ 
+          y: [0, -20, 0],
+          rotate: [0, 5, 0]
+        }}
+        transition={{ 
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute top-16 right-16 hidden lg:block"
+      >
+        <div className="w-20 h-20 bg-white/10 rounded-full backdrop-blur-sm" />
+      </motion.div>
+
+      <motion.div
+        animate={{ 
+          y: [0, 15, 0],
+          rotate: [0, -3, 0]
+        }}
+        transition={{ 
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1
+        }}
+        className="absolute bottom-24 left-16 hidden lg:block"
+      >
+        <div className="w-16 h-16 bg-white/10 rounded-full backdrop-blur-sm" />
+      </motion.div>
     </section>
   );
 }
