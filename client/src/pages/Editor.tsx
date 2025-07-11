@@ -73,6 +73,11 @@ export default function Editor() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Initialize scroll position to top when editor page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const productTypes: ProductType[] = [
     {
       id: 'keyring',
