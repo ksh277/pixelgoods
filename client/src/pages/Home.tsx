@@ -253,52 +253,58 @@ export default function Home() {
             ) : (
               products?.slice(0, 4).map((product: Product) => (
                 <motion.div key={product.id} variants={itemVariants}>
-                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
-                    <div className="relative aspect-square">
-                      {/* HOT Badge - Top Left */}
-                      <div className="absolute top-2 left-2 z-10">
-                        <Badge className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                          HOT
-                        </Badge>
-                      </div>
-                      
-                      {/* Product Image */}
-                      <img
-                        src="/api/placeholder/300/300"
-                        alt={product.nameKo || product.name}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
-                        }}
-                      />
-                      
-                      {/* Like Button - Top Right */}
-                      <button
-                        onClick={() => handleToggleFavorite(product)}
-                        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors"
-                      >
-                        <Heart 
-                          className={`w-3 h-3 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+                  <Link href={`/product/${product.id}`} className="block">
+                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
+                      <div className="relative aspect-square">
+                        {/* HOT Badge - Top Left */}
+                        <div className="absolute top-2 left-2 z-10">
+                          <Badge className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            HOT
+                          </Badge>
+                        </div>
+                        
+                        {/* Product Image */}
+                        <img
+                          src="/api/placeholder/300/300"
+                          alt={product.nameKo || product.name}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+                          }}
                         />
-                      </button>
-                    </div>
-                    
-                    {/* Product Info */}
-                    <div className="p-3">
-                      <div className="space-y-1">
-                        <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
-                          {product.nameKo || product.name}
-                        </h3>
-                        <div className="text-sm font-medium text-gray-900">
-                          {parseInt(product.basePrice).toLocaleString()} won
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {t({ ko: "리뷰", en: "Reviews" })} {Math.floor(Math.random() * 10000) + 1000}
+                        
+                        {/* Like Button - Top Right */}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleToggleFavorite(product);
+                          }}
+                          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors"
+                        >
+                          <Heart 
+                            className={`w-3 h-3 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+                          />
+                        </button>
+                      </div>
+                      
+                      {/* Product Info */}
+                      <div className="p-3">
+                        <div className="space-y-1">
+                          <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
+                            {product.nameKo || product.name}
+                          </h3>
+                          <div className="text-sm font-medium text-gray-900">
+                            {parseInt(product.basePrice).toLocaleString()} won
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {t({ ko: "리뷰", en: "Reviews" })} {Math.floor(Math.random() * 10000) + 1000}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </motion.div>
               ))
             )}
@@ -338,49 +344,51 @@ export default function Home() {
           >
             {creatorReviews.map((review) => (
               <motion.div key={review.id} variants={itemVariants}>
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
-                  <div className="relative aspect-square">
-                    {/* HOT Badge */}
-                    <div className="absolute top-2 left-2 z-10">
-                      <Badge className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
-                        HOT
-                      </Badge>
-                    </div>
-                    
-                    <img
-                      src={review.productImage}
-                      alt={review.productName}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    
-                    <div className="absolute top-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-xs">
-                      {review.reviewCount}개 리뷰
-                    </div>
-                  </div>
-                  
-                  <div className="p-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center mb-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                          />
-                        ))}
+                <Link href={`/product/${review.id}`} className="block">
+                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="relative aspect-square">
+                      {/* HOT Badge */}
+                      <div className="absolute top-2 left-2 z-10">
+                        <Badge className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+                          HOT
+                        </Badge>
                       </div>
-                      <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
-                        {review.productName}
-                      </h3>
-                      <p className="text-xs text-gray-600 line-clamp-1">
-                        {review.comment}
-                      </p>
-                      <div className="text-xs text-gray-500">
-                        {review.userName} • {review.date}
+                      
+                      <img
+                        src={review.productImage}
+                        alt={review.productName}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                      
+                      <div className="absolute top-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-xs">
+                        {review.reviewCount}개 리뷰
                       </div>
                     </div>
+                    
+                    <div className="p-3">
+                      <div className="space-y-1">
+                        <div className="flex items-center mb-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                            />
+                          ))}
+                        </div>
+                        <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
+                          {review.productName}
+                        </h3>
+                        <p className="text-xs text-gray-600 line-clamp-1">
+                          {review.comment}
+                        </p>
+                        <div className="text-xs text-gray-500">
+                          {review.userName} • {review.date}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </motion.div>
@@ -418,53 +426,55 @@ export default function Home() {
           >
             {communityShowcase.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
-                  <div className="relative aspect-square">
-                    <div className="absolute top-2 left-2 z-10">
-                      <Badge className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
-                        인기
-                      </Badge>
+                <Link href={`/community/${item.id}`} className="block">
+                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="relative aspect-square">
+                      <div className="absolute top-2 left-2 z-10">
+                        <Badge className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                          인기
+                        </Badge>
+                      </div>
+                      
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                      
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Heart className="h-3 w-3 text-red-400" />
+                            <span className="text-xs">{item.likes}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <MessageCircle className="h-3 w-3 text-blue-400" />
+                            <span className="text-xs">{item.comments}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Heart className="h-3 w-3 text-red-400" />
-                          <span className="text-xs">{item.likes}</span>
+                    <div className="p-3">
+                      <div className="space-y-1">
+                        <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
+                          {item.title}
+                        </h3>
+                        <div className="text-xs text-gray-500">
+                          {item.author}
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <MessageCircle className="h-3 w-3 text-blue-400" />
-                          <span className="text-xs">{item.comments}</span>
+                        <div className="flex flex-wrap gap-1">
+                          {item.tags.slice(0, 2).map((tag, i) => (
+                            <Badge key={i} variant="secondary" className="text-xs">
+                              #{tag}
+                            </Badge>
+                          ))}
                         </div>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="p-3">
-                    <div className="space-y-1">
-                      <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
-                        {item.title}
-                      </h3>
-                      <div className="text-xs text-gray-500">
-                        {item.author}
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        {item.tags.slice(0, 2).map((tag, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">
-                            #{tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </motion.div>
@@ -502,58 +512,65 @@ export default function Home() {
           >
             {materialRecommendations.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
-                  <div className="relative aspect-square">
-                    <Badge className={`absolute top-2 left-2 z-10 ${
-                      item.badge === 'HIT' ? 'bg-red-500' : 
-                      item.badge === 'NEW' ? 'bg-green-500' : 'bg-orange-500'
-                    } text-white text-xs font-bold px-2 py-1 rounded`}>
-                      {item.badge}
-                    </Badge>
-                    
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    
-                    {/* Heart Button - Top Right */}
-                    <button className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors">
-                      <Heart className="w-3 h-3 text-gray-600" />
-                    </button>
-                    
-                    {item.discount > 0 && (
-                      <div className="absolute top-10 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
-                        -{item.discount}%
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="p-3">
-                    <div className="space-y-1">
-                      <Badge variant="outline" className="text-xs mb-1">
-                        {item.material}
+                <Link href={`/product/${item.id}`} className="block">
+                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="relative aspect-square">
+                      <Badge className={`absolute top-2 left-2 z-10 ${
+                        item.badge === 'HIT' ? 'bg-red-500' : 
+                        item.badge === 'NEW' ? 'bg-green-500' : 'bg-orange-500'
+                      } text-white text-xs font-bold px-2 py-1 rounded`}>
+                        {item.badge}
                       </Badge>
-                      <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
-                        {item.title}
-                      </h3>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm font-medium text-gray-900">
-                          {item.price.toLocaleString()} won
-                        </span>
-                        {item.originalPrice && (
-                          <span className="text-xs text-gray-500 line-through">
-                            {item.originalPrice.toLocaleString()}
+                      
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                      
+                      {/* Heart Button - Top Right */}
+                      <button 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
+                        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors">
+                        <Heart className="w-3 h-3 text-gray-600" />
+                      </button>
+                      
+                      {item.discount > 0 && (
+                        <div className="absolute top-10 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+                          -{item.discount}%
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-3">
+                      <div className="space-y-1">
+                        <Badge variant="outline" className="text-xs mb-1">
+                          {item.material}
+                        </Badge>
+                        <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
+                          {item.title}
+                        </h3>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm font-medium text-gray-900">
+                            {item.price.toLocaleString()} won
                           </span>
-                        )}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {t({ ko: "리뷰", en: "Reviews" })} {item.reviewCount}개
+                          {item.originalPrice && (
+                            <span className="text-xs text-gray-500 line-through">
+                              {item.originalPrice.toLocaleString()}
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {t({ ko: "리뷰", en: "Reviews" })} {item.reviewCount}개
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </motion.div>
