@@ -36,13 +36,13 @@ export function ProductGrid({
 }: ProductGridProps) {
   return (
     <motion.div 
-      className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ${className}`}
+      className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 ${className}`}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
     >
-      {products.slice(0, 4).map((product) => (
+      {products.map((product) => (
         <motion.div key={product.id} variants={itemVariants}>
           <ProductCard
             product={product}

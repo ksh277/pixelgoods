@@ -44,24 +44,27 @@ export function ProductCard({
       transition={{ duration: 0.5 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
+      className="h-full"
     >
-      <Card className="group cursor-pointer overflow-hidden hover-lift bg-card/80 backdrop-blur-sm border-border/50">
+      <Card className="group cursor-pointer overflow-hidden hover-lift bg-white shadow-sm border border-gray-200 h-full flex flex-col">
         <div className="relative">
-          <motion.img
-            src={product.imageUrl}
-            alt={language === 'ko' ? product.nameKo : product.name}
-            className="w-full h-64 object-cover"
-            loading="lazy"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
-            }}
-          />
+          <motion.div className="aspect-[3/4] bg-gray-100 overflow-hidden">
+            <motion.img
+              src={product.imageUrl}
+              alt={language === 'ko' ? product.nameKo : product.name}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+              }}
+            />
+          </motion.div>
           
-          {/* Overlay with hover effects */}
+          {/* Overlay with hover effects - only on desktop */}
           <motion.div 
-            className="absolute inset-0 bg-black/40 flex items-center justify-center"
+            className="absolute inset-0 bg-black/40 items-center justify-center hidden md:flex"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHovered ? 1 : 0 }}
             transition={{ duration: 0.2 }}
@@ -87,26 +90,27 @@ export function ProductCard({
 
           {/* Like button */}
           <motion.button
-            className={`absolute top-3 right-3 p-2 rounded-full ${
-              isLiked ? 'bg-red-500 text-white' : 'bg-white/90 text-foreground'
-            } shadow-md hover:scale-110 transition-all duration-200`}
+            className={`absolute top-2 right-2 p-1.5 rounded-full ${
+              isLiked ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-700'
+            } shadow-md transition-all duration-200 active:scale-95`}
             onClick={handleLike}
             whileTap={{ scale: 0.95 }}
           >
-            <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
+            <Heart className={`h-3 w-3 ${isLiked ? 'fill-current' : ''}`} />
           </motion.button>
 
           {/* Featured badge */}
           {product.isFeatured && (
-            <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground">
-              {t({ ko: "인기", en: "Popular" })}
+            <Badge className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-0.5">
+              HOT
             </Badge>
           )}
         </div>
 
-        <CardContent className="p-4">
+        <CardContent className="p-3 flex flex-col flex-grow">
+          {/* Likes and rating section */}
           <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-1 text-accent">
+            <div className="flex items-center gap-1 text-red-500">
               <Heart className="h-3 w-3 fill-current" />
               <span className="text-xs font-medium">{likes}</span>
             </div>
@@ -119,35 +123,39 @@ export function ProductCard({
                   }`}
                 />
               ))}
-              <span className="text-xs text-muted-foreground ml-1">4.8</span>
+              <span className="text-xs text-gray-500 ml-1">4.8</span>
             </div>
           </div>
 
-          <h3 className="font-semibold text-foreground mb-2 text-korean text-tight line-clamp-2">
+          {/* Product title - single line with ellipsis */}
+          <h3 className="font-bold text-sm text-gray-900 mb-1 truncate text-korean">
             {language === 'ko' ? product.nameKo : product.name}
           </h3>
 
-          <p className="text-sm text-muted-foreground mb-3 line-clamp-2 text-korean">
+          {/* Product description - 2 lines max */}
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2 text-korean flex-grow">
             {language === 'ko' ? product.descriptionKo : product.description}
           </p>
 
-          <div className="flex items-center justify-between">
-            <div className="text-lg font-bold text-primary">
+          {/* Price section - always at bottom */}
+          <div className="flex items-center justify-between mt-auto">
+            <div className="text-sm font-bold text-gray-900">
               ₩{formattedPrice}
             </div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 20 }}
-              transition={{ duration: 0.2 }}
+            <div className="text-xs text-gray-500">
+              {t({ ko: "리뷰 234", en: "234 reviews" })}
+            </div>
+          </div>
+
+          {/* Mobile add to cart button */}
+          <div className="mt-2 md:hidden">
+            <Button
+              size="sm"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2"
+              onClick={handleAddToCart}
             >
-              <Button
-                size="sm"
-                className="btn-primary text-xs px-3 py-1"
-                onClick={handleAddToCart}
-              >
-                {t({ ko: "담기", en: "Add" })}
-              </Button>
-            </motion.div>
+              {t({ ko: "담기", en: "Add to Cart" })}
+            </Button>
           </div>
         </CardContent>
       </Card>
