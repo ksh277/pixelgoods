@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Hero } from "@/components/Hero";
+import { CategoryNav } from "@/components/CategoryNav";
 import { SectionHeader } from "@/components/SectionHeader";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -197,6 +198,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
+      <CategoryNav />
       <Hero />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
