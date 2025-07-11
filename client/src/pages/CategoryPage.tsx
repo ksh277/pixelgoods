@@ -72,14 +72,67 @@ export default function CategoryPage() {
       
       // Filter products based on category and subcategory
       let filteredProducts = data;
-      if (category && subcategory) {
-        // Filter by both category and subcategory
+      
+      if (category === 'acrylic') {
+        // First filter to only acrylic products (categoryId: 4)
         filteredProducts = data.filter((product: Product) => 
-          product.name.toLowerCase().includes(subcategory.toLowerCase()) ||
-          product.nameKo.includes(currentCategory?.subcategories.find(sub => sub.slug === subcategory)?.name.ko || '')
+          product.categoryId === 4 || 
+          product.nameKo.includes('아크릴') ||
+          product.name.toLowerCase().includes('acrylic')
         );
+        
+        // Then filter by subcategory if specified
+        if (subcategory) {
+          const subcategoryFilters = {
+            'keyring': (product: Product) => 
+              product.nameKo.includes('키링') || 
+              product.name.toLowerCase().includes('keyring') ||
+              product.name.toLowerCase().includes('keychain'),
+            'korotto': (product: Product) => 
+              product.nameKo.includes('코롯토') || 
+              product.name.toLowerCase().includes('korotto'),
+            'smarttok': (product: Product) => 
+              product.nameKo.includes('스마트톡') || 
+              product.name.toLowerCase().includes('smart tok') ||
+              product.name.toLowerCase().includes('grip'),
+            'stand': (product: Product) => 
+              product.nameKo.includes('스탠드') || 
+              product.nameKo.includes('디오라마') ||
+              product.name.toLowerCase().includes('stand') ||
+              product.name.toLowerCase().includes('diorama'),
+            'holder': (product: Product) => 
+              product.nameKo.includes('포카홀더') || 
+              product.nameKo.includes('홀더') ||
+              product.name.toLowerCase().includes('holder') ||
+              product.name.toLowerCase().includes('card'),
+            'shaker': (product: Product) => 
+              product.nameKo.includes('쉐이커') || 
+              product.name.toLowerCase().includes('shaker'),
+            'carabiner': (product: Product) => 
+              product.nameKo.includes('카라비너') || 
+              product.name.toLowerCase().includes('carabiner'),
+            'mirror': (product: Product) => 
+              product.nameKo.includes('거울') || 
+              product.name.toLowerCase().includes('mirror'),
+            'magnet': (product: Product) => 
+              product.nameKo.includes('자석') || 
+              product.nameKo.includes('마그넷') ||
+              product.name.toLowerCase().includes('magnet'),
+            'stationery': (product: Product) => 
+              product.nameKo.includes('문구') || 
+              product.name.toLowerCase().includes('stationery'),
+            'cutting': (product: Product) => 
+              product.nameKo.includes('재단') || 
+              product.name.toLowerCase().includes('cutting')
+          };
+          
+          const filterFn = subcategoryFilters[subcategory as keyof typeof subcategoryFilters];
+          if (filterFn) {
+            filteredProducts = filteredProducts.filter(filterFn);
+          }
+        }
       } else if (category) {
-        // Filter by category only
+        // Filter by other categories
         filteredProducts = data.filter((product: Product) => 
           product.name.toLowerCase().includes(category.toLowerCase())
         );
