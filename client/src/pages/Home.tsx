@@ -251,7 +251,7 @@ export default function Home() {
                       </h3>
                       <div className="flex items-center justify-between">
                         <span className="text-lg font-bold text-foreground">
-                          ₩{product.price.toLocaleString()}
+                          ₩{product.price?.toLocaleString() || 0}
                         </span>
                         <div className="flex items-center space-x-2">
                           <button

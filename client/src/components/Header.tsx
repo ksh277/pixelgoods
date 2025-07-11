@@ -23,8 +23,6 @@ export function Header() {
   ];
 
   const categoryNavItems = [
-    { id: 'printing', label: { ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" }, href: "/products" },
-    { id: 'community', label: { ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" }, href: "/community" },
     { id: 'reviews', label: { ko: "사용후기 💕", en: "Reviews 💕", ja: "レビュー 💕", zh: "使用心得 💕" }, href: "/reviews" },
     { id: 'collections', label: { ko: "모음전 🏷️", en: "Collections 🏷️", ja: "コレクション 🏷️", zh: "合集 🏷️" }, href: "/collections" },
     { id: 'resources', label: { ko: "자료실", en: "Resources", ja: "資料室", zh: "资料室" }, href: "/resources" },
@@ -40,6 +38,12 @@ export function Header() {
       <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-2 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-end text-sm">
           <div className="flex items-center space-x-4">
+            <Link href="/products" className="text-muted-foreground hover:text-foreground transition-colors">
+              {t({ ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" })}
+            </Link>
+            <Link href="/community" className="text-muted-foreground hover:text-foreground transition-colors">
+              {t({ ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" })}
+            </Link>
             <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">
               {t({ ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" })}
             </Link>
@@ -167,6 +171,22 @@ export function Header() {
                     />
                   </div>
 
+                  {/* Mobile Top Actions */}
+                  <div className="flex flex-col space-y-2 pb-4 border-b">
+                    <Link href="/products" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
+                      {t({ ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" })}
+                    </Link>
+                    <Link href="/community" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
+                      {t({ ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" })}
+                    </Link>
+                    <Link href="/login" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
+                      {t({ ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" })}
+                    </Link>
+                    <Link href="/register" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
+                      {t({ ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" })}
+                    </Link>
+                  </div>
+
                   {/* Mobile Category Links */}
                   <div className="flex flex-col space-y-2">
                     {categoryNavItems.map((item) => (
@@ -178,16 +198,6 @@ export function Header() {
                         {t(item.label)}
                       </Link>
                     ))}
-                  </div>
-
-                  {/* Mobile User Actions */}
-                  <div className="flex flex-col space-y-2 pt-4 border-t">
-                    <Link href="/login" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
-                      {t({ ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" })}
-                    </Link>
-                    <Link href="/register" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
-                      {t({ ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" })}
-                    </Link>
                   </div>
                 </div>
               </SheetContent>
