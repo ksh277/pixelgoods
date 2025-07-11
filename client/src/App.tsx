@@ -22,6 +22,7 @@ import Resources from "@/pages/Resources";
 import Events from "@/pages/Events";
 import CommunityShare from "@/pages/CommunityShare";
 import CommunityQuestion from "@/pages/CommunityQuestion";
+import Collections from "@/pages/Collections";
 
 function Router() {
   return (
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/reviews/:id" component={ReviewDetail} />
       <Route path="/resources" component={Resources} />
       <Route path="/events" component={Events} />
+      <Route path="/collections" component={Collections} />
       <Route path="/community/share" component={CommunityShare} />
       <Route path="/community/question" component={CommunityQuestion} />
       <Route path="/editor" component={Editor} />
