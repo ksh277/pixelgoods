@@ -174,6 +174,35 @@
     overflow: hidden;
   }
 
+  /* Mobile-specific Editor optimizations */
+  .editor-wrapper {
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .editor-canvas {
+    touch-action: none;
+  }
+  
+  .editor-image {
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  
+  /* Prevent horizontal overflow on mobile */
+  @media (max-width: 640px) {
+    .editor-wrapper {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    
+    .editor-canvas {
+      max-width: 350px;
+      max-height: 350px;
+    }
+  }
+
   /* Mobile-specific card styling */
   @media (max-width: 768px) {
     .mobile-card {

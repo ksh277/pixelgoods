@@ -1,5 +1,6 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,7 +25,11 @@ import {
   HelpCircle,
   Settings,
   MessageCircle,
-  Puzzle
+  Puzzle,
+  ChevronDown,
+  ChevronUp,
+  ImageIcon,
+  AlertCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +54,7 @@ interface CanvasImage {
 
 export default function Editor() {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   const [showProductSelector, setShowProductSelector] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 50, height: 50 });
@@ -61,6 +67,9 @@ export default function Editor() {
   const [removeWhiteSpill, setRemoveWhiteSpill] = useState(false);
   const [doubleSided, setDoubleSided] = useState(false);
   const [currentSide, setCurrentSide] = useState<'front' | 'back'>('front');
+  const [showMobileToolbar, setShowMobileToolbar] = useState(false);
+  const [draggedImage, setDraggedImage] = useState<string | null>(null);
+  const [imageLoadErrors, setImageLoadErrors] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -141,22 +150,47 @@ export default function Editor() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const newImage: CanvasImage = {
-          id: Date.now().toString(),
-          src: e.target?.result as string,
-          x: 100,
-          y: 100,
-          width: 150,
-          height: 150,
-          rotation: 0
-        };
-        setImages([...images, newImage]);
-        setSelectedImage(newImage.id);
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert(t({ ko: '이미지 파일만 업로드 가능합니다.', en: 'Only image files are allowed.', ja: '画像ファイルのみアップロード可能です。', zh: '仅允许上传图片文件。' }));
+        return;
+      }
+      
+      // Validate file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        alert(t({ ko: '파일 크기는 10MB 이하여야 합니다.', en: 'File size must be under 10MB.', ja: 'ファイルサイズは10MB以下でなければなりません。', zh: '文件大小必须在10MB以下。' }));
+        return;
+      }
+
+      // Create blob URL for immediate preview
+      const blobUrl = URL.createObjectURL(file);
+      const newImage: CanvasImage = {
+        id: Date.now().toString(),
+        src: blobUrl,
+        x: 10,
+        y: 10,
+        width: 100,
+        height: 100,
+        rotation: 0
       };
-      reader.readAsDataURL(file);
+      
+      setImages([...images, newImage]);
+      setSelectedImage(newImage.id);
+      
+      // Clear error for this image if it was previously failed
+      setImageLoadErrors(prev => prev.filter(id => id !== newImage.id));
     }
+    
+    // Reset input
+    event.target.value = '';
+  };
+
+  const handleImageError = (imageId: string) => {
+    setImageLoadErrors(prev => [...prev, imageId]);
+  };
+
+  const handleImageLoad = (imageId: string) => {
+    setImageLoadErrors(prev => prev.filter(id => id !== imageId));
   };
 
   const handleImageMove = (id: string, deltaX: number, deltaY: number) => {
@@ -307,105 +341,110 @@ export default function Editor() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="editor-wrapper min-h-screen bg-gray-100 flex flex-col overflow-x-hidden max-w-full">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b px-4 py-3">
+      <header className="bg-white shadow-sm border-b px-2 sm:px-4 py-2 sm:py-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowProductSelector(true)}
+              className="text-xs sm:text-sm"
             >
-              <Home className="h-4 w-4 mr-2" />
-              {t({ ko: '제품 선택', en: 'Select Product', ja: '製品選択', zh: '选择产品' })}
+              <Home className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              {isMobile ? t({ ko: '제품', en: 'Product', ja: '製品', zh: '产品' }) : t({ ko: '제품 선택', en: 'Select Product', ja: '製品選択', zh: '选择产品' })}
             </Button>
-            <div className="text-sm text-gray-600">
-              {selectedProduct && (
+            {selectedProduct && (
+              <div className="text-xs sm:text-sm text-gray-600 hidden sm:block">
                 <span>
                   {t(selectedProduct.name)} ({canvasSize.width}×{canvasSize.height}mm)
                 </span>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Top Right Controls */}
-          <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="sm">
-              <Undo2 className="h-4 w-4" />
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <Button variant="ghost" size="sm" className="p-1 sm:p-2">
+              <Undo2 className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="ghost" size="sm">
-              <Redo2 className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="p-1 sm:p-2">
+              <Redo2 className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="ghost" size="sm">
-              <Move className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="p-1 sm:p-2 hidden sm:inline-flex">
+              <Move className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="ghost" size="sm" onClick={deleteSelectedImage}>
-              <Trash2 className="h-4 w-4" />
+            <Button variant="ghost" size="sm" onClick={deleteSelectedImage} className="p-1 sm:p-2">
+              <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="ghost" size="sm">
-              <FolderOpen className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="p-1 sm:p-2 hidden sm:inline-flex">
+              <FolderOpen className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="ghost" size="sm">
-              <Save className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="p-1 sm:p-2">
+              <Save className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="ghost" size="sm">
-              <Download className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="p-1 sm:p-2">
+              <Download className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => setShowProductSelector(true)}>
-              <X className="h-4 w-4" />
+            <Button variant="ghost" size="sm" onClick={() => setShowProductSelector(true)} className="p-1 sm:p-2">
+              <X className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
           </div>
         </div>
       </header>
 
-      <div className="flex-1 flex">
-        {/* Left Sidebar */}
-        <div className="w-80 bg-white shadow-sm border-r p-4 overflow-y-auto">
-          <div className="space-y-6">
-            {/* Size Controls */}
-            <div>
-              <Label className="text-sm font-medium mb-3 block">
-                {t({ ko: '사이즈 (mm)', en: 'Size (mm)', ja: 'サイズ (mm)', zh: '尺寸 (mm)' })}
-              </Label>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Label className="text-xs text-gray-500">
-                    {t({ ko: '가로', en: 'Width', ja: '横', zh: '宽' })}
-                  </Label>
+      {/* Mobile Toolbar Toggle */}
+      {isMobile && (
+        <div className="bg-white border-b px-4 py-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowMobileToolbar(!showMobileToolbar)}
+            className="w-full justify-between"
+          >
+            <span className="text-sm">{t({ ko: '에디터 도구', en: 'Editor Tools', ja: 'エディタツール', zh: '编辑器工具' })}</span>
+            {showMobileToolbar ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+        </div>
+      )}
+
+      <div className={cn("flex-1 flex", isMobile ? "flex-col" : "flex-row")}>
+        {/* Mobile Collapsible Toolbar */}
+        {isMobile && showMobileToolbar && (
+          <div className="bg-white border-b p-4 max-h-64 overflow-y-auto">
+            <div className="space-y-4">
+              {/* Size Controls */}
+              <div>
+                <Label className="text-sm font-medium mb-2 block">
+                  {t({ ko: '사이즈 (mm)', en: 'Size (mm)', ja: 'サイズ (mm)', zh: '尺寸 (mm)' })}
+                </Label>
+                <div className="grid grid-cols-2 gap-2">
                   <Input
                     type="number"
                     value={canvasSize.width}
                     onChange={(e) => setCanvasSize({ ...canvasSize, width: parseInt(e.target.value) || 0 })}
                     className="text-sm"
+                    placeholder={t({ ko: '가로', en: 'Width', ja: '横', zh: '宽' })}
                   />
-                </div>
-                <div>
-                  <Label className="text-xs text-gray-500">
-                    {t({ ko: '세로', en: 'Height', ja: '縦', zh: '高' })}
-                  </Label>
                   <Input
                     type="number"
                     value={canvasSize.height}
                     onChange={(e) => setCanvasSize({ ...canvasSize, height: parseInt(e.target.value) || 0 })}
                     className="text-sm"
+                    placeholder={t({ ko: '세로', en: 'Height', ja: '縦', zh: '高' })}
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Image Upload */}
-            <div>
-              <Label className="text-sm font-medium mb-3 block">
-                {t({ ko: '이미지 업로드', en: 'Image Upload', ja: '画像アップロード', zh: '图片上传' })}
-              </Label>
+              {/* Image Upload */}
               <Button
                 variant="outline"
                 className="w-full"
                 onClick={() => fileInputRef.current?.click()}
               >
                 <Upload className="h-4 w-4 mr-2" />
-                {t({ ko: '+ 내 PC 이미지 불러오기', en: '+ Load Image from PC', ja: '+ PCから画像を読み込み', zh: '+ 从PC加载图片' })}
+                {t({ ko: '이미지 업로드', en: 'Image Upload', ja: '画像アップロード', zh: '图片上传' })}
               </Button>
               <input
                 ref={fileInputRef}
@@ -415,109 +454,234 @@ export default function Editor() {
                 className="hidden"
               />
             </div>
+          </div>
+        )}
 
-            {/* Background Removal */}
-            <div>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => {}}
-              >
-                <Scissors className="h-4 w-4 mr-2" />
-                {t({ ko: '배경이미지 제거', en: 'Remove Background', ja: '背景画像除去', zh: '移除背景图片' })}
-              </Button>
-            </div>
+        {/* Desktop Sidebar */}
+        {!isMobile && (
+          <div className="w-80 bg-white shadow-sm border-r p-4 overflow-y-auto">
+            <div className="space-y-6">
+              {/* Size Controls */}
+              <div>
+                <Label className="text-sm font-medium mb-3 block">
+                  {t({ ko: '사이즈 (mm)', en: 'Size (mm)', ja: 'サイズ (mm)', zh: '尺寸 (mm)' })}
+                </Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label className="text-xs text-gray-500">
+                      {t({ ko: '가로', en: 'Width', ja: '横', zh: '宽' })}
+                    </Label>
+                    <Input
+                      type="number"
+                      value={canvasSize.width}
+                      onChange={(e) => setCanvasSize({ ...canvasSize, width: parseInt(e.target.value) || 0 })}
+                      className="text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs text-gray-500">
+                      {t({ ko: '세로', en: 'Height', ja: '縦', zh: '高' })}
+                    </Label>
+                    <Input
+                      type="number"
+                      value={canvasSize.height}
+                      onChange={(e) => setCanvasSize({ ...canvasSize, height: parseInt(e.target.value) || 0 })}
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
 
-            {/* Double Sided */}
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="double-sided"
-                checked={doubleSided}
-                onCheckedChange={(checked) => setDoubleSided(checked as boolean)}
-              />
-              <Label htmlFor="double-sided" className="text-sm">
-                {t({ ko: '앞뒤 다르게 그리기', en: 'Different Front/Back', ja: '表裏異なる描画', zh: '正反面不同绘制' })}
-              </Label>
-            </div>
-
-            {doubleSided && (
-              <div className="flex space-x-2">
+              {/* Image Upload */}
+              <div>
+                <Label className="text-sm font-medium mb-3 block">
+                  {t({ ko: '이미지 업로드', en: 'Image Upload', ja: '画像アップロード', zh: '图片上传' })}
+                </Label>
                 <Button
-                  variant={currentSide === 'front' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setCurrentSide('front')}
-                  className="flex-1"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => fileInputRef.current?.click()}
                 >
-                  {t({ ko: '앞면', en: 'Front', ja: '表面', zh: '正面' })}
+                  <Upload className="h-4 w-4 mr-2" />
+                  {t({ ko: '+ 내 PC 이미지 불러오기', en: '+ Load Image from PC', ja: '+ PCから画像を読み込み', zh: '+ 从PC加载图片' })}
                 </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </div>
+
+              {/* Background Removal */}
+              <div>
                 <Button
-                  variant={currentSide === 'back' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setCurrentSide('back')}
-                  className="flex-1"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {}}
                 >
-                  {t({ ko: '뒷면', en: 'Back', ja: '裏面', zh: '背面' })}
+                  <Scissors className="h-4 w-4 mr-2" />
+                  {t({ ko: '배경이미지 제거', en: 'Remove Background', ja: '背景画像除去', zh: '移除背景图片' })}
                 </Button>
               </div>
-            )}
 
-            {/* Clear Canvas */}
-            <Button
-              variant="destructive"
-              className="w-full"
-              onClick={clearCanvas}
-            >
-              <RotateCcw className="h-4 w-4 mr-2" />
-              {t({ ko: '캔버스 초기화', en: 'Clear Canvas', ja: 'キャンバスクリア', zh: '清空画布' })}
-            </Button>
+              {/* Double Sided */}
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="double-sided"
+                  checked={doubleSided}
+                  onCheckedChange={(checked) => setDoubleSided(checked as boolean)}
+                />
+                <Label htmlFor="double-sided" className="text-sm">
+                  {t({ ko: '앞뒤 다르게 그리기', en: 'Different Front/Back', ja: '表裏異なる描画', zh: '正反面不同绘制' })}
+                </Label>
+              </div>
+
+              {doubleSided && (
+                <div className="flex space-x-2">
+                  <Button
+                    variant={currentSide === 'front' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setCurrentSide('front')}
+                    className="flex-1"
+                  >
+                    {t({ ko: '앞면', en: 'Front', ja: '表面', zh: '正面' })}
+                  </Button>
+                  <Button
+                    variant={currentSide === 'back' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setCurrentSide('back')}
+                    className="flex-1"
+                  >
+                    {t({ ko: '뒷면', en: 'Back', ja: '裏面', zh: '背面' })}
+                  </Button>
+                </div>
+              )}
+
+              {/* Clear Canvas */}
+              <Button
+                variant="destructive"
+                className="w-full"
+                onClick={clearCanvas}
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                {t({ ko: '캔버스 초기화', en: 'Clear Canvas', ja: 'キャンバスクリア', zh: '清空画布' })}
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Main Canvas Area */}
         <div className="flex-1 flex flex-col">
           {/* Canvas */}
-          <div className="flex-1 flex items-center justify-center p-8">
+          <div className="flex-1 flex items-center justify-center p-2 sm:p-8">
             <div className="relative bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden">
-              <canvas
-                ref={canvasRef}
-                width={canvasSize.width * 4}
-                height={canvasSize.height * 4}
-                className="block"
+              <div
+                className="relative bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg"
                 style={{
-                  width: `${canvasSize.width * 4}px`,
-                  height: `${canvasSize.height * 4}px`,
-                  maxWidth: '600px',
-                  maxHeight: '600px'
+                  width: isMobile ? `${Math.min(canvasSize.width * 3, 350)}px` : `${canvasSize.width * 4}px`,
+                  height: isMobile ? `${Math.min(canvasSize.height * 3, 350)}px` : `${canvasSize.height * 4}px`,
+                  maxWidth: isMobile ? '350px' : '600px',
+                  maxHeight: isMobile ? '350px' : '600px'
                 }}
-              />
-              
-              {/* Product Guide Overlay */}
-              {selectedProduct && (
-                <div className="absolute inset-0 pointer-events-none">
-                  {/* Ring Position Indicator */}
+              >
+                {/* Canvas Background */}
+                <div className="absolute inset-0 bg-white rounded-lg"></div>
+                
+                {/* Uploaded Images */}
+                {images.map((image) => (
                   <div
+                    key={image.id}
                     className={cn(
-                      "absolute w-3 h-3 bg-red-500 rounded-full opacity-50",
-                      ringPosition === 'top' && "top-2 left-1/2 transform -translate-x-1/2",
-                      ringPosition === 'left' && "left-2 top-1/2 transform -translate-y-1/2",
-                      ringPosition === 'right' && "right-2 top-1/2 transform -translate-y-1/2"
+                      "absolute border-2 cursor-move select-none",
+                      selectedImage === image.id ? "border-blue-500 bg-blue-50" : "border-transparent",
+                      imageLoadErrors.includes(image.id) && "border-red-500 bg-red-50"
                     )}
-                  />
-                </div>
-              )}
+                    style={{
+                      left: `${image.x}px`,
+                      top: `${image.y}px`,
+                      width: `${image.width}px`,
+                      height: `${image.height}px`,
+                      transform: `rotate(${image.rotation}deg)`,
+                      zIndex: selectedImage === image.id ? 10 : 5
+                    }}
+                    onClick={() => setSelectedImage(image.id)}
+                    onMouseDown={(e) => setDraggedImage(image.id)}
+                  >
+                    {imageLoadErrors.includes(image.id) ? (
+                      <div className="w-full h-full flex items-center justify-center text-red-500 text-xs">
+                        <div className="text-center">
+                          <AlertCircle className="h-6 w-6 mx-auto mb-1" />
+                          <div>{t({ ko: '이미지 로드 실패', en: 'Image Load Failed', ja: '画像読み込み失敗', zh: '图片加载失败' })}</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <img
+                        src={image.src}
+                        alt="Uploaded"
+                        className="w-full h-full object-contain rounded"
+                        onLoad={() => handleImageLoad(image.id)}
+                        onError={() => handleImageError(image.id)}
+                        draggable={false}
+                      />
+                    )}
+                    
+                    {/* Selection Handles */}
+                    {selectedImage === image.id && (
+                      <>
+                        <div className="absolute -top-1 -left-1 w-2 h-2 bg-blue-500 rounded-full cursor-nw-resize"></div>
+                        <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full cursor-ne-resize"></div>
+                        <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-blue-500 rounded-full cursor-sw-resize"></div>
+                        <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-blue-500 rounded-full cursor-se-resize"></div>
+                      </>
+                    )}
+                  </div>
+                ))}
+                
+                {/* Empty State */}
+                {images.length === 0 && (
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                    <div className="text-center">
+                      <ImageIcon className="h-12 w-12 mx-auto mb-2" />
+                      <p className="text-sm">
+                        {t({ ko: '이미지를 업로드해주세요', en: 'Please upload an image', ja: '画像をアップロードしてください', zh: '请上传图片' })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Product Guide Overlay */}
+                {selectedProduct && (
+                  <div className="absolute inset-0 pointer-events-none">
+                    {/* Ring Position Indicator */}
+                    <div
+                      className={cn(
+                        "absolute w-2 h-2 sm:w-3 sm:h-3 bg-red-500 rounded-full opacity-50",
+                        ringPosition === 'top' && "top-2 left-1/2 transform -translate-x-1/2",
+                        ringPosition === 'left' && "left-2 top-1/2 transform -translate-y-1/2",
+                        ringPosition === 'right' && "right-2 top-1/2 transform -translate-y-1/2"
+                      )}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Bottom Toolbar */}
-          <div className="bg-white border-t p-4">
-            <div className="flex items-center justify-center space-x-8">
+          <div className="bg-white border-t p-2 sm:p-4">
+            <div className={cn(
+              "flex items-center justify-center",
+              isMobile ? "flex-col space-y-2" : "space-x-8"
+            )}>
               {/* Ring Position */}
               <div className="flex items-center space-x-2">
-                <Label className="text-sm font-medium">
+                <Label className="text-xs sm:text-sm font-medium">
                   {t({ ko: '고리방향', en: 'Ring Position', ja: 'リング位置', zh: '环位置' })}:
                 </Label>
                 <Select value={ringPosition} onValueChange={(value: any) => setRingPosition(value)}>
-                  <SelectTrigger className="w-24">
+                  <SelectTrigger className="w-20 sm:w-24">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -530,11 +694,11 @@ export default function Editor() {
 
               {/* Ring Size */}
               <div className="flex items-center space-x-2">
-                <Label className="text-sm font-medium">
+                <Label className="text-xs sm:text-sm font-medium">
                   {t({ ko: '고리크기', en: 'Ring Size', ja: 'リングサイズ', zh: '环尺寸' })}:
                 </Label>
                 <Select value={ringSize.toString()} onValueChange={(value) => setRingSize(parseFloat(value))}>
-                  <SelectTrigger className="w-20">
+                  <SelectTrigger className="w-16 sm:w-20">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -547,32 +711,36 @@ export default function Editor() {
               </div>
 
               {/* White Area Adjustment */}
-              <div className="flex items-center space-x-2">
-                <Label className="text-sm font-medium">
-                  {t({ ko: '화이트영역', en: 'White Area', ja: '白い領域', zh: '白色区域' })}:
-                </Label>
-                <div className="w-24">
-                  <Slider
-                    value={[whiteAreaAdjustment]}
-                    onValueChange={(value) => setWhiteAreaAdjustment(value[0])}
-                    max={100}
-                    step={1}
-                    className="w-full"
-                  />
+              {!isMobile && (
+                <div className="flex items-center space-x-2">
+                  <Label className="text-xs sm:text-sm font-medium">
+                    {t({ ko: '화이트영역', en: 'White Area', ja: '白い領域', zh: '白色区域' })}:
+                  </Label>
+                  <div className="w-20 sm:w-24">
+                    <Slider
+                      value={[whiteAreaAdjustment]}
+                      onValueChange={(value) => setWhiteAreaAdjustment(value[0])}
+                      max={100}
+                      step={1}
+                      className="w-full"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Remove White Spill */}
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="remove-white-spill"
-                  checked={removeWhiteSpill}
-                  onCheckedChange={(checked) => setRemoveWhiteSpill(checked as boolean)}
-                />
-                <Label htmlFor="remove-white-spill" className="text-sm">
-                  {t({ ko: '흰색 돌출 제거', en: 'Remove White Spill', ja: '白い突出除去', zh: '移除白色溢出' })}
-                </Label>
-              </div>
+              {!isMobile && (
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="remove-white-spill"
+                    checked={removeWhiteSpill}
+                    onCheckedChange={(checked) => setRemoveWhiteSpill(checked as boolean)}
+                  />
+                  <Label htmlFor="remove-white-spill" className="text-xs sm:text-sm">
+                    {t({ ko: '흰색 돌출 제거', en: 'Remove White Spill', ja: '白い突出除去', zh: '移除白色溢出' })}
+                  </Label>
+                </div>
+              )}
             </div>
           </div>
         </div>
