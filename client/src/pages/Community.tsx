@@ -1,377 +1,303 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Heart, MessageCircle, Share2, Plus, Upload, X } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Heart, MessageCircle, Share2, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { api } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/useLanguage";
+import { api } from "@/lib/api";
 import type { CommunityPost, CommunityComment } from "@shared/schema";
 
 export default function Community() {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const { language, t } = useLanguage();
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedPost, setSelectedPost] = useState<CommunityPost | null>(null);
-  const [newPostData, setNewPostData] = useState({
-    title: "",
-    description: "",
-    imageUrl: "",
-    productId: ""
-  });
-  const [newComment, setNewComment] = useState("");
 
   const { data: posts, isLoading: postsLoading } = useQuery({
     queryKey: ["/api/community/posts"],
-    queryFn: () => api.getCommunityPosts(),
   });
 
-  const { data: comments, isLoading: commentsLoading } = useQuery({
-    queryKey: ["/api/community/posts", selectedPost?.id, "comments"],
-    queryFn: () => selectedPost ? api.getCommunityComments(selectedPost.id) : Promise.resolve([]),
+  const { data: comments } = useQuery({
+    queryKey: ["/api/community/comments", selectedPost?.id],
     enabled: !!selectedPost,
   });
 
-  const { data: products } = useQuery({
-    queryKey: ["/api/products"],
-    queryFn: () => api.getProducts(),
-  });
-
-  const createPostMutation = useMutation({
-    mutationFn: (postData: any) => api.createCommunityPost(postData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/community/posts"] });
-      setNewPostData({ title: "", description: "", imageUrl: "", productId: "" });
-      toast({
-        title: "게시물 작성 완료",
-        description: "커뮤니티에 게시물이 등록되었습니다.",
-      });
+  // Mock featured posts data to match the design
+  const featuredPosts = [
+    {
+      id: 1,
+      title: "오늘의 하루종일 아크릴 스탠드 제작 과정!",
+      description: "처음부터 끝까지 모든 과정을 담았습니다",
+      author: "네기디모토짱",
+      authorLevel: "골드회원",
+      image: "/api/placeholder/400/300",
+      likes: 245,
+      comments: 18,
+      badge: "BEST",
+      category: "제작후기"
     },
-    onError: () => {
-      toast({
-        title: "게시물 작성 실패",
-        description: "게시물 작성 중 오류가 발생했습니다.",
-        variant: "destructive",
-      });
+    {
+      id: 2,
+      title: "아크릴 키링 리뷰 대공개!",
+      description: "실제 주문해서 받은 퀄리티 후기입니다",
+      author: "데가키모토루",
+      authorLevel: "실버회원",
+      image: "/api/placeholder/400/300",
+      likes: 189,
+      comments: 12,
+      badge: "BEST",
+      category: "상품후기"
     },
-  });
-
-  const likePostMutation = useMutation({
-    mutationFn: (postId: number) => api.likeCommunityPost(postId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/community/posts"] });
-    },
-  });
-
-  const createCommentMutation = useMutation({
-    mutationFn: ({ postId, comment }: { postId: number; comment: string }) => 
-      api.createCommunityComment(postId, { userId: 1, comment }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/community/posts", selectedPost?.id, "comments"] });
-      setNewComment("");
-    },
-  });
-
-  const handleCreatePost = () => {
-    if (!newPostData.title || !newPostData.imageUrl) {
-      toast({
-        title: "입력 오류",
-        description: "제목과 이미지는 필수 항목입니다.",
-        variant: "destructive",
-      });
-      return;
+    {
+      id: 3,
+      title: "프린팅 서비스 품질 후기 (5점만점)",
+      description: "색감이 정말 좋네요!",
+      author: "네기디모토짱",
+      authorLevel: "골드회원",
+      image: "/api/placeholder/400/300",
+      likes: 156,
+      comments: 8,
+      badge: "BEST", 
+      category: "서비스후기"
     }
+  ];
 
-    createPostMutation.mutate({
-      ...newPostData,
-      userId: 1, // Mock user ID
-      productId: newPostData.productId ? parseInt(newPostData.productId) : undefined,
-    });
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % featuredPosts.length);
   };
 
-  const handleLikePost = (postId: number) => {
-    likePostMutation.mutate(postId);
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + featuredPosts.length) % featuredPosts.length);
   };
 
-  const handleCreateComment = () => {
-    if (!newComment.trim() || !selectedPost) return;
-    
-    createCommentMutation.mutate({
-      postId: selectedPost.id,
-      comment: newComment,
+  const handleLike = (postId: number) => {
+    toast({
+      title: t({ ko: "좋아요!", en: "Liked!" }),
+      description: t({ ko: "게시물에 좋아요를 눌렀습니다.", en: "You liked this post." }),
     });
   };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-muted/50 py-12">
+      <div className="bg-muted/30 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
-              커뮤니티 갤러리
+          <div className="flex items-center space-x-2 mb-4">
+            <span className="text-2xl">📸</span>
+            <h1 className="text-3xl font-bold text-foreground">
+              {t({ ko: "이번주 베스트 컨텐츠", en: "This Week's Best Content" })}
             </h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              사용자들이 제작한 창작물을 구경하고 영감을 받아보세요
-            </p>
-            
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="btn-primary">
-                  <Plus className="h-4 w-4 mr-2" />
-                  작품 공유하기
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                  <DialogTitle>새 작품 공유하기</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="title">제목 *</Label>
-                    <Input
-                      id="title"
-                      value={newPostData.title}
-                      onChange={(e) => setNewPostData(prev => ({ ...prev, title: e.target.value }))}
-                      placeholder="작품 제목을 입력하세요"
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="description">설명</Label>
-                    <Textarea
-                      id="description"
-                      value={newPostData.description}
-                      onChange={(e) => setNewPostData(prev => ({ ...prev, description: e.target.value }))}
-                      placeholder="작품에 대한 설명을 입력하세요"
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="imageUrl">이미지 URL *</Label>
-                    <Input
-                      id="imageUrl"
-                      value={newPostData.imageUrl}
-                      onChange={(e) => setNewPostData(prev => ({ ...prev, imageUrl: e.target.value }))}
-                      placeholder="이미지 URL을 입력하세요"
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="productId">관련 제품 (선택)</Label>
-                    <Select
-                      value={newPostData.productId}
-                      onValueChange={(value) => setNewPostData(prev => ({ ...prev, productId: value }))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="관련 제품을 선택하세요" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="">선택 안함</SelectItem>
-                        {products?.map((product: any) => (
-                          <SelectItem key={product.id} value={product.id.toString()}>
-                            {product.nameKo}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <Button 
-                    onClick={handleCreatePost}
-                    className="w-full btn-primary"
-                    disabled={createPostMutation.isPending}
-                  >
-                    {createPostMutation.isPending ? "작성 중..." : "작품 공유하기"}
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
           </div>
+          <p className="text-lg text-muted-foreground">
+            {t({ ko: "회원들이 공유한 최고의 제작 후기와 작품들을 만나보세요", en: "Discover the best creation reviews and works shared by our members" })}
+          </p>
         </div>
       </div>
 
-      {/* Posts Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {postsLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
-              <Card key={i} className="overflow-hidden animate-pulse">
-                <div className="h-48 bg-muted"></div>
-                <CardContent className="p-4">
-                  <div className="h-4 bg-muted rounded mb-2"></div>
-                  <div className="h-6 bg-muted rounded"></div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {posts?.map((post: CommunityPost) => (
-              <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                <div 
-                  onClick={() => setSelectedPost(post)}
-                  className="relative"
-                >
-                  <img
-                    src={post.imageUrl}
-                    alt={post.title}
-                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-2 right-2">
-                    <Badge variant="secondary" className="bg-black/70 text-white">
-                      작품
-                    </Badge>
-                  </div>
-                </div>
-                
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
-                    {post.title}
-                  </h3>
-                  {post.description && (
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                      {post.description}
-                    </p>
-                  )}
-                </CardContent>
-                
-                <CardFooter className="p-4 pt-0">
-                  <div className="flex items-center justify-between w-full">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleLikePost(post.id);
-                      }}
-                      className="flex items-center text-accent hover:text-red-600 transition-colors"
-                    >
-                      <Heart className="h-4 w-4 mr-1" />
-                      <span className="text-sm">{post.likes || 0}</span>
-                    </button>
-                    
-                    <div className="flex items-center gap-4">
-                      <button
-                        onClick={() => setSelectedPost(post)}
-                        className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        <MessageCircle className="h-4 w-4 mr-1" />
-                        <span className="text-sm">댓글</span>
-                      </button>
-                      
-                      <button className="flex items-center text-muted-foreground hover:text-foreground transition-colors">
-                        <Share2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Post Detail Modal */}
-      {selectedPost && (
-        <Dialog open={!!selectedPost} onOpenChange={() => setSelectedPost(null)}>
-          <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center justify-between">
-                <span>{selectedPost.title}</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setSelectedPost(null)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </DialogTitle>
-            </DialogHeader>
-            
-            <div className="space-y-4">
-              <img
-                src={selectedPost.imageUrl}
-                alt={selectedPost.title}
-                className="w-full h-64 object-cover rounded-lg"
-              />
-              
-              {selectedPost.description && (
-                <p className="text-muted-foreground">
-                  {selectedPost.description}
-                </p>
-              )}
-              
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => handleLikePost(selectedPost.id)}
-                  className="flex items-center text-accent hover:text-red-600 transition-colors"
-                >
-                  <Heart className="h-5 w-5 mr-2" />
-                  <span>{selectedPost.likes || 0}개의 좋아요</span>
-                </button>
-                
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm">
-                    <Share2 className="h-4 w-4 mr-1" />
-                    공유
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="border-t pt-4">
-                <h4 className="font-semibold mb-3">댓글</h4>
-                
-                {/* Comment Input */}
-                <div className="flex gap-2 mb-4">
-                  <Input
-                    placeholder="댓글을 입력하세요..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleCreateComment()}
-                  />
-                  <Button
-                    onClick={handleCreateComment}
-                    disabled={!newComment.trim() || createCommentMutation.isPending}
-                  >
-                    등록
-                  </Button>
-                </div>
-                
-                {/* Comments List */}
-                <div className="space-y-3 max-h-64 overflow-y-auto">
-                  {commentsLoading ? (
-                    <div className="space-y-2">
-                      {[...Array(3)].map((_, i) => (
-                        <div key={i} className="h-12 bg-muted rounded animate-pulse" />
-                      ))}
-                    </div>
-                  ) : comments?.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4">
-                      첫 번째 댓글을 작성해보세요!
-                    </p>
-                  ) : (
-                    comments?.map((comment: CommunityComment) => (
-                      <div key={comment.id} className="bg-muted/50 rounded-lg p-3">
-                        <p className="text-sm text-foreground">
-                          {comment.comment}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Featured Posts Carousel */}
+        <div className="relative mb-16">
+          <div className="overflow-hidden rounded-2xl">
+            <div 
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {featuredPosts.map((post) => (
+                <div key={post.id} className="w-full flex-shrink-0 relative">
+                  <div className="aspect-[16/9] bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 flex items-center">
+                    <div className="flex w-full max-w-6xl mx-auto">
+                      {/* Content */}
+                      <div className="flex-1 pr-8">
+                        <div className="flex items-center space-x-3 mb-4">
+                          <Badge className="bg-red-500 text-white font-bold px-3 py-1">
+                            {post.badge}
+                          </Badge>
+                          <Badge variant="outline" className="text-muted-foreground">
+                            {post.category}
+                          </Badge>
+                        </div>
+                        
+                        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4 leading-tight">
+                          {post.title}
+                        </h2>
+                        
+                        <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                          {post.description}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(comment.createdAt).toLocaleDateString('ko-KR')}
-                        </p>
+                        
+                        <div className="flex items-center space-x-6 mb-6">
+                          <div className="flex items-center space-x-2">
+                            <Heart className="h-5 w-5 text-red-500" />
+                            <span className="font-medium">{post.likes}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <MessageCircle className="h-5 w-5 text-blue-500" />
+                            <span className="font-medium">{post.comments}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">
+                              {post.author.charAt(0)}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">{post.author}</p>
+                            <p className="text-sm text-muted-foreground">{post.authorLevel}</p>
+                          </div>
+                        </div>
                       </div>
-                    ))
-                  )}
+                      
+                      {/* Image */}
+                      <div className="w-80 h-60 rounded-xl overflow-hidden shadow-lg">
+                        <img 
+                          src={post.image} 
+                          alt={post.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 rounded-full p-3 shadow-lg transition-colors"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 rounded-full p-3 shadow-lg transition-colors"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+          
+          {/* Dots Indicator */}
+          <div className="flex justify-center mt-6 space-x-2">
+            {featuredPosts.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-3 h-3 rounded-full transition-colors ${
+                  index === currentSlide 
+                    ? 'bg-primary' 
+                    : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-8 mb-12">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <Star className="h-6 w-6 text-amber-500" />
+              <h3 className="text-2xl font-bold text-foreground">
+                {t({ ko: "지난 1개월간 누적 매출액", en: "Total Sales in the Last Month" })}
+              </h3>
+            </div>
+            <div className="flex items-center justify-center space-x-8 text-center">
+              <div className="flex items-center space-x-2">
+                <span className="text-3xl font-bold text-primary">3,000</span>
+                <span className="text-lg text-muted-foreground">
+                  {t({ ko: "만원 돌파와 함께", en: "KRW breakthrough with" })}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-3xl font-bold text-secondary">500</span>
+                <span className="text-lg text-muted-foreground">
+                  {t({ ko: "명의 회원이 함께 했습니다", en: "members participated" })}
+                </span>
               </div>
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
+          </div>
+        </div>
+
+        {/* Recent Posts Grid */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            {t({ ko: "최근 게시물", en: "Recent Posts" })}
+          </h2>
+          
+          {postsLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <Card key={i} className="overflow-hidden">
+                  <div className="h-48 bg-muted animate-pulse" />
+                  <CardContent className="p-4">
+                    <div className="h-4 bg-muted animate-pulse rounded mb-2" />
+                    <div className="h-3 bg-muted animate-pulse rounded mb-4" />
+                    <div className="flex justify-between">
+                      <div className="h-3 bg-muted animate-pulse rounded w-16" />
+                      <div className="h-3 bg-muted animate-pulse rounded w-16" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : posts && posts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {posts.map((post: CommunityPost) => (
+                <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="h-48 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
+                    <img 
+                      src="/api/placeholder/300/200" 
+                      alt={post.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                      {post.content}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <button
+                          onClick={() => handleLike(post.id)}
+                          className="flex items-center space-x-1 text-muted-foreground hover:text-red-500 transition-colors"
+                        >
+                          <Heart className="h-4 w-4" />
+                          <span className="text-sm">{post.likes}</span>
+                        </button>
+                        <div className="flex items-center space-x-1 text-muted-foreground">
+                          <MessageCircle className="h-4 w-4" />
+                          <span className="text-sm">0</span>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="sm">
+                        <Share2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <MessageCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                {t({ ko: "아직 게시물이 없습니다", en: "No posts yet" })}
+              </h3>
+              <p className="text-muted-foreground">
+                {t({ ko: "첫 번째 게시물을 작성해보세요!", en: "Be the first to create a post!" })}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
