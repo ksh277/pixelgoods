@@ -1,0 +1,72 @@
+Create a fully responsive custom printing e-commerce homepage similar to "AllThatPrinting" using modern UI/UX design. Design in Korean language by default. Include the following layout in vertical scroll structure:
+
+1. [Top Banner]
+- Full-width banner at the very top
+- Background color: #0066ff
+- Text: “🔥 이번 주 전상품 20% 할인중! 🔥” in bold white font
+- Right side: 작은 'X' 아이콘으로 닫기 버튼
+
+2. [Header Navigation]
+- Sticky top navigation bar with shadow on scroll
+- Left: Logo "ALL THAT PRINTING" (bold)
+- Right: Links: 올댓스토어 | 올댓커뮤니티 | 사용후기 | 기획전 | 자료실 | 이벤트 | 문의게시판 | 추가결제
+- Far right: 회원가입, 로그인, 주문조회, 장바구니 아이콘, 프로필 아이콘, 검색 아이콘
+
+3. [Hero Section]
+- Fullscreen width image carousel (3 slides)
+- Each slide has:
+   - Centered text in large white font (e.g., "나만의 커스텀 굿즈")
+   - Subtext in smaller font (e.g., “아크릴 키링, 스티커, 머그컵까지 원하는 디자인으로 제작하세요”)
+   - CTA buttons: "지금 커스터마이즈하기" (blue) + "템플릿 보기" (bordered)
+
+4. [Category Preview Section]
+- Title: 인기 카테고리
+- Horizontal scroll of product categories like "아크릴 키링", "스마트톡", "마그넷", "포카홀더"
+- Each item: 이미지 + 상품명 + 가격 + 리뷰수 + LIKE 수 표시
+
+5. [Best Seller Section]
+- Title: 🔥 인기급상승 아이템
+- 5 cards in a row
+- Each card includes:
+   - 상품 이미지
+   - 상품명 (2줄까지)
+   - 가격, 리뷰 수
+   - 우측 상단: NEW / UPGRADE / HIT 뱃지
+
+6. [추천 상품 섹션 - 자재별]
+- Title: 자재별 추천 상품✨
+- Scrollable grid layout
+- Show various types of acrylic, pastel, 투명 아크릴, 음각, 유색 제품
+- Include “LIKE” 수치 표시, 제품명, 가격, 리뷰 개수
+
+7. [Creator’s Top Picks]
+- Title: 올댓추천아이템
+- 동일한 상품 타일 구성
+- 포함 항목: 더큰스탠드, 디오라마 스탠드, 쉐이커 키링 등
+
+8. [Community Section - 🔥 NEW 따끈따끈 굿즈자랑]
+- Title on top with flame emojis
+- Grid of recent user-generated posts:
+   - Image of the product
+   - Title (e.g., "덕질용 굿즈")
+   - Username, 좋아요 수, 조회 수, 댓글 수
+
+9. [Review Section]
+- Title: 창작자들의 소중한 리뷰 🥰
+- Show 5~6 product images with star rating (평점 4.9) and short customer quote
+- 하단에는 리뷰 작성자의 이름 일부와 작성일 표시
+
+10. [Footer]
+- 3-column layout:
+   - Left: 로고 + 브랜드 소개
+   - Center: 메뉴 링크 (Home, Products, Community, Contact)
+   - Right: 소셜 아이콘 (인스타그램, 트위터, 카카오), 뉴스레터 입력 폼 + 구독 버튼
+
+11. [Global UI Features]
+- Responsive for mobile, tablet, desktop
+- 모든 텍스트는 한글 중심 (한국어 모드)
+- 다크 모드 지원: 헤더 상단에 토글 추가
+- 상단 검색창 자동완성 기능: “아크릴 키링”, “포카홀더” 등 예시 포함
+
+Design the page with modern TailwindCSS-inspired layout, rounded card corners, soft drop shadows, and hover effects on all clickable items. 모든 상품 섹션은 실제 리뷰/가격/좋아요 UI 포함하여 사용자 신뢰도 높이기.
+

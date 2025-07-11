@@ -1,0 +1,177 @@
+Create a fully responsive full-stack e-commerce web application called "AllThatPrinting", a custom printing service platform. Use React + TypeScript (.tsx), Tailwind CSS, Supabase as backend. Structure the frontend using modular components and Vite as build tool. Optimize code for SEO and performance.
+
+Include the following components in exact structure:
+
+1. **Header (Fixed at top, width 100%)**
+   - Logo (left aligned)
+   - Navigation menu (right aligned): [Home, Products, Reviews, Community, Login, Sign Up]
+   - Sticky on scroll, use shadow on scroll behavior
+   - Add a language toggle button (KR/EN) at the far right
+   - Add dark mode toggle icon beside language toggle
+
+2. **Top Promotional Banner**
+   - Full width strip banner at the very top
+   - Background: primary color (e.g., #0066ff)
+   - Text: “🔥 20% off on all custom printing services this week!”
+   - Center aligned, bold, white font
+   - Include dismissible 'X' icon on the right
+
+3. **Hero Section (Fullscreen Carousel)**
+   - 3 image slides (T-shirts, Mugs, Stickers)
+   - Each slide has:
+     - Centered large title + subtitle
+     - CTA buttons: “Customize Now” (primary), “See Templates” (secondary)
+     - Background image with overlay
+
+4. **Featured Categories Section (Below Carousel)**
+   - 3 grid items horizontally aligned
+   - Each card:
+     - Image
+     - Title
+     - Button → leads to product detail
+     - Hover effect: scale + shadow
+     - Categories: T-Shirts, Mugs, Stickers
+
+5. **Best Sellers Section**
+   - Title centered: “🔥 Best Selling Items”
+   - Grid layout: 2 rows x 3 columns (6 items)
+   - Each card:
+     - Product image (lazy-loaded)
+     - Name, price, star rating
+     - “Customize” button
+     - Hover animation: lift on hover
+
+6. **How It Works Section**
+   - 3 horizontally aligned steps with illustration/icon
+   - Step 1: Select Product  
+   - Step 2: Upload/Create Design  
+   - Step 3: Place Order  
+   - Use icon above each step title and short description below
+
+7. **Customer Review Section**
+   - Title: “Verified Customer Reviews”
+   - 3 cards in row:
+     - User profile photo, username
+     - Star rating (out of 5)
+     - Review text (truncate after 3 lines)
+   - “View All Reviews” button centered below
+
+8. **Community Section**
+   - Title: “Explore Custom Print Ideas from Community”
+   - 4 grid items
+   - Each post includes:
+     - Design image
+     - Short description
+     - Like button (heart icon)
+     - Comment count
+
+9. **Footer Section (Sticky Bottom, Dark Background)**
+   - 3 columns:
+     - Left: Logo + brand intro (small text)
+     - Middle: Nav links (Home, Products, Community, Contact Us)
+     - Right: Newsletter input + Subscribe button + social icons (Kakao, Instagram, Twitter)
+   - Add copyright
+   - Responsive: stacks vertically on mobile
+
+10. **Login Page**
+   - Centered card
+   - Inputs: Email, Password
+   - Buttons: Login, Social Login (Google, Kakao)
+   - Link: “Don’t have an account? Sign up”
+
+11. **Signup Page**
+   - Fields: Username, Email, Password, Confirm Password
+   - Terms agreement checkbox
+   - Submit button (with validation)
+   - Redirect link to login
+
+12. **User Dashboard (Protected Route)**
+   - 3 Tabs at top: [My Orders, My Designs, Account Settings]
+   - My Orders: order history with image, name, status, "Reorder" button
+   - My Designs: thumbnail grid of saved designs, “Edit” button
+   - Account Settings: update name, email, password
+
+13. **Product Detail Page**
+   - Large product image on left, details on right
+   - Customization panel:
+     - Upload Image (drag/drop or button)
+     - Add Text (font, size, color)
+     - Size & Color dropdowns
+     - Live preview box
+     - “Add to Cart” button
+     - Support for preset templates (select & customize)
+
+14. **Cart Page**
+   - List of items added:
+     - Thumbnail + title + qty selector + price + delete
+   - Summary sidebar:
+     - Subtotal, Delivery fee, Total
+     - "Proceed to Checkout" button
+
+15. **Checkout Page**
+   - Form:
+     - Shipping info (name, address, phone)
+     - Payment method (credit card, KakaoPay placeholder)
+     - Checkbox for "Agree to Terms"
+   - “Place Order” button (disabled until form valid)
+
+16. **Admin Dashboard (Protected)**
+   - Nav Tabs: Orders, Products, Community
+   - Orders: Table with order ID, user, status, action buttons (approve/cancel)
+   - Products: Add/Edit/Delete products (form + image)
+   - Community: Moderate posts (Approve/Delete)
+
+17. **Global Features**
+   - Search Bar in Header (autocomplete: product name)
+   - Responsive design for mobile/tablet/desktop
+   - Tailwind CSS utility classes throughout
+   - Lazy-load all images
+   - Dark Mode (toggle state saved)
+   - Multi-language toggle (KR/EN)
+   - Accessible components (a11y ready)
+   - SEO metadata tags
+   - Supabase backend integration for auth, database
+   - GitHub export-ready
+   - All pages TSX structured
+18. For each product (T-shirt, mug, sticker), support template presets.
+
+- Each product detail page should include:
+  - A dropdown or modal selector titled “Choose a Template”
+  - At least 3 default design templates (e.g., simple text, graphic overlay, full image wrap)
+  - Once a template is selected, auto-fill the customization panel with default styles
+  - Users should be able to modify the template (change text/image/colors)
+  - Live preview should update instantly as users adjust the template
+  - Save modified version as “My Design” in the user dashboard
+19. Add a fully functional Admin Dashboard, accessible only to authenticated admin users.
+
+- Protect this route with role-based auth (admin only)
+- Layout:
+  - Sidebar with tabs: [Manage Orders, Manage Products, Moderate Community]
+- Manage Orders:
+  - Table view: Order ID, User, Product, Status, Total, Buttons (Approve, Cancel, Ship)
+  - Status dropdown to change state (Pending → Shipped)
+- Manage Products:
+  - List of all products with images, name, price
+  - “Add New Product” form (with image upload, price, description)
+  - Edit/Delete buttons
+- Moderate Community:
+  - Display list of all community posts (design image + content preview)
+  - Approve / Delete buttons for each
+  - Show total likes & reports per post
+20. Ensure the codebase is deploy-ready and cleanly structured for production use.
+
+- Use Vite as the frontend bundler
+- Structure all components in `/components`, all pages in `/pages`, and utility logic in `/lib` or `/hooks`
+- Connect Supabase as the backend:
+  - Authentication (email/password + OAuth with Google/Kakao)
+  - Realtime database (products, orders, reviews, posts)
+  - Storage for image uploads
+- Include `.env` config for API keys
+- Enable GitHub integration:
+  - Export the project to a GitHub repo
+  - Include `README.md` with setup instructions
+- Add automatic deployment scripts or Vercel/Firebase Hosting deploy-ready config
+- All pages should be written in `.tsx` files
+- Use Tailwind CSS throughout with `tailwind.config.ts` preconfigured
+- Ensure performance optimization: lazy loading, image compression, minimal initial bundle
+

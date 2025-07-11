@@ -1,0 +1,47 @@
+Create a fully responsive Korean-style full-stack e-commerce web application for custom printing services using React + TypeScript, Tailwind CSS, Supabase. Match the style and features of "AllThatPrinting" (올댓프린팅) website.
+
+Use Vite as the frontend build tool and modularize all components in .tsx files. Structure the project for deployment and GitHub export.
+
+Design goals:
+- UI in Korean with English toggle (KR/EN)
+- Korean pricing (₩) and product grid with “LIKE” count per product
+- Add tags: NEW, 추천, UPGRADE, HIT, HOT based on reviews or engagement
+- Support for acrylic keychains, stickers, T-shirts, phone grips, stands, and accessories
+- User upload customization tool: upload image, add text, adjust colors, choose sizes
+- Include live preview (image + text) for all editable fields
+- Each product supports template presets: graphic/text layouts that auto-fill editor
+- Allow template modification with real-time preview
+- Save user design to dashboard (My Designs)
+
+Pages to include:
+1. Home – Top banner (e.g. 20% discount), hero carousel, best sellers, custom categories
+2. Product List – Grid layout with sorting (최신순, 좋아요순, 리뷰순, 가격순), filter by category/material
+3. Product Detail – Customization panel, “Choose Template”, “Add to Cart”
+4. Cart – Editable quantity, subtotal summary, “Proceed to Checkout”
+5. Checkout – Shipping form, payment method (KakaoPay placeholder), terms checkbox
+6. Login / Signup – Email login + social login (Google/Kakao)
+7. User Dashboard – Tabs: My Orders, My Designs, Account Settings
+8. Community – User posts with image, like button, comment count, 댓글/답글 기능
+9. Admin Dashboard – Manage products, orders (상태변경: 승인/배송중), community moderation
+10. Review System – Star ratings, text reviews (truncate over 3 lines), "View All Reviews"
+
+Global features:
+- Dark mode toggle
+- Responsive design for mobile/tablet
+- Infinite scroll or pagination on product list
+- Multi-language support (KR/EN)
+- Social sharing (KakaoTalk, Instagram)
+- SEO meta tags, lazy-loaded images
+- Event banner manager in admin panel
+- Point & level system (등급제), rewards for activity (like/review)
+
+Use Supabase for:
+- Authentication (email, OAuth: Google/Kakao)
+- Realtime DB (products, orders, users, reviews)
+- File storage (image uploads)
+- Admin role-based route protection
+
+Deployment-ready:
+- .env for API keys
+- GitHub export
+- Vercel/Firebase deploy-ready config
