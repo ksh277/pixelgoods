@@ -48,12 +48,15 @@ export function ProductCard({
       <Card className="group cursor-pointer overflow-hidden hover-lift bg-card/80 backdrop-blur-sm border-border/50">
         <div className="relative">
           <motion.img
-            src={product.imageUrl || "/api/placeholder/300/300"}
+            src={product.imageUrl}
             alt={language === 'ko' ? product.nameKo : product.name}
             className="w-full h-64 object-cover"
             loading="lazy"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+            }}
           />
           
           {/* Overlay with hover effects */}

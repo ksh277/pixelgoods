@@ -112,14 +112,14 @@ export function Hero() {
                   >
                     <Button
                       size="lg"
-                      className="bg-white text-primary hover:bg-white/90 font-bold py-3 px-6 rounded-xl text-base hover-scale text-korean"
+                      className="bg-white text-black hover:bg-white/90 font-bold py-3 px-6 rounded-xl text-base hover-scale text-korean shadow-lg"
                     >
                       {t(heroSlides[currentSlide].ctaText)}
                     </Button>
                     <Button
                       size="lg"
                       variant="outline"
-                      className="border-white text-white hover:bg-white hover:text-primary font-semibold py-3 px-6 rounded-xl text-base text-korean"
+                      className="border-white border-2 text-white hover:bg-white hover:text-black font-semibold py-3 px-6 rounded-xl text-base text-korean shadow-lg"
                     >
                       <Play className="h-4 w-4 mr-2" />
                       {t({ ko: "작업 과정 보기", en: "Watch Process" })}
