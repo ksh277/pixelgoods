@@ -8,7 +8,7 @@ interface CategoryNavProps {
 
 export function CategoryNav({ className }: CategoryNavProps) {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState('acrylic');
+  const [hoveredTab, setHoveredTab] = useState<string | null>(null);
 
   const categories = [
     {
@@ -59,47 +59,60 @@ export function CategoryNav({ className }: CategoryNavProps) {
     }
   ];
 
-  const activeCategory = categories.find(cat => cat.id === activeTab);
+  const hoveredCategory = categories.find(cat => cat.id === hoveredTab);
 
   return (
-    <div className={cn("bg-white border-b border-gray-200", className)}>
+    <div className={cn("bg-white border-b border-gray-200 relative", className)}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Tab Navigation */}
-        <div className="flex justify-center border-b border-gray-100">
+        <div className="flex justify-center">
           <div className="flex space-x-8 overflow-x-auto">
             {categories.map((category) => (
-              <button
+              <div
                 key={category.id}
-                onClick={() => setActiveTab(category.id)}
-                className={cn(
-                  "relative py-4 px-2 text-sm font-medium whitespace-nowrap transition-colors",
-                  "hover:text-gray-700 focus:outline-none focus:text-gray-700",
-                  activeTab === category.id
-                    ? "text-gray-900 border-b-2 border-black"
-                    : "text-gray-500 hover:text-gray-700"
-                )}
+                className="relative"
+                onMouseEnter={() => setHoveredTab(category.id)}
+                onMouseLeave={() => setHoveredTab(null)}
               >
-                {t(category.name)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Sub Menu */}
-        <div className="py-4">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            {activeCategory?.items.map((item, index) => (
-              <div key={index} className="flex items-center">
-                <button className="text-sm text-gray-600 hover:text-gray-900 transition-colors px-2 py-1 whitespace-nowrap">
-                  {t(item)}
+                <button
+                  className={cn(
+                    "relative py-4 px-2 text-sm font-medium whitespace-nowrap transition-colors",
+                    "hover:text-gray-700 focus:outline-none focus:text-gray-700",
+                    hoveredTab === category.id
+                      ? "text-gray-900 border-b-2 border-black"
+                      : "text-gray-500 hover:text-gray-700"
+                  )}
+                >
+                  {t(category.name)}
                 </button>
-                {index < activeCategory.items.length - 1 && (
-                  <div className="w-px h-4 bg-gray-300 mx-3" />
-                )}
               </div>
             ))}
           </div>
         </div>
+
+        {/* Hover Sub Menu */}
+        {hoveredTab && hoveredCategory && (
+          <div
+            className="absolute left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-50 animate-in fade-in-0 duration-200"
+            onMouseEnter={() => setHoveredTab(hoveredTab)}
+            onMouseLeave={() => setHoveredTab(null)}
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+                {hoveredCategory.items.map((item, index) => (
+                  <div key={index} className="flex items-center">
+                    <button className="text-sm text-gray-600 hover:text-gray-900 transition-colors px-2 py-1 whitespace-nowrap">
+                      {t(item)}
+                    </button>
+                    {index < hoveredCategory.items.length - 1 && (
+                      <div className="w-px h-4 bg-gray-300 mx-3" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

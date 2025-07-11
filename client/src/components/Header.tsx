@@ -38,12 +38,6 @@ export function Header() {
       <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-2 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-end text-sm">
           <div className="flex items-center space-x-4">
-            <Link href="/products" className="text-muted-foreground hover:text-foreground transition-colors">
-              {t({ ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" })}
-            </Link>
-            <Link href="/community" className="text-muted-foreground hover:text-foreground transition-colors">
-              {t({ ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" })}
-            </Link>
             <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">
               {t({ ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" })}
             </Link>
@@ -90,6 +84,16 @@ export function Header() {
                 ALL THAT PRINTING
               </span>
             </Link>
+
+            {/* Main Navigation Links */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Link href="/products" className="text-foreground hover:text-muted-foreground transition-colors font-medium">
+                {t({ ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" })}
+              </Link>
+              <Link href="/community" className="text-foreground hover:text-muted-foreground transition-colors font-medium">
+                {t({ ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" })}
+              </Link>
+            </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
@@ -171,7 +175,7 @@ export function Header() {
                     />
                   </div>
 
-                  {/* Mobile Top Actions */}
+                  {/* Mobile Main Actions */}
                   <div className="flex flex-col space-y-2 pb-4 border-b">
                     <Link href="/products" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
                       {t({ ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" })}
@@ -179,6 +183,10 @@ export function Header() {
                     <Link href="/community" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
                       {t({ ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" })}
                     </Link>
+                  </div>
+
+                  {/* Mobile User Actions */}
+                  <div className="flex flex-col space-y-2 pb-4 border-b">
                     <Link href="/login" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
                       {t({ ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" })}
                     </Link>
