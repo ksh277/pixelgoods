@@ -1,454 +1,533 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { Flame, Palette, Truck, Clock, Shield, Star, ArrowRight, Users, Award, MessageCircle, Heart, Play, ChevronLeft, ChevronRight, Gift, Zap, Camera, TrendingUp, Calendar, Mail, Sparkles, Tag, Target } from "lucide-react";
-import { Hero } from "@/components/Hero";
-import { ProductCard } from "@/components/ProductCard";
-import { ProductGrid } from "@/components/ProductGrid";
-import { SectionHeader } from "@/components/SectionHeader";
+import { Heart, MessageCircle, ShoppingCart, Star, Eye, ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "wouter";
-import { useLanguage } from "@/hooks/useLanguage";
-import { api } from "@/lib/api";
+import { Hero } from "@/components/Hero";
+import { SectionHeader } from "@/components/SectionHeader";
 import { useToast } from "@/hooks/use-toast";
-import type { Product, Category } from "@shared/schema";
-
-// Animation variants
-const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: "easeOut" }
-};
-
-const staggerContainer = {
-  animate: { transition: { staggerChildren: 0.1 } }
-};
-
-const slideIn = {
-  initial: { opacity: 0, x: -60 },
-  animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.8, ease: "easeOut" }
-};
+import { useLanguage } from "@/hooks/useLanguage";
+import { motion } from "framer-motion";
+import type { Product } from "@shared/schema";
 
 export default function Home() {
   const { toast } = useToast();
   const { language, t } = useLanguage();
-  const [activeSection, setActiveSection] = useState(0);
-  const [featuredCarouselIndex, setFeaturedCarouselIndex] = useState(0);
-  const [communityCarouselIndex, setCommunityCarouselIndex] = useState(0);
-  
-  // Refs for in-view animations
-  const heroRef = useRef(null);
-  const categoriesRef = useRef(null);
-  const bestSellersRef = useRef(null);
-  const newArrivalsRef = useRef(null);
-  const howItWorksRef = useRef(null);
-  const communityRef = useRef(null);
-  const reviewsRef = useRef(null);
-  const eventsRef = useRef(null);
-  const newsletterRef = useRef(null);
+  const [favorites, setFavorites] = useState<number[]>([]);
 
-  const heroInView = useInView(heroRef, { once: true });
-  const categoriesInView = useInView(categoriesRef, { once: true });
-  const bestSellersInView = useInView(bestSellersRef, { once: true });
-  const newArrivalsInView = useInView(newArrivalsRef, { once: true });
-  const howItWorksInView = useInView(howItWorksRef, { once: true });
-  const communityInView = useInView(communityRef, { once: true });
-  const reviewsInView = useInView(reviewsRef, { once: true });
-  const eventsInView = useInView(eventsRef, { once: true });
-  const newsletterInView = useInView(newsletterRef, { once: true });
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["/api/products"],
+  });
 
-  const { data: categories, isLoading: categoriesLoading } = useQuery({
+  const { data: categories } = useQuery({
     queryKey: ["/api/categories"],
-    queryFn: () => api.getCategories(),
   });
 
-  const { data: featuredProducts, isLoading: productsLoading } = useQuery({
-    queryKey: ["/api/products", "featured"],
-    queryFn: () => api.getProducts({ featured: true }),
-  });
+  // Mock data for enhanced sections
+  const creatorReviews = [
+    {
+      id: 1,
+      productImage: "/api/placeholder/300/300",
+      productName: "홀로그램 아크릴 키링",
+      userName: "창작자님***",
+      rating: 5,
+      date: "2025.01.10",
+      reviewCount: 127,
+      comment: "퀄리티가 정말 좋아요! 색감도 예쁘고 홀로그램 효과가 환상적이에요",
+      tags: ["홀로그램", "아크릴", "키링"]
+    },
+    {
+      id: 2,
+      productImage: "/api/placeholder/300/300",
+      productName: "투명 아크릴 스탠드",
+      userName: "디자이너***",
+      rating: 5,
+      date: "2025.01.09",
+      reviewCount: 89,
+      comment: "투명도가 완벽하고 마감이 깔끔해요. 캐릭터가 생생하게 보입니다",
+      tags: ["투명", "스탠드", "아크릴"]
+    },
+    {
+      id: 3,
+      productImage: "/api/placeholder/300/300",
+      productName: "우드 키링 세트",
+      userName: "작가님***",
+      rating: 4,
+      date: "2025.01.08",
+      reviewCount: 156,
+      comment: "나무 질감이 좋고 레이저 각인이 선명해요. 선물용으로 최고!",
+      tags: ["우드", "키링", "레이저각인"]
+    }
+  ];
 
-  const { data: communityPosts, isLoading: communityLoading } = useQuery({
-    queryKey: ["/api/community/posts"],
-    queryFn: () => api.getCommunityPosts(),
-  });
+  const communityShowcase = [
+    {
+      id: 1,
+      image: "/api/placeholder/300/300",
+      title: "나만의 캐릭터 키링 완성!",
+      likes: 245,
+      comments: 18,
+      tags: ["캐릭터", "키링", "커스텀"],
+      author: "네기디***"
+    },
+    {
+      id: 2,
+      image: "/api/placeholder/300/300",
+      title: "홀로그램 스티커 대박!",
+      likes: 189,
+      comments: 24,
+      tags: ["홀로그램", "스티커", "반짝"],
+      author: "모토***"
+    },
+    {
+      id: 3,
+      image: "/api/placeholder/300/300",
+      title: "투명 아크릴 스탠드 후기",
+      likes: 167,
+      comments: 12,
+      tags: ["투명", "스탠드", "아크릴"],
+      author: "짱구***"
+    },
+    {
+      id: 4,
+      image: "/api/placeholder/300/300",
+      title: "레진 키링 DIY 성공!",
+      likes: 134,
+      comments: 15,
+      tags: ["레진", "DIY", "키링"],
+      author: "토루***"
+    }
+  ];
+
+  const materialRecommendations = [
+    {
+      id: 1,
+      image: "/api/placeholder/300/300",
+      title: "프리미엄 홀로그램 키링",
+      price: 12000,
+      originalPrice: 15000,
+      reviewCount: 245,
+      badge: "HIT",
+      material: "홀로그램",
+      discount: 20
+    },
+    {
+      id: 2,
+      image: "/api/placeholder/300/300",
+      title: "투명 아크릴 스탠드",
+      price: 8000,
+      reviewCount: 189,
+      badge: "NEW",
+      material: "투명아크릴",
+      discount: 0
+    },
+    {
+      id: 3,
+      image: "/api/placeholder/300/300",
+      title: "미러 아크릴 키링",
+      price: 10000,
+      reviewCount: 167,
+      badge: "추천",
+      material: "미러",
+      discount: 0
+    },
+    {
+      id: 4,
+      image: "/api/placeholder/300/300",
+      title: "원목 레이저 키링",
+      price: 9000,
+      reviewCount: 134,
+      badge: "HIT",
+      material: "원목",
+      discount: 0
+    }
+  ];
+
+  const instagramFeed = [
+    { id: 1, image: "/api/placeholder/300/300", likes: 125, comments: 8 },
+    { id: 2, image: "/api/placeholder/300/300", likes: 98, comments: 12 },
+    { id: 3, image: "/api/placeholder/300/300", likes: 156, comments: 15 },
+    { id: 4, image: "/api/placeholder/300/300", likes: 89, comments: 6 },
+    { id: 5, image: "/api/placeholder/300/300", likes: 234, comments: 18 },
+    { id: 6, image: "/api/placeholder/300/300", likes: 167, comments: 9 },
+    { id: 7, image: "/api/placeholder/300/300", likes: 145, comments: 11 },
+    { id: 8, image: "/api/placeholder/300/300", likes: 201, comments: 16 }
+  ];
 
   const handleAddToCart = (product: Product) => {
     toast({
-      title: t({ ko: "장바구니에 추가됨", en: "Added to Cart" }),
-      description: t({ 
-        ko: `${product.nameKo}이(가) 장바구니에 추가되었습니다.`,
-        en: `${product.name} has been added to your cart.`
-      }),
+      title: t({ ko: "장바구니에 추가되었습니다", en: "Added to cart" }),
+      description: `${product.nameKo || product.name}`,
     });
   };
 
   const handleToggleFavorite = (product: Product) => {
+    setFavorites(prev => 
+      prev.includes(product.id) 
+        ? prev.filter(id => id !== product.id)
+        : [...prev, product.id]
+    );
     toast({
-      title: t({ ko: "찜 목록에 추가됨", en: "Added to Favorites" }),
-      description: t({ 
-        ko: `${product.nameKo}이(가) 찜 목록에 추가되었습니다.`,
-        en: `${product.name} has been added to your favorites.`
-      }),
+      title: t({ ko: "찜 목록에 추가되었습니다", en: "Added to favorites" }),
+      description: `${product.nameKo || product.name}`,
     });
   };
 
-  const handleLikePost = async (postId: number) => {
-    try {
-      await api.likeCommunityPost(postId);
-      toast({
-        title: t({ ko: "좋아요!", en: "Liked!" }),
-        description: t({ ko: "게시물에 좋아요를 눌렀습니다.", en: "You liked this post." }),
-      });
-    } catch (error) {
-      toast({
-        title: t({ ko: "오류", en: "Error" }),
-        description: t({ ko: "좋아요 처리 중 오류가 발생했습니다.", en: "An error occurred while liking the post." }),
-        variant: "destructive",
-      });
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
     }
   };
 
-  // Auto-advance carousel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFeaturedCarouselIndex((prev) => (prev + 1) % (featuredProducts?.length || 1));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [featuredProducts?.length]);
-
-  // Intersection Observer for slide animations
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const slideElements = document.querySelectorAll('.slide-in');
-    slideElements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-background">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-background">
       <Hero />
       
-      {/* Main Content Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
-
-        {/* Section 1: 🔥 인기상품 */}
-        <section>
+        {/* Popular Products Section */}
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SectionHeader
             emoji="🔥"
             title={{ ko: "인기상품", en: "Popular Items" }}
-            subtitle={{ ko: "창작자들이 가장 사랑하는 아이템", en: "Popular Items Loved by Creators" }}
-            seeMoreLink="/popular"
+            subtitle={{ ko: "지금 가장 핫한 아이템들을 만나보세요", en: "Meet the hottest items right now" }}
+            seeMoreLink="/products"
           />
-          <ProductGrid
-            products={featuredProducts || []}
-            onAddToCart={handleAddToCart}
-            onToggleFavorite={handleToggleFavorite}
-          />
-        </section>
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            variants={containerVariants}
+          >
+            {isLoading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <motion.div key={i} variants={itemVariants}>
+                  <Card className="overflow-hidden">
+                    <div className="aspect-square bg-muted animate-pulse" />
+                    <CardContent className="p-4">
+                      <div className="space-y-2">
+                        <div className="h-4 bg-muted animate-pulse rounded" />
+                        <div className="h-4 bg-muted animate-pulse rounded w-2/3" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))
+            ) : (
+              products?.slice(0, 4).map((product: Product) => (
+                <motion.div key={product.id} variants={itemVariants}>
+                  <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
+                    <div className="relative aspect-square">
+                      <img
+                        src="/api/placeholder/300/300"
+                        alt={product.nameKo || product.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <Badge className="absolute top-2 left-2 bg-red-500 text-white">
+                        HOT
+                      </Badge>
+                    </div>
+                    <CardContent className="p-4">
+                      <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+                        {product.nameKo || product.name}
+                      </h3>
+                      <div className="flex items-center justify-between">
+                        <span className="text-lg font-bold text-foreground">
+                          ₩{product.price.toLocaleString()}
+                        </span>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => handleToggleFavorite(product)}
+                            className="p-1 hover:bg-muted rounded"
+                          >
+                            <Heart 
+                              className={`h-4 w-4 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+                            />
+                          </button>
+                          <button
+                            onClick={() => handleAddToCart(product)}
+                            className="p-1 hover:bg-muted rounded"
+                          >
+                            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+                          </button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))
+            )}
+          </motion.div>
+        </motion.section>
 
-        {/* Section 2: 🧡 따끈따끈한 신상품 */}
-        <section>
-          <SectionHeader
-            emoji="🧡"
-            title={{ ko: "따끈따끈한 신상품", en: "Fresh New Arrivals" }}
-            subtitle={{ ko: "방금 출시된 따끈따끈한 신제품", en: "Fresh New Arrivals" }}
-            seeMoreLink="/new"
-          />
-          <ProductGrid
-            products={featuredProducts || []}
-            onAddToCart={handleAddToCart}
-            onToggleFavorite={handleToggleFavorite}
-          />
-        </section>
-
-        {/* Section 3: 🤗 창작자들의 소중한 리뷰 */}
-        <section>
+        {/* Creator Reviews Section */}
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SectionHeader
             emoji="🤗"
-            title={{ ko: "창작자들의 소중한 리뷰", en: "Creator Reviews" }}
-            subtitle={{ ko: "실제 고객들의 생생한 후기", en: "Real reviews from our creators" }}
+            title={{ ko: "창작자들의 소중한 리뷰", en: "Precious Reviews from Creators" }}
+            subtitle={{ ko: "실제 창작자들이 남긴 생생한 후기를 확인해보세요", en: "Check out vivid reviews from real creators" }}
             seeMoreLink="/reviews"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                name: "김민수",
-                rating: 5,
-                comment: "아크릴 키링 퀄리티가 정말 좋아요! 배송도 빨랐습니다.",
-                productName: "아크릴 키링",
-                avatar: "김"
-              },
-              {
-                name: "이지은",
-                rating: 5,
-                comment: "커스텀 티셔츠 만들어서 친구들과 맞춰 입었어요!",
-                productName: "커스텀 티셔츠",
-                avatar: "이"
-              },
-              {
-                name: "박준호",
-                rating: 4,
-                comment: "머그컵 프린팅이 고화질로 나와서 만족합니다.",
-                productName: "머그컵",
-                avatar: "박"
-              },
-              {
-                name: "최유진",
-                rating: 5,
-                comment: "스티커 색상이 너무 예뻐요. 또 주문할게요!",
-                productName: "스티커",
-                avatar: "최"
-              }
-            ].map((review, index) => (
-              <motion.div
-                key={index}
-                className="bg-card p-6 rounded-lg border hover:shadow-md transition-shadow"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-3">
-                    {review.avatar}
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            variants={containerVariants}
+          >
+            {creatorReviews.map((review) => (
+              <motion.div key={review.id} variants={itemVariants}>
+                <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="relative">
+                    <img
+                      src={review.productImage}
+                      alt={review.productName}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-xs">
+                      {review.reviewCount}개 리뷰
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-semibold text-sm">{review.name}</div>
-                    <div className="flex">
+                  <CardContent className="p-4">
+                    <div className="flex items-center mb-2">
                       {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-3 w-3 ${
-                            i < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"
-                          }`}
+                        <Star 
+                          key={i} 
+                          className={`h-4 w-4 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
                         />
                       ))}
+                      <span className="ml-2 text-sm text-muted-foreground">{review.date}</span>
                     </div>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground mb-2">{review.comment}</p>
-                <div className="text-xs text-muted-foreground">
-                  {review.productName} 구매
-                </div>
+                    <h3 className="font-semibold text-foreground mb-2">
+                      {review.productName}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                      {review.comment}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-foreground">
+                        {review.userName}
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {review.tags.slice(0, 2).map((tag, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">
+                            #{tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
-        {/* Section 4: 🔥 굿즈 자랑 커뮤니티 */}
-        <section>
-          <SectionHeader
-            emoji="🔥"
-            title={{ ko: "굿즈 자랑 커뮤니티", en: "Community Showcase" }}
-            subtitle={{ ko: "창작자들의 멋진 작품들을 구경해보세요", en: "Amazing creations from our community" }}
-            seeMoreLink="/community"
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((index) => (
-              <motion.div
-                key={index}
-                className="bg-card rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="relative">
-                  <img
-                    src={`/api/placeholder/300/300`}
-                    alt={`Community showcase ${index}`}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute bottom-2 left-2 right-2 bg-black/50 text-white p-2 rounded text-sm">
-                    커뮤니티 작품 {index}
+        {/* Community Showcase */}
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <div className="flex items-center justify-between mb-8">
+            <SectionHeader
+              emoji="🔥"
+              title={{ ko: "굿즈 자랑 커뮤니티", en: "Goods Showcase Community" }}
+              subtitle={{ ko: "멋진 굿즈들을 자랑해보세요", en: "Show off your amazing goods" }}
+            />
+            <Button variant="outline" size="sm">
+              {t({ ko: "더보기", en: "More" })}
+              <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            variants={containerVariants}
+          >
+            {communityShowcase.map((item) => (
+              <motion.div key={item.id} variants={itemVariants}>
+                <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
+                  <div className="relative aspect-square">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
                   </div>
-                </div>
-                <div className="p-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <Heart className="h-4 w-4 text-red-500" />
-                      <span>{Math.floor(Math.random() * 100) + 20}</span>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm text-muted-foreground">
+                        {item.author}
+                      </span>
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-1">
+                          <Heart className="h-4 w-4 text-red-500" />
+                          <span className="text-sm">{item.likes}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <MessageCircle className="h-4 w-4 text-blue-500" />
+                          <span className="text-sm">{item.comments}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MessageCircle className="h-4 w-4 text-muted-foreground" />
-                      <span>{Math.floor(Math.random() * 20) + 1}</span>
+                    <div className="flex flex-wrap gap-1">
+                      {item.tags.map((tag, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">
+                          #{tag}
+                        </Badge>
+                      ))}
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
-        {/* Section 5: ✨ 자재별 추천 */}
-        <section>
+        {/* Material Recommendations */}
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SectionHeader
             emoji="✨"
             title={{ ko: "자재별 추천", en: "Material-Based Recommendations" }}
-            subtitle={{ ko: "투명, 홀로그램, 미러 등 자재별 인기 아이템", en: "Top items by material type" }}
-            seeMoreLink="/materials"
+            subtitle={{ ko: "원하는 재질의 완벽한 굿즈를 찾아보세요", en: "Find perfect goods with your desired materials" }}
+            seeMoreLink="/products"
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { material: "투명 아크릴", color: "bg-blue-100", icon: "💎" },
-              { material: "홀로그램", color: "bg-purple-100", icon: "🌈" },
-              { material: "미러", color: "bg-gray-100", icon: "✨" },
-              { material: "우드", color: "bg-amber-100", icon: "🌳" }
-            ].map((material, index) => (
-              <motion.div
-                key={index}
-                className={`${material.color} p-6 rounded-lg cursor-pointer hover:shadow-md transition-shadow`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <div className="text-center">
-                  <div className="text-4xl mb-4">{material.icon}</div>
-                  <h3 className="font-bold text-lg mb-2">{material.material}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {material.material} 소재의 인기 제품들
-                  </p>
-                  <Button variant="outline" size="sm" className="w-full">
-                    제품 보기
-                  </Button>
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            variants={containerVariants}
+          >
+            {materialRecommendations.map((item) => (
+              <motion.div key={item.id} variants={itemVariants}>
+                <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
+                  <div className="relative aspect-square">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <Badge className={`absolute top-2 left-2 ${
+                      item.badge === 'HIT' ? 'bg-red-500' : 
+                      item.badge === 'NEW' ? 'bg-green-500' : 'bg-orange-500'
+                    } text-white`}>
+                      {item.badge}
+                    </Badge>
+                    {item.discount > 0 && (
+                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+                        -{item.discount}%
+                      </div>
+                    )}
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="mb-2">
+                      <Badge variant="outline" className="text-xs mb-2">
+                        {item.material}
+                      </Badge>
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-lg font-bold text-foreground">
+                          ₩{item.price.toLocaleString()}
+                        </span>
+                        {item.originalPrice && (
+                          <span className="text-sm text-muted-foreground line-through">
+                            ₩{item.originalPrice.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm text-muted-foreground">
+                          리뷰 {item.reviewCount}개
+                        </span>
+                      </div>
+                      <Button size="sm" variant="outline">
+                        <ShoppingCart className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.section>
+
+        {/* Instagram Feed */}
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <SectionHeader
+            emoji="📸"
+            title={{ ko: "인스타그램 피드", en: "Instagram Feed" }}
+            subtitle={{ ko: "@allthatprinting_ 최신 소식을 확인해보세요", en: "Check out the latest from @allthatprinting_" }}
+          />
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            variants={containerVariants}
+          >
+            {instagramFeed.map((post) => (
+              <motion.div key={post.id} variants={itemVariants}>
+                <div className="relative aspect-square group cursor-pointer">
+                  <img
+                    src={post.image}
+                    alt={`Instagram post ${post.id}`}
+                    className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors rounded-lg" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center space-x-4 text-white">
+                      <div className="flex items-center space-x-1">
+                        <Heart className="h-5 w-5" />
+                        <span className="font-medium">{post.likes}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <MessageCircle className="h-5 w-5" />
+                        <span className="font-medium">{post.comments}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
-          </div>
-        </section>
-
-        {/* Section 6: ❤️ 인기급상승 아이템 */}
-        <section>
-          <SectionHeader
-            emoji="❤️"
-            title={{ ko: "인기급상승 아이템", en: "Trending Now" }}
-            subtitle={{ ko: "지금 가장 핫한 트렌딩 아이템", en: "Rapidly rising popular items" }}
-            seeMoreLink="/trending"
-          />
-          <ProductGrid
-            products={featuredProducts || []}
-            onAddToCart={handleAddToCart}
-            onToggleFavorite={handleToggleFavorite}
-          />
-        </section>
-
-        {/* Section 7: 🎯 올댓추천 */}
-        <section>
-          <SectionHeader
-            emoji="🎯"
-            title={{ ko: "올댓추천", en: "Staff Picks" }}
-            subtitle={{ ko: "올댓프린팅이 직접 추천하는 베스트 아이템", en: "Handpicked recommendations from our team" }}
-            seeMoreLink="/recommendations"
-          />
-          <ProductGrid
-            products={featuredProducts || []}
-            onAddToCart={handleAddToCart}
-            onToggleFavorite={handleToggleFavorite}
-          />
-        </section>
-
-        {/* Section 8: 🏷️ 브랜드 굿즈 안내 */}
-        <section>
-          <SectionHeader
-            emoji="🏷️"
-            title={{ ko: "브랜드 굿즈 안내", en: "Brand Custom Goods" }}
-            subtitle={{ ko: "기업 및 브랜드 맞춤 굿즈 제작 서비스", en: "Custom goods for companies and brands" }}
-            seeMoreLink="/brand"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div
-              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8 rounded-lg"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-2xl font-bold mb-4">기업 맞춤 굿즈</h3>
-              <p className="mb-6">
-                회사 로고, 브랜드 캐릭터를 활용한 맞춤 굿즈를 제작해드립니다.
-              </p>
-              <Button className="bg-white text-blue-600 hover:bg-gray-100">
-                상담 신청하기
-              </Button>
-            </motion.div>
-            <motion.div
-              className="bg-gradient-to-r from-green-500 to-teal-600 text-white p-8 rounded-lg"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-2xl font-bold mb-4">창작자 지원</h3>
-              <p className="mb-6">
-                개인 창작자, 인플루언서를 위한 특별한 할인 혜택을 제공합니다.
-              </p>
-              <Button className="bg-white text-green-600 hover:bg-gray-100">
-                혜택 확인하기
-              </Button>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Section 9: 🎁 고객 맞춤 혜택 배너 */}
-        <section>
-          <SectionHeader
-            emoji="🎁"
-            title={{ ko: "고객 맞춤 혜택 배너", en: "Personalized Benefits" }}
-            subtitle={{ ko: "회원님을 위한 특별한 혜택과 이벤트", en: "Special benefits and events just for you" }}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.div
-              className="bg-gradient-to-r from-pink-500 to-red-500 text-white p-6 rounded-lg"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <div className="flex items-center mb-4">
-                <Gift className="h-8 w-8 mr-3" />
-                <h3 className="text-xl font-bold">신규 회원 혜택</h3>
-              </div>
-              <p className="mb-4">첫 주문 시 30% 할인 + 무료 배송</p>
-              <Button className="bg-white text-pink-600 hover:bg-gray-100">
-                지금 가입하기
-              </Button>
-            </motion.div>
-            <motion.div
-              className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-6 rounded-lg"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <div className="flex items-center mb-4">
-                <Calendar className="h-8 w-8 mr-3" />
-                <h3 className="text-xl font-bold">이달의 특가</h3>
-              </div>
-              <p className="mb-4">인기 상품 최대 50% 할인</p>
-              <Button className="bg-white text-orange-600 hover:bg-gray-100">
-                특가 상품 보기
-              </Button>
-            </motion.div>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
       </div>
     </div>
   );
