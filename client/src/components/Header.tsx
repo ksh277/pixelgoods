@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, ShoppingCart, Moon, Sun, Menu, User, Heart, ChevronDown, Globe } from "lucide-react";
+import { Search, ShoppingCart, Moon, Sun, Menu, User, Heart, ChevronDown, ChevronRight, ChevronUp, Globe } from "lucide-react";
 import { useThemeContext } from "./ThemeProvider";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export function Header() {
   const [location] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [expandedSections, setExpandedSections] = useState<string[]>(['customer', 'participation', 'goods']);
   const { theme, toggleTheme } = useThemeContext();
   const { language, setSpecificLanguage, t } = useLanguage();
+
+  const toggleSection = (sectionId: string) => {
+    setExpandedSections(prev => 
+      prev.includes(sectionId) 
+        ? prev.filter(id => id !== sectionId)
+        : [...prev, sectionId]
+    );
+  };
 
   const languages = [
     { code: 'ko', name: '한국어', flag: '🇰🇷' },
@@ -29,7 +38,82 @@ export function Header() {
     { id: 'events', label: { ko: "이벤트", en: "Events", ja: "イベント", zh: "活动" }, href: "/events" },
     { id: 'support', label: { ko: "문의게시판", en: "Support", ja: "お問い合わせ", zh: "咨询版" }, href: "/support" },
     { id: 'payment', label: { ko: "추가결제", en: "Payment", ja: "追加支払い", zh: "追加付款" }, href: "/payment" },
-    { id: 'benefits', label: { ko: "회원등급혜택", en: "Member Benefits", ja: "会員特典", zh: "会员福利" }, href: "/benefits" }
+    { id: 'benefits', label: { ko: "회원등급혜택", en: "Member Benefits", ja: "会员特典", zh: "会员福利" }, href: "/benefits" }
+  ];
+
+  // Mobile menu structure with sections
+  const mobileMenuSections = [
+    {
+      id: 'customer',
+      title: { ko: "고객 기능", en: "Customer Features", ja: "顧客機能", zh: "客户功能" },
+      items: [
+        { id: 'printing', label: { ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" }, href: "/products" },
+        { id: 'community', label: { ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" }, href: "/community" },
+        { id: 'editor', label: { ko: "굿즈 에디터", en: "Goods Editor", ja: "グッズエディタ", zh: "商品编辑器" }, href: "/editor" },
+        { id: 'login', label: { ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" }, href: "/login" },
+        { id: 'register', label: { ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" }, href: "/register" }
+      ]
+    },
+    {
+      id: 'participation',
+      title: { ko: "고객참여", en: "Customer Participation", ja: "顧客参加", zh: "客户参与" },
+      items: [
+        { id: 'reviews', label: { ko: "사용후기 💕", en: "Reviews 💕", ja: "レビュー 💕", zh: "使用心得 💕" }, href: "/reviews" },
+        { id: 'collections', label: { ko: "모음전 🏷️", en: "Collections 🏷️", ja: "コレクション 🏷️", zh: "合集 🏷️" }, href: "/collections" },
+        { id: 'resources', label: { ko: "자료실", en: "Resources", ja: "資料室", zh: "资料室" }, href: "/resources" },
+        { id: 'events', label: { ko: "이벤트", en: "Events", ja: "イベント", zh: "活动" }, href: "/events" },
+        { id: 'support', label: { ko: "문의게시판", en: "Support", ja: "お問い合わせ", zh: "咨询版" }, href: "/support" }
+      ]
+    },
+    {
+      id: 'goods',
+      title: { ko: "굿즈 카테고리", en: "Goods Categories", ja: "グッズカテゴリ", zh: "商品类别" },
+      items: [
+        {
+          id: 'acrylic',
+          label: { ko: "아크릴굿즈", en: "Acrylic Goods", ja: "アクリルグッズ", zh: "亚克力商品" },
+          href: "/category/acrylic",
+          subItems: [
+            { id: 'keyring', label: { ko: "아크릴키링", en: "Acrylic Keyring", ja: "アクリルキーリング", zh: "亚克力钥匙扣" }, href: "/category/acrylic/keyring" },
+            { id: 'korotto', label: { ko: "코롯토", en: "Korotto", ja: "コロット", zh: "Korotto" }, href: "/category/acrylic/korotto" },
+            { id: 'smarttok', label: { ko: "스마트톡", en: "Smart Tok", ja: "スマートトック", zh: "智能支架" }, href: "/category/acrylic/smarttok" },
+            { id: 'stand', label: { ko: "스탠드/디오라마", en: "Stand/Diorama", ja: "スタンド/ジオラマ", zh: "支架/立体模型" }, href: "/category/acrylic/stand" },
+            { id: 'holder', label: { ko: "포카홀더/포토액자", en: "Card Holder/Photo Frame", ja: "カードホルダー/フォトフレーム", zh: "卡片夹/相框" }, href: "/category/acrylic/holder" },
+            { id: 'shaker', label: { ko: "아크릴쉐이커", en: "Acrylic Shaker", ja: "アクリルシェイカー", zh: "亚克力摇摆器" }, href: "/category/acrylic/shaker" },
+            { id: 'carabiner', label: { ko: "아크릴카라비너", en: "Acrylic Carabiner", ja: "アクリルカラビナ", zh: "亚克力登山扣" }, href: "/category/acrylic/carabiner" },
+            { id: 'mirror', label: { ko: "거울", en: "Mirror", ja: "ミラー", zh: "镜子" }, href: "/category/acrylic/mirror" },
+            { id: 'magnet', label: { ko: "자석/뱃지/코스터", en: "Magnet/Badge/Coaster", ja: "マグネット/バッジ/コースター", zh: "磁铁/徽章/杯垫" }, href: "/category/acrylic/magnet" },
+            { id: 'stationery', label: { ko: "문구류(집게, 볼펜 등)", en: "Stationery (Clips, Pens, etc.)", ja: "文具類(クリップ、ペンなど)", zh: "文具类(夹子、笔等)" }, href: "/category/acrylic/stationery" },
+            { id: 'cutting', label: { ko: "아크릴 재단", en: "Acrylic Cutting", ja: "アクリル裁断", zh: "亚克力切割" }, href: "/category/acrylic/cutting" }
+          ]
+        },
+        {
+          id: 'wood',
+          label: { ko: "우드굿즈", en: "Wood Goods", ja: "ウッドグッズ", zh: "木制商品" },
+          href: "/category/wood",
+          subItems: [
+            { id: 'wood-keyring', label: { ko: "우드키링", en: "Wood Keyring", ja: "ウッドキーリング", zh: "木制钥匙扣" }, href: "/category/wood/keyring" },
+            { id: 'wood-magnet', label: { ko: "우드마그넷", en: "Wood Magnet", ja: "ウッドマグネット", zh: "木制磁铁" }, href: "/category/wood/magnet" },
+            { id: 'wood-stand', label: { ko: "우드스탠드", en: "Wood Stand", ja: "ウッドスタンド", zh: "木制支架" }, href: "/category/wood/stand" }
+          ]
+        },
+        {
+          id: 'lanyard',
+          label: { ko: "랜야드굿즈", en: "Lanyard Goods", ja: "ランヤードグッズ", zh: "挂绳商品" },
+          href: "/category/lanyard"
+        },
+        {
+          id: 'packaging',
+          label: { ko: "포장/부자재", en: "Packaging/Materials", ja: "パッケージ/副資材", zh: "包装/辅助材料" },
+          href: "/category/packaging",
+          subItems: [
+            { id: 'swatch', label: { ko: "스와치", en: "Swatch", ja: "スウォッチ", zh: "色卡" }, href: "/category/packaging/swatch" },
+            { id: 'materials', label: { ko: "부자재", en: "Materials", ja: "副資材", zh: "辅助材料" }, href: "/category/packaging/materials" },
+            { id: 'packaging-items', label: { ko: "포장재", en: "Packaging Items", ja: "包装材", zh: "包装材料" }, href: "/category/packaging/items" }
+          ]
+        }
+      ]
+    }
   ];
 
   return (
@@ -164,7 +248,7 @@ export function Header() {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80">
+              <SheetContent side="right" className="w-80 overflow-y-auto">
                 <div className="flex flex-col space-y-4 mt-6">
                   {/* Mobile Search */}
                   <div className="relative">
@@ -178,39 +262,62 @@ export function Header() {
                     />
                   </div>
 
-                  {/* Mobile Main Actions */}
-                  <div className="flex flex-col space-y-2 pb-4 border-b">
-                    <Link href="/products" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
-                      {t({ ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" })}
-                    </Link>
-                    <Link href="/community" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
-                      {t({ ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" })}
-                    </Link>
-                    <Link href="/editor" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
-                      {t({ ko: "굿즈 에디터", en: "Goods Editor", ja: "グッズエディタ", zh: "商品编辑器" })}
-                    </Link>
-                  </div>
+                  {/* Mobile Menu Sections */}
+                  <div className="flex flex-col space-y-6">
+                    {mobileMenuSections.map((section) => (
+                      <div key={section.id} className="border-b border-gray-200 dark:border-gray-800 pb-4">
+                        {/* Section Header */}
+                        <button
+                          onClick={() => toggleSection(section.id)}
+                          className="flex items-center justify-between w-full py-2 px-3 text-left font-semibold text-foreground hover:bg-muted rounded-md transition-colors"
+                        >
+                          <span className="text-sm font-bold text-gray-700 dark:text-gray-300">
+                            📁 {t(section.title)}
+                          </span>
+                          {expandedSections.includes(section.id) ? (
+                            <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          )}
+                        </button>
 
-                  {/* Mobile User Actions */}
-                  <div className="flex flex-col space-y-2 pb-4 border-b">
-                    <Link href="/login" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
-                      {t({ ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" })}
-                    </Link>
-                    <Link href="/register" className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors">
-                      {t({ ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" })}
-                    </Link>
-                  </div>
+                        {/* Section Items */}
+                        {expandedSections.includes(section.id) && (
+                          <div className="mt-2 space-y-1">
+                            {section.items.map((item) => (
+                              <div key={item.id}>
+                                {/* Main Item */}
+                                <Link
+                                  href={item.href}
+                                  className="flex items-center justify-between py-2 px-6 text-foreground hover:bg-muted rounded-md transition-colors"
+                                >
+                                  <span className="text-sm">
+                                    {t(item.label)}
+                                  </span>
+                                  {item.subItems && (
+                                    <ChevronRight className="h-3 w-3 text-muted-foreground" />
+                                  )}
+                                </Link>
 
-                  {/* Mobile Category Links */}
-                  <div className="flex flex-col space-y-2">
-                    {categoryNavItems.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={item.href}
-                        className="flex items-center py-2 px-3 text-foreground hover:bg-muted rounded-md transition-colors"
-                      >
-                        {t(item.label)}
-                      </Link>
+                                {/* Sub Items */}
+                                {item.subItems && (
+                                  <div className="ml-4 mt-1 space-y-1">
+                                    {item.subItems.map((subItem) => (
+                                      <Link
+                                        key={subItem.id}
+                                        href={subItem.href}
+                                        className="flex items-center py-1.5 px-6 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                                      >
+                                        • {t(subItem.label)}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ))}
                   </div>
                 </div>
