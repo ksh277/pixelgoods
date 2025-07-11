@@ -8,10 +8,24 @@ import {
   Star, 
   Plus, 
   Minus, 
-  Palette, 
   Upload,
   Download,
-  RotateCcw
+  MessageCircle,
+  Puzzle,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Palette,
+  Package,
+  Info,
+  ChevronDown,
+  ChevronUp,
+  Eye,
+  User,
+  Calendar,
+  HelpCircle,
+  Phone,
+  Clock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,60 +36,170 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { api } from "@/lib/api";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/useLanguage";
+import { motion } from "framer-motion";
 import type { Product, ProductReview } from "@shared/schema";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const { toast } = useToast();
+  const { language, t } = useLanguage();
+  
+  // State management
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedBase, setSelectedBase] = useState("");
+  const [selectedPackaging, setSelectedPackaging] = useState("");
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [activeTab, setActiveTab] = useState("pdf");
   const [customText, setCustomText] = useState("");
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const { data: product, isLoading: productLoading } = useQuery({
-    queryKey: ["/api/products", id],
-    queryFn: () => api.getProduct(parseInt(id!)),
-    enabled: !!id,
-  });
+  // Mock product data for demonstration
+  const mockProduct = {
+    id: parseInt(id || "1"),
+    name: "Acrylic Stand",
+    nameKo: "아크릴 스탠드",
+    nameEn: "Acrylic Stand",
+    nameJa: "アクリルスタンド",
+    nameZh: "亚克力支架",
+    description: "Premium acrylic stand for displaying your custom designs",
+    descriptionKo: "맞춤형 디자인을 위한 프리미엄 아크릴 스탠드",
+    basePrice: "3500",
+    images: [
+      "/api/placeholder/600/600",
+      "/api/placeholder/600/600",
+      "/api/placeholder/600/600",
+      "/api/placeholder/600/600",
+      "/api/placeholder/600/600"
+    ],
+    sizes: [
+      { name: "일반 35x50", price: 3500, description: "기본 사이즈" },
+      { name: "라미 70x140", price: 8500, description: "라미네이팅 처리" },
+      { name: "대형 100x200", price: 12000, description: "대형 사이즈" }
+    ],
+    bases: [
+      { name: "투명", price: 0, description: "투명 받침" },
+      { name: "인쇄", price: 500, description: "인쇄 받침" },
+      { name: "라미 3T", price: 800, description: "라미네이팅 3T" },
+      { name: "라미 5T", price: 1200, description: "라미네이팅 5T" }
+    ],
+    quantityRanges: [
+      { range: "1~9개", condition: "도안 1종류", multiplier: 1 },
+      { range: "10~99개", condition: "도안 1종류", multiplier: 0.9 },
+      { range: "100~499개", condition: "도안 3종류 이하", multiplier: 0.8 },
+      { range: "500개 이상", condition: "도안 5종류 이하", multiplier: 0.7 }
+    ],
+    packaging: [
+      { name: "기본 포장", price: 0, description: "기본 포장" },
+      { name: "OPP 동봉", price: 200, description: "OPP 포장지 동봉" }
+    ],
+    rating: 4.8,
+    reviewCount: 1247,
+    isFeatured: true
+  };
 
-  const { data: reviews, isLoading: reviewsLoading } = useQuery({
-    queryKey: ["/api/products", id, "reviews"],
-    queryFn: () => api.getProductReviews(parseInt(id!)),
-    enabled: !!id,
-  });
+  // Mock reviews data
+  const mockReviews = [
+    {
+      id: 1,
+      userId: 1,
+      productId: 1,
+      rating: 5,
+      title: "정말 만족스러운 품질이에요!",
+      content: "디자인이 선명하게 나오고 아크릴 재질도 고급스럽습니다. 받침도 튼튼하고 완성도가 높네요. 다음에 또 주문할 예정입니다.",
+      userName: "창작자님***",
+      createdAt: new Date("2024-01-15"),
+      images: ["/api/placeholder/150/150", "/api/placeholder/150/150"]
+    },
+    {
+      id: 2,
+      userId: 2,
+      productId: 1,
+      rating: 4,
+      title: "빠른 배송과 좋은 퀄리티",
+      content: "주문 후 2일 만에 받았어요. 색상도 정확하고 크기도 딱 맞습니다. 포장도 깔끔하게 되어있고 만족합니다.",
+      userName: "굿즈러버***",
+      createdAt: new Date("2024-01-10"),
+      images: ["/api/placeholder/150/150"]
+    }
+  ];
+
+  // Calculate total price
+  const calculateTotalPrice = () => {
+    const basePrice = mockProduct.basePrice ? parseInt(mockProduct.basePrice) : 0;
+    const sizePrice = mockProduct.sizes.find(s => s.name === selectedSize)?.price || 0;
+    const baseTypePrice = mockProduct.bases.find(b => b.name === selectedBase)?.price || 0;
+    const packagingPrice = mockProduct.packaging.find(p => p.name === selectedPackaging)?.price || 0;
+    
+    const subtotal = sizePrice + baseTypePrice + packagingPrice;
+    const quantityRange = mockProduct.quantityRanges.find(r => {
+      const [min, max] = r.range.split('~').map(n => parseInt(n.replace(/\D/g, '')));
+      return quantity >= min && (isNaN(max) || quantity <= max);
+    });
+    const multiplier = quantityRange?.multiplier || 1;
+    
+    return Math.round(subtotal * multiplier * quantity);
+  };
+
+  // File upload handlers
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedFile(file);
+      toast({
+        title: t({ ko: "파일 업로드 완료", en: "File uploaded successfully" }),
+        description: t({ ko: `${file.name}이(가) 업로드되었습니다.`, en: `${file.name} has been uploaded.` }),
+      });
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type === 'application/pdf') {
+      setUploadedFile(file);
+      toast({
+        title: t({ ko: "PDF 파일 업로드 완료", en: "PDF file uploaded successfully" }),
+        description: t({ ko: `${file.name}이(가) 업로드되었습니다.`, en: `${file.name} has been uploaded.` }),
+      });
+    }
+  };
 
   const handleAddToCart = () => {
     toast({
-      title: "장바구니에 추가됨",
-      description: `${product?.nameKo}이(가) 장바구니에 추가되었습니다.`,
+      title: t({ ko: "장바구니에 추가됨", en: "Added to cart" }),
+      description: t({ ko: `${mockProduct.nameKo}이(가) 장바구니에 추가되었습니다.`, en: `${mockProduct.nameKo} has been added to cart.` }),
     });
   };
 
   const handleToggleFavorite = () => {
+    setIsFavorite(!isFavorite);
     toast({
-      title: "찜 목록에 추가됨",
-      description: `${product?.nameKo}이(가) 찜 목록에 추가되었습니다.`,
+      title: isFavorite ? t({ ko: "찜 목록에서 제거됨", en: "Removed from favorites" }) : t({ ko: "찜 목록에 추가됨", en: "Added to favorites" }),
+      description: isFavorite ? 
+        t({ ko: `${mockProduct.nameKo}이(가) 찜 목록에서 제거되었습니다.`, en: `${mockProduct.nameKo} has been removed from favorites.` }) :
+        t({ ko: `${mockProduct.nameKo}이(가) 찜 목록에 추가되었습니다.`, en: `${mockProduct.nameKo} has been added to favorites.` }),
     });
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setUploadedImage(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const formatPrice = (price: string) => {
-    return `₩${parseInt(price).toLocaleString()}`;
-  };
-
+  // Generate star rating
   const generateStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -87,424 +211,509 @@ export default function ProductDetail() {
     ));
   };
 
-  const averageRating = reviews?.length 
-    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length 
-    : 0;
-
-  if (productLoading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="h-96 bg-muted rounded-lg"></div>
-              <div className="space-y-4">
-                <div className="h-8 bg-muted rounded"></div>
-                <div className="h-4 bg-muted rounded w-3/4"></div>
-                <div className="h-6 bg-muted rounded w-1/2"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">
-            제품을 찾을 수 없습니다
-          </h2>
-          <Link href="/products">
-            <Button className="btn-primary">
-              제품 목록으로 돌아가기
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <nav className="flex items-center text-sm text-gray-500">
+            <Link href="/" className="hover:text-gray-700">홈</Link>
+            <ChevronRight className="w-4 h-4 mx-2" />
+            <Link href="/products" className="hover:text-gray-700">제품</Link>
+            <ChevronRight className="w-4 h-4 mx-2" />
+            <span className="text-gray-900">{mockProduct.nameKo}</span>
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Product Image */}
+          {/* Left Column - Product Images */}
           <div className="space-y-4">
-            <div className="aspect-square bg-muted rounded-lg overflow-hidden">
+            {/* Main Image */}
+            <div className="aspect-square bg-white rounded-lg overflow-hidden shadow-sm border">
               <img
-                src={product.imageUrl}
-                alt={product.nameKo}
+                src={mockProduct.images[currentImageIndex]}
+                alt={mockProduct.nameKo}
                 className="w-full h-full object-cover"
               />
             </div>
             
-            <div className="grid grid-cols-4 gap-2">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="aspect-square bg-muted rounded-lg overflow-hidden">
+            {/* Thumbnail Images */}
+            <div className="flex space-x-2 overflow-x-auto">
+              {mockProduct.images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                    currentImageIndex === index 
+                      ? 'border-blue-500 ring-2 ring-blue-200' 
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
                   <img
-                    src={product.imageUrl}
-                    alt={`${product.nameKo} ${i + 1}`}
-                    className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
+                    src={image}
+                    alt={`${mockProduct.nameKo} ${index + 1}`}
+                    className="w-full h-full object-cover"
                   />
-                </div>
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Product Info */}
+          {/* Right Column - Product Info */}
           <div className="space-y-6">
+            {/* Product Title & Rating */}
             <div>
-              <h1 className="text-3xl font-bold text-foreground mb-2">
-                {product.nameKo}
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                {mockProduct.nameKo}
               </h1>
-              <p className="text-lg text-muted-foreground mb-4">
-                {product.descriptionKo}
-              </p>
-              
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center">
                   <div className="flex mr-2">
-                    {generateStars(Math.round(averageRating))}
+                    {generateStars(Math.round(mockProduct.rating))}
                   </div>
-                  <span className="text-sm text-muted-foreground">
-                    ({reviews?.length || 0} 리뷰)
+                  <span className="text-sm text-gray-500">
+                    {mockProduct.rating} ({mockProduct.reviewCount} 리뷰)
                   </span>
                 </div>
-                {product.isFeatured && (
-                  <Badge className="bg-accent text-accent-foreground">
-                    인기 상품
+                {mockProduct.isFeatured && (
+                  <Badge className="bg-red-500 text-white">
+                    인기상품
                   </Badge>
                 )}
               </div>
-              
-              <div className="text-3xl font-bold text-foreground mb-6">
-                {formatPrice(product.basePrice)}
+            </div>
+
+            {/* Price Display */}
+            <div className="bg-blue-50 rounded-lg p-4">
+              <div className="text-3xl font-bold text-blue-600 mb-2">
+                {calculateTotalPrice().toLocaleString()} 원
+              </div>
+              <div className="text-sm text-gray-600">
+                기본 가격부터 시작 (옵션에 따라 변동)
               </div>
             </div>
 
-            {/* Customization Options */}
-            {product.customizationOptions && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Palette className="h-5 w-5 mr-2" />
-                    커스터마이징 옵션
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {(product.customizationOptions as any).sizes && (
-                    <div>
-                      <Label>사이즈</Label>
-                      <Select onValueChange={(value) => setSelectedOptions(prev => ({ ...prev, size: value }))}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="사이즈를 선택하세요" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {(product.customizationOptions as any).sizes.map((size: string) => (
-                            <SelectItem key={size} value={size}>
-                              {size}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                  
-                  {(product.customizationOptions as any).colors && (
-                    <div>
-                      <Label>색상</Label>
-                      <Select onValueChange={(value) => setSelectedOptions(prev => ({ ...prev, color: value }))}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="색상을 선택하세요" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {(product.customizationOptions as any).colors.map((color: string) => (
-                            <SelectItem key={color} value={color}>
-                              {color}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                  
-                  <div>
-                    <Label>커스텀 텍스트</Label>
-                    <Input
-                      value={customText}
-                      onChange={(e) => setCustomText(e.target.value)}
-                      placeholder="원하는 텍스트를 입력하세요"
-                    />
+            {/* Product Options */}
+            <div className="space-y-4">
+              {/* Size Selection */}
+              <div>
+                <Label className="text-base font-medium mb-3 block">
+                  ✅ 스탠드 사이즈
+                </Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {mockProduct.sizes.map((size) => (
+                    <button
+                      key={size.name}
+                      onClick={() => setSelectedSize(size.name)}
+                      className={`p-3 rounded-lg border text-left transition-all ${
+                        selectedSize === size.name
+                          ? 'border-blue-500 bg-blue-50 text-blue-700'
+                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="font-medium">{size.name}</div>
+                      <div className="text-sm text-gray-500">{size.description}</div>
+                      <div className="text-sm font-medium text-blue-600">
+                        {size.price.toLocaleString()}원
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Base Selection */}
+              <div>
+                <Label className="text-base font-medium mb-3 block">
+                  ✅ 받침 선택
+                </Label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {mockProduct.bases.map((base) => (
+                    <button
+                      key={base.name}
+                      onClick={() => setSelectedBase(base.name)}
+                      className={`p-3 rounded-lg border text-center transition-all ${
+                        selectedBase === base.name
+                          ? 'border-blue-500 bg-blue-50 text-blue-700'
+                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="font-medium">{base.name}</div>
+                      <div className="text-xs text-gray-500">{base.description}</div>
+                      <div className="text-sm font-medium text-blue-600">
+                        {base.price > 0 ? `+${base.price.toLocaleString()}원` : '무료'}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quantity Selection */}
+              <div>
+                <Label className="text-base font-medium mb-3 block">
+                  ✅ 수량 선택
+                </Label>
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="flex items-center border rounded-lg">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="p-2 hover:bg-gray-100 rounded-l-lg"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="px-4 py-2 border-x min-w-[60px] text-center">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="p-2 hover:bg-gray-100 rounded-r-lg"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
                   </div>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="text-sm text-gray-600">
+                    <strong>수량별 할인 안내:</strong>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1 space-y-1">
+                    {mockProduct.quantityRanges.map((range) => (
+                      <div key={range.range} className="flex justify-between">
+                        <span>{range.range} ({range.condition})</span>
+                        <span className="font-medium">
+                          {range.multiplier === 1 ? '정가' : `${((1 - range.multiplier) * 100).toFixed(0)}% 할인`}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Packaging Selection */}
+              <div>
+                <Label className="text-base font-medium mb-3 block">
+                  ✅ 포장 방식
+                </Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {mockProduct.packaging.map((pkg) => (
+                    <button
+                      key={pkg.name}
+                      onClick={() => setSelectedPackaging(pkg.name)}
+                      className={`p-3 rounded-lg border text-left transition-all ${
+                        selectedPackaging === pkg.name
+                          ? 'border-blue-500 bg-blue-50 text-blue-700'
+                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="font-medium">{pkg.name}</div>
+                      <div className="text-sm text-gray-500">{pkg.description}</div>
+                      <div className="text-sm font-medium text-blue-600">
+                        {pkg.price > 0 ? `+${pkg.price.toLocaleString()}원` : '무료'}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* File Upload Section */}
+              <div>
+                <Label className="text-base font-medium mb-3 block">
+                  ✅ 파일 업로드
+                </Label>
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="pdf">PDF 업로드</TabsTrigger>
+                    <TabsTrigger value="design">도안 작업 의뢰</TabsTrigger>
+                    <TabsTrigger value="editor">올댓에디터</TabsTrigger>
+                  </TabsList>
                   
-                  <div>
-                    <Label>이미지 업로드</Label>
-                    <div className="mt-2">
+                  <TabsContent value="pdf" className="mt-4">
+                    <div
+                      className={`border-2 border-dashed rounded-lg p-6 text-center transition-all ${
+                        isDragOver 
+                          ? 'border-blue-400 bg-blue-50' 
+                          : uploadedFile 
+                            ? 'border-green-400 bg-green-50' 
+                            : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                    >
                       <input
                         type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
+                        accept=".pdf"
+                        onChange={handleFileUpload}
                         className="hidden"
-                        id="image-upload"
+                        id="pdf-upload"
                       />
-                      <label
-                        htmlFor="image-upload"
-                        className="flex items-center justify-center w-full h-32 border-2 border-dashed border-muted-foreground rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-                      >
-                        {uploadedImage ? (
-                          <img
-                            src={uploadedImage}
-                            alt="업로드된 이미지"
-                            className="max-h-full max-w-full object-contain"
-                          />
+                      <label htmlFor="pdf-upload" className="cursor-pointer">
+                        <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+                        {uploadedFile ? (
+                          <div>
+                            <p className="text-green-600 font-medium mb-2">
+                              ✅ {uploadedFile.name}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              파일이 업로드되었습니다. 다른 파일을 선택하려면 클릭하세요.
+                            </p>
+                          </div>
                         ) : (
-                          <div className="text-center">
-                            <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                            <p className="text-sm text-muted-foreground">
-                              이미지를 업로드하세요
+                          <div>
+                            <p className="text-gray-600 font-medium mb-2">
+                              PDF 파일을 드래그하거나 클릭하여 업로드
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              최대 50MB, PDF 파일만 업로드 가능합니다.
                             </p>
                           </div>
                         )}
                       </label>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+                  </TabsContent>
+                  
+                  <TabsContent value="design" className="mt-4">
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                      <div className="flex items-center mb-3">
+                        <Palette className="w-5 h-5 text-yellow-600 mr-2" />
+                        <h3 className="font-medium text-yellow-800">도안 작업 의뢰</h3>
+                      </div>
+                      <p className="text-sm text-yellow-700 mb-3">
+                        전문 디자이너가 고객님의 요청에 따라 도안을 제작해드립니다.
+                      </p>
+                      <Textarea
+                        placeholder="원하는 디자인에 대해 자세히 설명해주세요..."
+                        value={customText}
+                        onChange={(e) => setCustomText(e.target.value)}
+                        className="mb-3"
+                        rows={4}
+                      />
+                      <div className="text-xs text-yellow-600">
+                        * 도안 작업비: 별도 견적 (복잡도에 따라 5,000원~20,000원)
+                      </div>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="editor" className="mt-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <div className="flex items-center mb-3">
+                        <Puzzle className="w-5 h-5 text-blue-600 mr-2" />
+                        <h3 className="font-medium text-blue-800">올댓에디터</h3>
+                      </div>
+                      <p className="text-sm text-blue-700 mb-4">
+                        브라우저에서 바로 디자인을 만들어보세요! 간단한 조작으로 전문적인 굿즈를 제작할 수 있습니다.
+                      </p>
+                      <Link href="/editor">
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                          <Puzzle className="w-4 h-4 mr-2" />
+                          올댓에디터 시작하기
+                        </Button>
+                      </Link>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </div>
 
-            {/* Quantity and Actions */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <Label>수량</Label>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="w-12 text-center">{quantity}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setQuantity(quantity + 1)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="flex gap-2">
-                <Button
-                  className="flex-1 btn-primary"
-                  onClick={handleAddToCart}
-                >
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  장바구니 담기
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleToggleFavorite}
-                >
-                  <Heart className="h-4 w-4" />
-                </Button>
-                <Button variant="outline">
-                  <Share2 className="h-4 w-4" />
-                </Button>
-              </div>
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <Button
+                onClick={handleAddToCart}
+                disabled={!selectedSize || !selectedBase || !selectedPackaging}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-medium"
+              >
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                {calculateTotalPrice().toLocaleString()}원 주문하기
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleToggleFavorite}
+                className="p-3"
+              >
+                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+              </Button>
+              <Button variant="outline" className="p-3">
+                <Share2 className="w-5 h-5 text-gray-400" />
+              </Button>
             </div>
           </div>
         </div>
 
-        {/* Product Details Tabs */}
-        <div className="mt-16">
+        {/* Sample File Guide */}
+        <div className="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Download className="w-6 h-6 text-blue-600 mr-3" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900">샘플파일 안내</h3>
+                <p className="text-sm text-gray-600">
+                  올바른 파일 제작을 위한 템플릿과 가이드를 확인하세요
+                </p>
+              </div>
+            </div>
+            <Button variant="outline" className="bg-white">
+              <Download className="w-4 h-4 mr-2" />
+              다운로드
+            </Button>
+          </div>
+        </div>
+
+        {/* Product Details & Reviews */}
+        <div className="mt-12">
           <Tabs defaultValue="description" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="description">상품 설명</TabsTrigger>
-              <TabsTrigger value="reviews">리뷰 ({reviews?.length || 0})</TabsTrigger>
-              <TabsTrigger value="qna">Q&A</TabsTrigger>
+              <TabsTrigger value="description">상품 상세</TabsTrigger>
+              <TabsTrigger value="reviews">상품 후기 ({mockReviews.length})</TabsTrigger>
+              <TabsTrigger value="qna">상품 문의</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="description" className="mt-6">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="prose max-w-none">
-                    <h3 className="text-lg font-semibold mb-4">제품 상세 정보</h3>
-                    <p className="text-muted-foreground mb-4">
-                      {product.descriptionKo}
-                    </p>
-                    
-                    <h4 className="font-semibold mb-2">제품 특징</h4>
-                    <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                      <li>고품질 소재 사용</li>
-                      <li>개인 맞춤형 디자인 가능</li>
-                      <li>친환경 프린팅 방식</li>
-                      <li>내구성이 뛰어남</li>
-                    </ul>
-                    
-                    <h4 className="font-semibold mb-2 mt-4">제작 시간</h4>
-                    <p className="text-muted-foreground">
-                      주문 후 2-3일 내 제작 완료 (주말 및 공휴일 제외)
-                    </p>
-                    
-                    <h4 className="font-semibold mb-2 mt-4">배송 정보</h4>
-                    <p className="text-muted-foreground">
-                      전국 배송 가능, 3만원 이상 주문 시 무료 배송
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="reviews" className="mt-6">
-              <div className="space-y-6">
-                {/* Review Stats */}
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-8">
-                      <div className="text-center">
-                        <div className="text-3xl font-bold text-foreground mb-2">
-                          {averageRating.toFixed(1)}
-                        </div>
-                        <div className="flex justify-center mb-2">
-                          {generateStars(Math.round(averageRating))}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {reviews?.length || 0}개 리뷰
-                        </div>
-                      </div>
+            <TabsContent value="description" className="mt-8">
+              <div className="space-y-8">
+                {/* Product Detail Images */}
+                <div className="bg-white rounded-lg p-6">
+                  <h3 className="text-xl font-bold mb-6">상품 상세 정보</h3>
+                  <div className="space-y-6">
+                    <img
+                      src="/api/placeholder/800/600"
+                      alt="상품 상세 이미지"
+                      className="w-full rounded-lg"
+                    />
+                    <div className="prose max-w-none">
+                      <h4 className="text-lg font-semibold mb-3">제품 특징</h4>
+                      <ul className="space-y-2 text-gray-700">
+                        <li>• 고품질 아크릴 소재 사용으로 선명한 인쇄 품질</li>
+                        <li>• 다양한 사이즈 옵션으로 원하는 크기 제작 가능</li>
+                        <li>• 튼튼한 받침으로 안정적인 전시 효과</li>
+                        <li>• 개인 맞춤형 디자인 제작 서비스</li>
+                      </ul>
                       
-                      <div className="flex-1">
-                        {[5, 4, 3, 2, 1].map((rating) => {
-                          const count = reviews?.filter(r => r.rating === rating).length || 0;
-                          const percentage = reviews?.length ? (count / reviews.length) * 100 : 0;
-                          
-                          return (
-                            <div key={rating} className="flex items-center gap-2 mb-1">
-                              <span className="text-sm w-3">{rating}</span>
-                              <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                                <div 
-                                  className="h-full bg-yellow-400 rounded-full"
-                                  style={{ width: `${percentage}%` }}
-                                />
-                              </div>
-                              <span className="text-sm text-muted-foreground w-8">
-                                {count}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
+                      <h4 className="text-lg font-semibold mb-3 mt-6">주의사항</h4>
+                      <ul className="space-y-2 text-gray-700">
+                        <li>• 해상도 300dpi 이상의 고해상도 이미지를 사용해주세요</li>
+                        <li>• 색상은 모니터 환경에 따라 실제와 다를 수 있습니다</li>
+                        <li>• 제작 완료 후 교환/환불이 어려우니 신중히 주문해주세요</li>
+                      </ul>
                     </div>
-                  </CardContent>
-                </Card>
-
-                {/* Reviews List */}
-                <div className="space-y-4">
-                  {reviewsLoading ? (
-                    <div className="space-y-4">
-                      {[...Array(3)].map((_, i) => (
-                        <Card key={i} className="animate-pulse">
-                          <CardContent className="p-6">
-                            <div className="h-4 bg-muted rounded w-1/4 mb-2"></div>
-                            <div className="h-16 bg-muted rounded"></div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : reviews?.length === 0 ? (
-                    <Card>
-                      <CardContent className="p-6 text-center">
-                        <p className="text-muted-foreground">
-                          아직 리뷰가 없습니다. 첫 번째 리뷰를 작성해보세요!
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    reviews?.map((review: ProductReview) => (
-                      <Card key={review.id}>
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                              <div className="flex">
-                                {generateStars(review.rating)}
-                              </div>
-                              <span className="text-sm text-muted-foreground">
-                                {new Date(review.createdAt).toLocaleDateString('ko-KR')}
-                              </span>
-                            </div>
-                          </div>
-                          <p className="text-foreground">{review.comment}</p>
-                        </CardContent>
-                      </Card>
-                    ))
-                  )}
+                  </div>
                 </div>
-
-                {/* Write Review */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>리뷰 작성하기</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <Label>평점</Label>
-                      <div className="flex items-center gap-1 mt-2">
-                        {[1, 2, 3, 4, 5].map((rating) => (
-                          <button
-                            key={rating}
-                            onClick={() => setNewReview(prev => ({ ...prev, rating }))}
-                            className="p-1"
-                          >
-                            <Star
-                              className={`h-6 w-6 ${
-                                rating <= newReview.rating
-                                  ? "text-yellow-400 fill-current"
-                                  : "text-gray-300"
-                              }`}
-                            />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <Label>리뷰 내용</Label>
-                      <Textarea
-                        value={newReview.comment}
-                        onChange={(e) => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
-                        placeholder="제품에 대한 후기를 작성해주세요"
-                        rows={4}
-                      />
-                    </div>
-                    
-                    <Button className="btn-primary">
-                      리뷰 등록하기
-                    </Button>
-                  </CardContent>
-                </Card>
               </div>
             </TabsContent>
             
-            <TabsContent value="qna" className="mt-6">
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <p className="text-muted-foreground mb-4">
-                    궁금한 점이 있으시면 언제든지 문의해주세요!
-                  </p>
-                  <Button className="btn-primary">
+            <TabsContent value="reviews" className="mt-8">
+              <div className="space-y-6">
+                {/* Review Summary */}
+                <div className="bg-white rounded-lg p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-bold">상품 후기</h3>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center">
+                        <div className="flex mr-2">
+                          {generateStars(Math.round(mockProduct.rating))}
+                        </div>
+                        <span className="text-lg font-semibold">{mockProduct.rating}</span>
+                      </div>
+                      <span className="text-gray-500">({mockProduct.reviewCount}개 리뷰)</span>
+                    </div>
+                  </div>
+                  
+                  {/* Reviews List */}
+                  <div className="space-y-6">
+                    {mockReviews.map((review) => (
+                      <div key={review.id} className="border-b pb-6 last:border-b-0">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                              <User className="w-5 h-5 text-gray-600" />
+                            </div>
+                            <div>
+                              <div className="font-medium">{review.userName}</div>
+                              <div className="text-sm text-gray-500 flex items-center gap-2">
+                                <Calendar className="w-3 h-3" />
+                                {review.createdAt.toLocaleDateString()}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex">
+                            {generateStars(review.rating)}
+                          </div>
+                        </div>
+                        <h4 className="font-medium mb-2">{review.title}</h4>
+                        <p className="text-gray-700 mb-3">{review.content}</p>
+                        {review.images && review.images.length > 0 && (
+                          <div className="flex gap-2">
+                            {review.images.map((img, index) => (
+                              <img
+                                key={index}
+                                src={img}
+                                alt={`리뷰 이미지 ${index + 1}`}
+                                className="w-20 h-20 object-cover rounded-lg"
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="qna" className="mt-8">
+              <div className="bg-white rounded-lg p-6">
+                <h3 className="text-xl font-bold mb-6">상품 문의</h3>
+                <div className="text-center py-12">
+                  <HelpCircle className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                  <p className="text-gray-500 mb-4">아직 문의가 없습니다.</p>
+                  <Button variant="outline">
+                    <MessageCircle className="w-4 h-4 mr-2" />
                     문의하기
                   </Button>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
+      </div>
+
+      {/* Fixed Floating Buttons */}
+      <div className="fixed bottom-6 right-6 flex flex-col items-end space-y-4 z-50">
+        {/* Inquiry Button */}
+        <div className="relative">
+          <Button
+            variant="outline"
+            size="lg"
+            className="bg-white hover:bg-gray-50 text-gray-700 shadow-lg border border-gray-200 rounded-full px-4 sm:px-6 py-3 flex items-center space-x-2 transition-all hover:shadow-xl"
+          >
+            <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
+            <div className="text-left">
+              <div className="font-medium text-xs sm:text-sm">문의하기</div>
+              <div className="text-xs text-gray-500 hidden sm:block">
+                평일 9시~6시
+              </div>
+            </div>
+          </Button>
+          
+          {/* Speech bubble */}
+          <div className="absolute bottom-full right-0 mb-2 bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            평일 9시~6시 (점심 12~1시)
+            <div className="absolute top-full right-4 w-2 h-2 bg-gray-800 transform rotate-45"></div>
+          </div>
+        </div>
+
+        {/* Editor Button */}
+        <Link href="/editor">
+          <Button
+            size="lg"
+            className="bg-black hover:bg-gray-800 text-white shadow-lg rounded-full px-4 sm:px-6 py-3 flex items-center space-x-2 transition-all hover:shadow-xl"
+          >
+            <Puzzle className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="font-medium text-xs sm:text-sm">
+              🧩 올댓에디터
+            </span>
+          </Button>
+        </Link>
       </div>
     </div>
   );
