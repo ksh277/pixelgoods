@@ -677,6 +677,190 @@ export default function ProductDetail() {
         </div>
       </div>
 
+      {/* Product Overview Section */}
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              {t({ ko: "상품목록 한눈에 보기", en: "Product Overview at a Glance", ja: "商品一覧一目で見る", zh: "产品列表一目了然" })}
+            </h2>
+            <p className="text-gray-600">
+              {t({ ko: "다양한 맞춤형 굿즈를 확인하고 원하는 상품을 찾아보세요", en: "Explore various custom goods and find what you're looking for", ja: "様々なカスタムグッズを確認し、お探しの商品を見つけてください", zh: "查看各种定制商品，找到您想要的产品" })}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Acrylic Keyrings */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">🧷</span>
+                <h3 className="text-lg font-bold text-gray-900">
+                  {t({ ko: "아크릴 키링", en: "Acrylic Keyrings", ja: "アクリルキーリング", zh: "亚克力钥匙扣" })}
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { ko: "투명 키링", en: "Clear Keyring", category: "keyring", subcategory: "clear" },
+                  { ko: "하프미러 키링", en: "Half Mirror Keyring", category: "keyring", subcategory: "halfmirror" },
+                  { ko: "글리터 키링", en: "Glitter Keyring", category: "keyring", subcategory: "glitter" },
+                  { ko: "유색/투명컬러/아스텔 키링", en: "Colored/Transparent/Pastel Keyring", category: "keyring", subcategory: "colored" },
+                  { ko: "자개 키링", en: "Mother of Pearl Keyring", category: "keyring", subcategory: "pearl" },
+                  { ko: "거울 키링", en: "Mirror Keyring", category: "keyring", subcategory: "mirror" },
+                  { ko: "홀로그램 키링", en: "Hologram Keyring", category: "keyring", subcategory: "hologram" },
+                  { ko: "하프미러5T 키링", en: "Half Mirror 5T Keyring", category: "keyring", subcategory: "halfmirror5t" },
+                  { ko: "투명5T 키링", en: "Clear 5T Keyring", category: "keyring", subcategory: "clear5t" },
+                  { ko: "뮤트컬러 키링", en: "Mute Color Keyring", category: "keyring", subcategory: "mute" },
+                  { ko: "야광 키링", en: "Glow-in-the-Dark Keyring", category: "keyring", subcategory: "glow" },
+                  { ko: "회전 스핀 돌려돌려 키링", en: "Rotating Spin Keyring", category: "keyring", subcategory: "spin" },
+                  { ko: "랜티큘러 키링", en: "Lenticular Keyring", category: "keyring", subcategory: "lenticular" },
+                  { ko: "파스텔 아스텔 4T 키링", en: "Pastel 4T Keyring", category: "keyring", subcategory: "pastel4t" }
+                ].map((item, index) => (
+                  <Link key={index} href={`/category/${item.category}?sub=${item.subcategory}`}>
+                    <div className="text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors cursor-pointer">
+                      • {language === 'ko' ? item.ko : item.en}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Corot */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">🧷</span>
+                <h3 className="text-lg font-bold text-gray-900">
+                  {t({ ko: "코롯토", en: "Corot", ja: "コロット", zh: "科罗托" })}
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { ko: "자립형 코롯토 (8T/9T)", en: "Self-standing Corot (8T/9T)", category: "korotto", subcategory: "selfstanding" },
+                  { ko: "뒤도바 코롯토 (10T)", en: "Reverse Corot (10T)", category: "korotto", subcategory: "reverse" },
+                  { ko: "아프로바 코롯토 (10T)", en: "Approve Corot (10T)", category: "korotto", subcategory: "approve" }
+                ].map((item, index) => (
+                  <Link key={index} href={`/category/${item.category}?sub=${item.subcategory}`}>
+                    <div className="text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors cursor-pointer">
+                      • {language === 'ko' ? item.ko : item.en}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Smart Tok */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">📱</span>
+                <h3 className="text-lg font-bold text-gray-900">
+                  {t({ ko: "스마트톡", en: "Smart Tok", ja: "スマートトーク", zh: "智能支架" })}
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { ko: "투명 스마트톡", en: "Clear Smart Tok", category: "smarttok", subcategory: "clear" },
+                  { ko: "거울 스마트톡", en: "Mirror Smart Tok", category: "smarttok", subcategory: "mirror" },
+                  { ko: "홀로그램 스마트톡", en: "Hologram Smart Tok", category: "smarttok", subcategory: "hologram" },
+                  { ko: "하프미러5T 스마트톡", en: "Half Mirror 5T Smart Tok", category: "smarttok", subcategory: "halfmirror5t" },
+                  { ko: "뮤트컬러 스마트톡", en: "Mute Color Smart Tok", category: "smarttok", subcategory: "mute" },
+                  { ko: "야광 스마트톡", en: "Glow-in-the-Dark Smart Tok", category: "smarttok", subcategory: "glow" },
+                  { ko: "회전 스마트톡", en: "Rotating Smart Tok", category: "smarttok", subcategory: "rotating" }
+                ].map((item, index) => (
+                  <Link key={index} href={`/category/${item.category}?sub=${item.subcategory}`}>
+                    <div className="text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors cursor-pointer">
+                      • {language === 'ko' ? item.ko : item.en}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Stands */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">🎯</span>
+                <h3 className="text-lg font-bold text-gray-900">
+                  {t({ ko: "스탠드", en: "Stands", ja: "スタンド", zh: "支架" })}
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { ko: "일반 스탠드 (35×50)", en: "Regular Stand (35×50)", category: "stand", subcategory: "regular" },
+                  { ko: "라미 스탠드 (70×140)", en: "Lami Stand (70×140)", category: "stand", subcategory: "lami" },
+                  { ko: "대형 스탠드 (100×200)", en: "Large Stand (100×200)", category: "stand", subcategory: "large" },
+                  { ko: "투명 스탠드", en: "Clear Stand", category: "stand", subcategory: "clear" },
+                  { ko: "컬러 스탠드", en: "Color Stand", category: "stand", subcategory: "color" }
+                ].map((item, index) => (
+                  <Link key={index} href={`/category/${item.category}?sub=${item.subcategory}`}>
+                    <div className="text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors cursor-pointer">
+                      • {language === 'ko' ? item.ko : item.en}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Holders */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">🖼️</span>
+                <h3 className="text-lg font-bold text-gray-900">
+                  {t({ ko: "홀더", en: "Holders", ja: "ホルダー", zh: "支架" })}
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { ko: "포카홀더", en: "Photo Card Holder", category: "holder", subcategory: "photocard" },
+                  { ko: "카드홀더", en: "Card Holder", category: "holder", subcategory: "card" },
+                  { ko: "명함홀더", en: "Business Card Holder", category: "holder", subcategory: "business" },
+                  { ko: "메모홀더", en: "Memo Holder", category: "holder", subcategory: "memo" }
+                ].map((item, index) => (
+                  <Link key={index} href={`/category/${item.category}?sub=${item.subcategory}`}>
+                    <div className="text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors cursor-pointer">
+                      • {language === 'ko' ? item.ko : item.en}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Miscellaneous */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">🎨</span>
+                <h3 className="text-lg font-bold text-gray-900">
+                  {t({ ko: "기타 굿즈", en: "Other Goods", ja: "その他グッズ", zh: "其他商品" })}
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { ko: "셰이커", en: "Shaker", category: "shaker", subcategory: "all" },
+                  { ko: "카라비너", en: "Carabiner", category: "carabiner", subcategory: "all" },
+                  { ko: "거울", en: "Mirror", category: "mirror", subcategory: "all" },
+                  { ko: "자석", en: "Magnet", category: "magnet", subcategory: "all" },
+                  { ko: "문구류", en: "Stationery", category: "stationery", subcategory: "all" },
+                  { ko: "컷팅스티커", en: "Cutting Sticker", category: "cutting", subcategory: "all" }
+                ].map((item, index) => (
+                  <Link key={index} href={`/category/${item.category}?sub=${item.subcategory}`}>
+                    <div className="text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors cursor-pointer">
+                      • {language === 'ko' ? item.ko : item.en}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link href="/categories">
+              <Button variant="outline" size="lg" className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200">
+                <Eye className="w-4 h-4 mr-2" />
+                {t({ ko: "전체 카테고리 보기", en: "View All Categories", ja: "全カテゴリを見る", zh: "查看所有分类" })}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Fixed Floating Buttons */}
       <div className="fixed bottom-6 right-6 flex flex-col items-end space-y-4 z-50">
         {/* Inquiry Button */}
