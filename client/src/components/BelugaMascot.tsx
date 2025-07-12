@@ -3,7 +3,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, HelpCircle, ShoppingBag, Star, Palette, Megaphone } from "lucide-react";
-import belugaImage from "@assets/d22cc608-c703-4c05-b27b-dd2cadc65f4d_1752305530576.png";
+import belugaImage from "@assets/ChatGPT Image 2025년 7월 12일 오후 04_51_30_1752306698190.png";
 
 interface BelugaMascotProps {
   variant: 'inquiry' | 'empty-cart' | 'login' | 'mypage' | 'error' | 'review' | 'design' | 'event' | 'loading';
