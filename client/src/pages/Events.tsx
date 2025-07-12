@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Gift, Star, Trophy, Clock, Users, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Link } from "wouter";
+import { BelugaMascot } from "@/components/BelugaMascot";
 
 export default function Events() {
   const { language, t } = useLanguage();
@@ -91,15 +92,22 @@ export default function Events() {
             <ChevronRight className="w-4 h-4" />
             <span className="text-gray-900 font-medium">이벤트</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t({ ko: "이벤트", en: "Events" })}
-          </h1>
-          <p className="text-gray-600">
-            {t({ 
-              ko: "다양한 혜택과 재미있는 이벤트에 참여하세요", 
-              en: "Join various benefits and exciting events" 
-            })}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                {t({ ko: "이벤트", en: "Events" })}
+              </h1>
+              <p className="text-gray-600">
+                {t({ 
+                  ko: "다양한 혜택과 재미있는 이벤트에 참여하세요", 
+                  en: "Join various benefits and exciting events" 
+                })}
+              </p>
+            </div>
+            <div className="hidden md:block">
+              <BelugaMascot variant="event" />
+            </div>
+          </div>
         </div>
 
         {/* Ongoing Events */}

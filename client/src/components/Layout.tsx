@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Share2, Calendar, FileText, Users, MessageSquare, MessageCircle, Puzzle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BelugaMascot } from "./BelugaMascot";
 
 interface LayoutProps {
   children: ReactNode;
@@ -177,23 +178,10 @@ export function Layout({ children, showCommunityNav = false }: LayoutProps) {
       </div>
       
       {/* Global Fixed Floating Buttons */}
-      {/* Inquiry Button (Bottom-Right) - Updated to shorter text */}
-      <div className="fixed bottom-6 right-6 z-50 fab-slide-in-right">
-        <Link href="/inquiry">
-          <Button
-            variant="outline"
-            size="lg"
-            className="bg-white hover:bg-gray-50 text-gray-700 shadow-lg border border-gray-200 rounded-full px-4 sm:px-6 py-3 flex items-center space-x-2 transition-all hover:shadow-xl transform hover:scale-105"
-          >
-            <div className="flex items-center space-x-2">
-              <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
-              <span className="font-medium text-xs sm:text-sm">
-                {t({ ko: '문의', en: 'Inquiry', ja: 'お問い合わせ', zh: '咨询' })}
-              </span>
-            </div>
-          </Button>
-        </Link>
-      </div>
+      {/* Beluga Mascot Inquiry Button (Bottom-Right) */}
+      <Link href="/inquiry">
+        <BelugaMascot variant="inquiry" />
+      </Link>
 
       {/* Editor Button (Bottom-Left) */}
       <div className="fixed bottom-6 left-6 z-50 fab-slide-in-left">

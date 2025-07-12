@@ -22,6 +22,7 @@ import {
   LogOut,
   Edit3
 } from "lucide-react";
+import { BelugaMascot } from "@/components/BelugaMascot";
 
 interface OrderHistory {
   id: string;
@@ -243,7 +244,9 @@ export default function MyPage() {
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <Star className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
+              <div className="mb-2">
+                <BelugaMascot variant="mypage" className="h-8 w-8 mx-auto" />
+              </div>
               <p className="text-2xl font-bold text-gray-900">0</p>
               <p className="text-sm text-gray-600">
                 {t({ ko: "적립 포인트", en: "Points" })}

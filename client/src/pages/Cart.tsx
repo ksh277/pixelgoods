@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Minus, Plus, X, ShoppingCart, CreditCard, AlertTriangle } from "lucide-react";
+import { BelugaMascot } from "@/components/BelugaMascot";
 
 interface CartItem {
   id: number;
@@ -133,8 +134,8 @@ export default function Cart() {
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
-            <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-              <AlertTriangle className="w-12 h-12 text-gray-400" />
+            <div className="mb-8">
+              <BelugaMascot variant="empty-cart" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               {t({ ko: "장바구니가 비어 있습니다", en: "Your cart is empty" })}
@@ -142,11 +143,13 @@ export default function Cart() {
             <p className="text-gray-600 mb-8">
               {t({ ko: "원하는 상품을 장바구니에 담아보세요", en: "Add items to your cart to get started" })}
             </p>
-            <Link href="/products">
-              <Button className="px-8 py-3">
-                {t({ ko: "쇼핑 계속하기", en: "Continue Shopping" })}
-              </Button>
-            </Link>
+            <div className="flex items-center justify-center space-x-4">
+              <Link href="/products">
+                <Button className="px-8 py-3">
+                  {t({ ko: "쇼핑 계속하기", en: "Continue Shopping" })}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

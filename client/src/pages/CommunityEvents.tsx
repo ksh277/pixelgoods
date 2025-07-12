@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { BelugaMascot } from "@/components/BelugaMascot";
 
 interface Event {
   id: string;
@@ -168,6 +169,9 @@ export default function CommunityEvents() {
         >
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center">
+            <div className="mb-6">
+              <BelugaMascot variant="event" />
+            </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               {t({ ko: "이벤트", en: "Events", ja: "イベント", zh: "活动" })}
             </h1>

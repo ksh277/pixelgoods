@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, AlertCircle } from "lucide-react";
+import { BelugaMascot } from "@/components/BelugaMascot";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,18 +48,27 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">
-            {t({ ko: "로그인", en: "Login" })}
-          </CardTitle>
-          <p className="text-muted-foreground">
-            {t({ 
-              ko: "계정에 로그인하여 서비스를 이용하세요", 
-              en: "Sign in to your account to continue" 
-            })}
-          </p>
-        </CardHeader>
+      <div className="w-full max-w-6xl flex items-center justify-center gap-12">
+        {/* Beluga Welcome Section */}
+        <div className="hidden lg:block flex-1 text-center">
+          <div className="mb-6">
+            <BelugaMascot variant="login" />
+          </div>
+        </div>
+        
+        {/* Login Form */}
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">
+              {t({ ko: "로그인", en: "Login" })}
+            </CardTitle>
+            <p className="text-muted-foreground">
+              {t({ 
+                ko: "계정에 로그인하여 서비스를 이용하세요", 
+                en: "Sign in to your account to continue" 
+              })}
+            </p>
+          </CardHeader>
         <CardContent className="space-y-4">
           {error && (
             <Alert variant="destructive">
@@ -178,6 +188,7 @@ export default function Login() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

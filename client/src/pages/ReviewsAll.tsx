@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
+import { BelugaMascot } from "@/components/BelugaMascot";
 
 interface ReviewData {
   id: number;
@@ -250,22 +251,29 @@ export default function ReviewsAll() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Page Title */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t({
-              ko: "전체 창작자 후기",
-              en: "All Creator Reviews",
-              ja: "全クリエイターレビュー",
-              zh: "所有创作者评价"
-            })}
-          </h1>
-          <p className="text-gray-600">
-            {t({
-              ko: "우리 서비스를 이용한 창작자들의 솔직한 후기를 모두 확인해보세요",
-              en: "Check out all honest reviews from creators who used our service",
-              ja: "私たちのサービスを利用したクリエイターの正直なレビューをすべてご確認ください",
-              zh: "查看所有使用我们服务的创作者的真实评价"
-            })}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                {t({
+                  ko: "전체 창작자 후기",
+                  en: "All Creator Reviews",
+                  ja: "全クリエイターレビュー",
+                  zh: "所有创作者评价"
+                })}
+              </h1>
+              <p className="text-gray-600">
+                {t({
+                  ko: "우리 서비스를 이용한 창작자들의 솔직한 후기를 모두 확인해보세요",
+                  en: "Check out all honest reviews from creators who used our service",
+                  ja: "私たちのサービスを利用したクリエイターの正直なレビューをすべてご確認ください",
+                  zh: "查看所有使用我们服务的创作者的真实评价"
+                })}
+              </p>
+            </div>
+            <div className="hidden md:block">
+              <BelugaMascot variant="review" />
+            </div>
+          </div>
         </div>
 
         {/* Search and Filter Controls */}
