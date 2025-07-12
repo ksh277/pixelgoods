@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Layout } from "@/components/Layout";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Products from "@/pages/Products";
@@ -32,51 +33,61 @@ import CommunityResources from "@/pages/CommunityResources";
 import UserContentShowcase from "@/pages/UserContentShowcase";
 
 function Router() {
+  const [location] = useLocation();
+  
+  // Determine if we should show community navigation
+  const showCommunityNav = location.startsWith('/community') || 
+                           location.startsWith('/resources') || 
+                           location.startsWith('/events') || 
+                           location === '/showcase';
+
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/products" component={Products} />
-      <Route path="/product/:id" component={ProductDetail} />
-      
-      {/* Category routes */}
-      <Route path="/category/:category/:subcategory" component={CategoryPage} />
-      <Route path="/category/:category" component={CategoryPage} />
-      
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      <Route path="/cart" component={Cart} />
-      <Route path="/community" component={Community} />
-      <Route path="/reviews/:id" component={ReviewDetail} />
-      <Route path="/resources" component={Resources} />
-      <Route path="/events" component={Events} />
-      <Route path="/collections" component={Collections} />
-      <Route path="/community/share" component={CommunityShare} />
-      <Route path="/community/question" component={CommunityQuestion} />
-      <Route path="/community/design-share" component={CommunityDesignShare} />
-      <Route path="/community/events" component={CommunityEvents} />
-      <Route path="/community/resources" component={CommunityResources} />
-      <Route path="/showcase" component={UserContentShowcase} />
-      <Route path="/editor" component={Editor} />
-      <Route path="/inquiry" component={Inquiry} />
-      <Route path="/support" component={Inquiry} />
-      <Route path="/rewards" component={Rewards} />
-      <Route path="/reviews/all" component={ReviewsAll} />
-      <Route path="/design-service" component={DesignServiceProduct} />
-      
-      {/* Category and section routes */}
-      <Route path="/popular" component={Products} />
-      <Route path="/new" component={Products} />
-      <Route path="/reviews" component={Community} />
-      <Route path="/showcase" component={Community} />
-      <Route path="/material" component={Products} />
-      <Route path="/trending" component={Products} />
-      <Route path="/picks" component={Products} />
-      <Route path="/brand" component={Products} />
-      <Route path="/benefits" component={Products} />
-      
-      {/* Fallback to 404 */}
-      <Route component={NotFound} />
-    </Switch>
+    <Layout showCommunityNav={showCommunityNav}>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/products" component={Products} />
+        <Route path="/product/:id" component={ProductDetail} />
+        
+        {/* Category routes */}
+        <Route path="/category/:category/:subcategory" component={CategoryPage} />
+        <Route path="/category/:category" component={CategoryPage} />
+        
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/community" component={Community} />
+        <Route path="/reviews/:id" component={ReviewDetail} />
+        <Route path="/resources" component={Resources} />
+        <Route path="/events" component={Events} />
+        <Route path="/collections" component={Collections} />
+        <Route path="/community/share" component={CommunityShare} />
+        <Route path="/community/question" component={CommunityQuestion} />
+        <Route path="/community/design-share" component={CommunityDesignShare} />
+        <Route path="/community/events" component={CommunityEvents} />
+        <Route path="/community/resources" component={CommunityResources} />
+        <Route path="/showcase" component={UserContentShowcase} />
+        <Route path="/editor" component={Editor} />
+        <Route path="/inquiry" component={Inquiry} />
+        <Route path="/support" component={Inquiry} />
+        <Route path="/rewards" component={Rewards} />
+        <Route path="/reviews/all" component={ReviewsAll} />
+        <Route path="/design-service" component={DesignServiceProduct} />
+        
+        {/* Category and section routes */}
+        <Route path="/popular" component={Products} />
+        <Route path="/new" component={Products} />
+        <Route path="/reviews" component={Community} />
+        <Route path="/showcase" component={Community} />
+        <Route path="/material" component={Products} />
+        <Route path="/trending" component={Products} />
+        <Route path="/picks" component={Products} />
+        <Route path="/brand" component={Products} />
+        <Route path="/benefits" component={Products} />
+        
+        {/* Fallback to 404 */}
+        <Route component={NotFound} />
+      </Switch>
+    </Layout>
   );
 }
 

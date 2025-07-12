@@ -20,14 +20,7 @@ export default function Community() {
     queryKey: ["/api/community/posts"],
   });
 
-  // Navigation menu items
-  const navItems = [
-    { id: 'showcase', label: { ko: "내가만든거보여줄게", en: "Show My Creation" }, active: true, href: '/community' },
-    { id: 'design', label: { ko: "도안공유", en: "Design Share" }, active: false, href: '/community/design-share' },
-    { id: 'events', label: { ko: "이벤트", en: "Events" }, active: false, href: '/community/events' },
-    { id: 'resources', label: { ko: "자료실", en: "Resources" }, active: false, href: '/community/resources' },
-    { id: 'qa', label: { ko: "궁금햄물어바", en: "Q&A" }, active: false, href: '/community/question' },
-  ];
+  // Navigation is now handled globally in Layout component
 
   // Mock best content data
   const bestContent = [
@@ -107,26 +100,7 @@ export default function Community() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
-      {/* Community Navigation Bar */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-[120px] z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center space-x-8 py-4 overflow-x-auto">
-            {navItems.map((item) => (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={`whitespace-nowrap text-sm font-medium transition-colors pb-2 border-b-2 ${
-                  item.active
-                    ? 'text-foreground border-orange-500'
-                    : 'text-muted-foreground border-transparent hover:text-foreground hover:border-gray-300'
-                }`}
-              >
-                {t(item.label)}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </div>
+      {/* Navigation is now handled globally in Layout component */}
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
