@@ -80,6 +80,110 @@ export default function Editor() {
     window.scrollTo(0, 0);
   }, []);
 
+  // Create Beluga character SVG illustrations for each product type
+  const createBelugaProductIllustration = (productType: string) => {
+    const belugaBase = `
+      <g transform="translate(60, 40)">
+        <!-- Beluga Body -->
+        <ellipse cx="0" cy="20" rx="25" ry="18" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+        <!-- Beluga Head -->
+        <ellipse cx="0" cy="0" rx="20" ry="15" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+        <!-- Eyes -->
+        <circle cx="-8" cy="-2" r="2" fill="#374151"/>
+        <circle cx="8" cy="-2" r="2" fill="#374151"/>
+        <!-- Mouth -->
+        <path d="M -4 4 Q 0 6 4 4" stroke="#6b7280" stroke-width="1" fill="none"/>
+        <!-- Fins -->
+        <ellipse cx="-22" cy="15" rx="8" ry="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+        <ellipse cx="22" cy="15" rx="8" ry="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+    `;
+
+    const productElements = {
+      keyring: `
+        ${belugaBase}
+        <!-- Keyring in hand -->
+        <g transform="translate(-15, 10)">
+          <circle cx="0" cy="0" r="8" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
+          <circle cx="0" cy="0" r="5" fill="none" stroke="#ffffff" stroke-width="1"/>
+          <circle cx="0" cy="-12" r="2" fill="#1d4ed8"/>
+        </g>
+        </g>
+      `,
+      stand: `
+        ${belugaBase}
+        <!-- Stand with base -->
+        <g transform="translate(15, 25)">
+          <rect x="-6" y="-15" width="12" height="18" fill="#10b981" stroke="#059669" stroke-width="1"/>
+          <rect x="-10" y="3" width="20" height="3" fill="#6b7280" stroke="#374151" stroke-width="1"/>
+        </g>
+        </g>
+      `,
+      corot: `
+        ${belugaBase}
+        <!-- Corot character goods -->
+        <g transform="translate(15, 5)">
+          <rect x="-8" y="-8" width="16" height="16" rx="2" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+          <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+          <circle cx="0" cy="0" r="2" fill="#374151"/>
+        </g>
+        </g>
+      `,
+      photoholder: `
+        ${belugaBase}
+        <!-- Photo holder frame -->
+        <g transform="translate(15, 10)">
+          <rect x="-6" y="-10" width="12" height="16" fill="#8b5cf6" stroke="#7c3aed" stroke-width="1"/>
+          <rect x="-4" y="-8" width="8" height="10" fill="#ffffff" stroke="#d1d5db" stroke-width="1"/>
+        </g>
+        </g>
+      `,
+      smarttok: `
+        ${belugaBase}
+        <!-- Smart tok on phone -->
+        <g transform="translate(15, 10)">
+          <rect x="-6" y="-12" width="12" height="20" rx="2" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+          <circle cx="0" cy="0" r="4" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
+        </g>
+        </g>
+      `,
+      badge: `
+        ${belugaBase}
+        <!-- Badge -->
+        <g transform="translate(15, 8)">
+          <circle cx="0" cy="0" r="8" fill="#ef4444" stroke="#dc2626" stroke-width="1"/>
+          <circle cx="0" cy="0" r="5" fill="#fef2f2"/>
+          <text x="0" y="2" text-anchor="middle" fill="#dc2626" font-size="8" font-weight="bold">!</text>
+        </g>
+        </g>
+      `,
+      magnet: `
+        ${belugaBase}
+        <!-- Magnet -->
+        <g transform="translate(15, 10)">
+          <rect x="-6" y="-4" width="12" height="8" rx="1" fill="#dc2626" stroke="#b91c1c" stroke-width="1"/>
+          <rect x="-4" y="-2" width="8" height="4" fill="#fef2f2"/>
+          <text x="0" y="1" text-anchor="middle" fill="#dc2626" font-size="6" font-weight="bold">N S</text>
+        </g>
+        </g>
+      `,
+      carabiner: `
+        ${belugaBase}
+        <!-- Carabiner (grayed out) -->
+        <g transform="translate(15, 10)" opacity="0.5">
+          <path d="M -4 -8 Q 4 -8 4 0 Q 4 8 -4 8 Q -8 8 -8 0 Q -8 -8 -4 -8" fill="#9ca3af" stroke="#6b7280" stroke-width="1"/>
+          <rect x="-2" y="-6" width="4" height="2" fill="#6b7280"/>
+        </g>
+        </g>
+      `
+    };
+
+    return `
+      <svg width="120" height="100" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+        ${productElements[productType as keyof typeof productElements] || productElements.keyring}
+      </svg>
+    `;
+  };
+
   const productTypes: ProductType[] = [
     {
       id: 'keyring',
@@ -276,7 +380,7 @@ export default function Editor() {
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
             {productTypes.map((product) => (
               <Card 
                 key={product.id}
@@ -306,10 +410,13 @@ export default function Editor() {
                 )}
 
                 <CardContent className="p-6 text-center h-full flex flex-col justify-between">
-                  {/* Product Icon */}
+                  {/* Beluga Character Illustration */}
                   <div className="mb-4">
-                    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <span className="text-3xl filter drop-shadow-sm">{product.icon}</span>
+                    <div className="w-full h-24 mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center">
+                      <div 
+                        className="w-full h-full"
+                        dangerouslySetInnerHTML={{ __html: createBelugaProductIllustration(product.id) }}
+                      />
                     </div>
                     
                     {/* Product Name */}
@@ -359,7 +466,7 @@ export default function Editor() {
                 <HelpCircle className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {t({ ko: '제작 가이드가 필요하신가요?', en: 'Need Production Guide?', ja: '製作ガイドが必要ですか？', zh: '需要制作指南吗？' })}
+                {t({ ko: '처음 제작시 필독', en: 'First Time Production Guide', ja: '初回製作時必読', zh: '首次制作必读' })}
               </h3>
               <p className="text-gray-600 mb-6">
                 {t({ ko: '고품질 제작을 위한 필수 정보를 확인해보세요', en: 'Check essential information for high-quality production', ja: '高品質製作のための必須情報をご確認ください', zh: '查看高质量制作的必要信息' })}
@@ -371,7 +478,7 @@ export default function Editor() {
                 className="bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
               >
                 <HelpCircle className="h-5 w-5 mr-2" />
-                {t({ ko: '제작 필독사항', en: 'Production Guide', ja: '製作必読事項', zh: '制作必读事项' })}
+                {t({ ko: '처음 제작시 필독', en: 'First Time Guide', ja: '初回製作時必読', zh: '首次制作必读' })}
               </Button>
             </CardContent>
           </Card>

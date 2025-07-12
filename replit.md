@@ -521,3 +521,21 @@ Preferred communication style: Simple, everyday language.
 - **Enhanced UX**: Single-click interaction area with no visual confusion or competing elements
 - **Technical Resolution**: Completely removed fixed floating buttons section from Editor page while maintaining global Layout inquiry button
 - **Clean Architecture**: Centralized inquiry functionality through global Layout component only
+
+### 2025-01-12: Beluga Character Product Selection UI Implementation
+- **Custom Beluga Character Illustrations**: Created unique SVG illustrations for each product type featuring the Beluga mascot
+- **Character-Product Integration**: Each product card shows Beluga mascot holding or interacting with the specific product:
+  - 키링 (Keyring): Beluga holding a blue keyring with chain
+  - 스탠드 (Stand): Beluga next to a display stand with base
+  - 코롯토 (Corot): Beluga with character goods/flat merchandise
+  - 포카홀더 (Photo Holder): Beluga with purple photo frame
+  - 스마트톡 (Smart Tok): Beluga with phone and smart tok attachment
+  - 뱃지 (Badge): Beluga with red circular badge
+  - 자석/문구류 (Magnet/Stationery): Beluga with refrigerator magnet
+  - 카라비너 (Carabiner): Beluga with grayed-out carabiner (준비중)
+- **SVG-Based Implementation**: Created scalable vector graphics for crisp display at all sizes
+- **Responsive Grid Layout**: 2-column mobile, 4-column desktop for optimal viewing
+- **Interactive Character Animations**: Character illustrations scale on hover (scale-110) for engaging user experience
+- **Status Integration**: Available products show full-color illustrations, unavailable products use reduced opacity
+- **Korean E-commerce Aesthetics**: Maintained clean white cards with proper spacing and typography
+- **Help Button Update**: Changed to "처음 제작시 필독" to match reference design patterns
