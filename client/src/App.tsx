@@ -24,6 +24,7 @@ import CommunityShare from "@/pages/CommunityShare";
 import CommunityQuestion from "@/pages/CommunityQuestion";
 import Collections from "@/pages/Collections";
 import Rewards from "@/pages/Rewards";
+import ReviewsAll from "@/pages/ReviewsAll";
 
 function Router() {
   return (
@@ -50,6 +51,7 @@ function Router() {
       <Route path="/inquiry" component={Inquiry} />
       <Route path="/support" component={Inquiry} />
       <Route path="/rewards" component={Rewards} />
+      <Route path="/reviews/all" component={ReviewsAll} />
       
       {/* Category and section routes */}
       <Route path="/popular" component={Products} />

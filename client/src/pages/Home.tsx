@@ -8,6 +8,7 @@ import { Link } from "wouter";
 import { Hero } from "@/components/Hero";
 import { CategoryNav } from "@/components/CategoryNav";
 import { SectionHeader } from "@/components/SectionHeader";
+import { UserReviewsSection } from "@/components/UserReviewsSection";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/useLanguage";
 import { motion } from "framer-motion";
@@ -575,6 +576,9 @@ export default function Home() {
             ))}
           </motion.div>
         </motion.section>
+
+        {/* User Reviews Section */}
+        <UserReviewsSection />
 
         {/* Instagram Feed */}
         <motion.section
