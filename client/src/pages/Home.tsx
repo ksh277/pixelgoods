@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Heart, MessageCircle, ShoppingCart, Star, Eye, ArrowRight, ChevronRight, Puzzle } from "lucide-react";
+import { Heart, MessageCircle, ShoppingCart, Star, Eye, ArrowRight, ChevronRight, Puzzle, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,15 +9,19 @@ import { Hero } from "@/components/Hero";
 import { CategoryNav } from "@/components/CategoryNav";
 import { SectionHeader } from "@/components/SectionHeader";
 import { UserReviewsSection } from "@/components/UserReviewsSection";
+import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
 import type { Product } from "@shared/schema";
 
 export default function Home() {
   const { toast } = useToast();
   const { language, t } = useLanguage();
+  const isMobile = useIsMobile();
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["/api/products"],
@@ -61,6 +65,17 @@ export default function Home() {
       reviewCount: 156,
       comment: "나무 질감이 좋고 레이저 각인이 선명해요. 선물용으로 최고!",
       tags: ["우드", "키링", "레이저각인"]
+    },
+    {
+      id: 4,
+      productImage: "/api/placeholder/300/300",
+      productName: "반투명 스마트톡",
+      userName: "사용자***",
+      rating: 5,
+      date: "2025.01.07",
+      reviewCount: 203,
+      comment: "접착력도 좋고 회전도 부드러워요. 디자인이 너무 예뻐서 자랑하고 다녀요",
+      tags: ["반투명", "스마트톡", "회전"]
     }
   ];
 
@@ -231,28 +246,15 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Mobile-First 2-Column Product Grid */}
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
-            variants={containerVariants}
-          >
-            {isLoading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <motion.div key={i} variants={itemVariants}>
-                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
-                    <div className="aspect-square bg-gray-200 animate-pulse" />
-                    <div className="p-3">
-                      <div className="space-y-2">
-                        <div className="h-4 bg-gray-200 animate-pulse rounded" />
-                        <div className="h-3 bg-gray-200 animate-pulse rounded w-2/3" />
-                        <div className="h-2 bg-gray-200 animate-pulse rounded w-1/2" />
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))
-            ) : (
-              products?.slice(0, 4).map((product: Product) => (
+          {/* Responsive Product Grid: 2 mobile → 3 tablet → 4 desktop */}
+          {isLoading ? (
+            <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
+          ) : (
+            <motion.div 
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4"
+              variants={containerVariants}
+            >
+              {products?.slice(0, 4).map((product: Product) => (
                 <motion.div key={product.id} variants={itemVariants}>
                   <Link href={`/product/${product.id}`} className="block">
                     <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
@@ -307,9 +309,9 @@ export default function Home() {
                     </div>
                   </Link>
                 </motion.div>
-              ))
-            )}
-          </motion.div>
+              ))}
+            </motion.div>
+          )}
         </motion.section>
 
         {/* Creator Reviews Section */}
@@ -340,7 +342,7 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4"
             variants={containerVariants}
           >
             {creatorReviews.map((review) => (
