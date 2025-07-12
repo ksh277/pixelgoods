@@ -35,6 +35,7 @@ import CommunityResources from "@/pages/CommunityResources";
 import UserContentShowcase from "@/pages/UserContentShowcase";
 import CommunityQA from "@/pages/CommunityQA";
 import MyPage from "@/pages/MyPage";
+import Wishlist from "@/pages/Wishlist";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
@@ -77,6 +78,13 @@ function Router() {
           {() => (
             <ProtectedRoute>
               <MyPage />
+            </ProtectedRoute>
+          )}
+        </Route>
+        <Route path="/wishlist">
+          {() => (
+            <ProtectedRoute>
+              <Wishlist />
             </ProtectedRoute>
           )}
         </Route>

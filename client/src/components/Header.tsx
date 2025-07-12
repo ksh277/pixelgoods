@@ -271,8 +271,10 @@ export function Header() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Heart className="mr-2 h-4 w-4" />
-                      {t({ ko: "찜한 상품", en: "Favorites", ja: "お気に入り", zh: "收藏" })}
+                      <Link href="/wishlist" className="flex items-center w-full">
+                        <Heart className="mr-2 h-4 w-4" />
+                        {t({ ko: "찜한 상품", en: "Favorites", ja: "お気に入り", zh: "收藏" })}
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={logout}>
                       <span className="mr-2">🚪</span>
@@ -293,13 +295,15 @@ export function Header() {
               )}
 
               {/* Favorites */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <Heart className="h-5 w-5" />
-              </Button>
+              <Link href="/wishlist">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <Heart className="h-5 w-5" />
+                </Button>
+              </Link>
 
               {/* Cart */}
               <Link href="/cart">
