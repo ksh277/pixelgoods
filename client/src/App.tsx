@@ -29,6 +29,7 @@ import DesignServiceProduct from "@/pages/DesignServiceProduct";
 import CommunityDesignShare from "@/pages/CommunityDesignShare";
 import CommunityEvents from "@/pages/CommunityEvents";
 import CommunityResources from "@/pages/CommunityResources";
+import UserContentShowcase from "@/pages/UserContentShowcase";
 
 function Router() {
   return (
@@ -54,6 +55,7 @@ function Router() {
       <Route path="/community/design-share" component={CommunityDesignShare} />
       <Route path="/community/events" component={CommunityEvents} />
       <Route path="/community/resources" component={CommunityResources} />
+      <Route path="/showcase" component={UserContentShowcase} />
       <Route path="/editor" component={Editor} />
       <Route path="/inquiry" component={Inquiry} />
       <Route path="/support" component={Inquiry} />
