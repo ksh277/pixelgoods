@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Play, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, Puzzle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/useLanguage";
+import { Link } from "wouter";
 
 const heroSlides = [
   {
@@ -119,17 +120,19 @@ export function Hero() {
                         {t(heroSlides[currentSlide].ctaText)}
                       </span>
                     </Button>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="border-white border-2 text-white hover:bg-white hover:text-gray-900 font-semibold py-3 px-6 rounded-xl text-base text-korean shadow-lg bg-transparent"
-                      style={{ color: 'white', borderColor: 'white' }}
-                    >
-                      <Play className="h-4 w-4 mr-2 text-white" />
-                      <span className="text-white font-semibold">
-                        {t({ ko: "작업 과정 보기", en: "Watch Process" })}
-                      </span>
-                    </Button>
+                    <Link href="/design-service">
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="border-white border-2 text-white hover:bg-white hover:text-gray-900 font-semibold py-3 px-6 rounded-xl text-base text-korean shadow-lg bg-transparent"
+                        style={{ color: 'white', borderColor: 'white' }}
+                      >
+                        <Puzzle className="h-4 w-4 mr-2 text-white" />
+                        <span className="text-white font-semibold">
+                          {t({ ko: "도안작업 서비스", en: "Design Service" })}
+                        </span>
+                      </Button>
+                    </Link>
                   </motion.div>
                 </motion.div>
 

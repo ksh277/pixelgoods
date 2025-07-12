@@ -25,6 +25,7 @@ import CommunityQuestion from "@/pages/CommunityQuestion";
 import Collections from "@/pages/Collections";
 import Rewards from "@/pages/Rewards";
 import ReviewsAll from "@/pages/ReviewsAll";
+import DesignServiceProduct from "@/pages/DesignServiceProduct";
 
 function Router() {
   return (
@@ -52,6 +53,7 @@ function Router() {
       <Route path="/support" component={Inquiry} />
       <Route path="/rewards" component={Rewards} />
       <Route path="/reviews/all" component={ReviewsAll} />
+      <Route path="/design-service" component={DesignServiceProduct} />
       
       {/* Category and section routes */}
       <Route path="/popular" component={Products} />
