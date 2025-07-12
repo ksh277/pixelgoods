@@ -61,6 +61,25 @@ function CommunityTopNav() {
   const { t } = useLanguage();
   const [location] = useLocation();
 
+  const isItemActive = (item: CommunityNavItem) => {
+    if (item.href === '/community') {
+      return location === '/community';
+    }
+    if (item.href === '/community/design-share') {
+      return location === '/community/design-share' || location === '/doan';
+    }
+    if (item.href === '/community/events') {
+      return location === '/community/events' || location === '/event';
+    }
+    if (item.href === '/community/resources') {
+      return location === '/community/resources' || location === '/resources';
+    }
+    if (item.href === '/community/question') {
+      return location === '/community/question' || location === '/community/qna';
+    }
+    return location.startsWith(item.href);
+  };
+
   return (
     <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,9 +88,7 @@ function CommunityTopNav() {
           <div className="hidden md:flex items-center space-x-8">
             {communityNavItems.map((item) => {
               const Icon = item.icon;
-              const isActive = location === item.href || 
-                              (item.href === '/community' && location === '/community') ||
-                              (item.href !== '/community' && location.startsWith(item.href));
+              const isActive = isItemActive(item);
               
               return (
                 <Link key={item.id} href={item.href}>
@@ -109,9 +126,7 @@ function CommunityTopNav() {
           <div className="md:hidden flex items-center space-x-1 overflow-x-auto">
             {communityNavItems.map((item) => {
               const Icon = item.icon;
-              const isActive = location === item.href || 
-                              (item.href === '/community' && location === '/community') ||
-                              (item.href !== '/community' && location.startsWith(item.href));
+              const isActive = isItemActive(item);
               
               return (
                 <Link key={item.id} href={item.href}>

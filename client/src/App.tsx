@@ -37,9 +37,13 @@ function Router() {
   
   // Determine if we should show community navigation
   const showCommunityNav = location.startsWith('/community') || 
-                           location.startsWith('/resources') || 
-                           location.startsWith('/events') || 
-                           location === '/showcase';
+                           location === '/resources' || 
+                           location === '/events' || 
+                           location === '/showcase' ||
+                           location === '/doan' ||
+                           location === '/event' ||
+                           location.startsWith('/community/qna') ||
+                           location.startsWith('/community/question');
 
   return (
     <Layout showCommunityNav={showCommunityNav}>
@@ -65,7 +69,12 @@ function Router() {
         <Route path="/community/design-share" component={CommunityDesignShare} />
         <Route path="/community/events" component={CommunityEvents} />
         <Route path="/community/resources" component={CommunityResources} />
+        <Route path="/community/qna" component={CommunityQuestion} />
         <Route path="/showcase" component={UserContentShowcase} />
+        
+        {/* Shortcut routes */}
+        <Route path="/doan" component={CommunityDesignShare} />
+        <Route path="/event" component={CommunityEvents} />
         <Route path="/editor" component={Editor} />
         <Route path="/inquiry" component={Inquiry} />
         <Route path="/support" component={Inquiry} />

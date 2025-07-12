@@ -259,6 +259,32 @@ Preferred communication style: Simple, everyday language.
   - Responsive bottom toolbar with essential controls only on mobile
   - Professional mobile-first layout with proper viewport handling
 
+### 2025-01-12: Advanced Canvas Editor & Global Navigation System
+- **Professional DraggableImage Component**: Complete interactive image manipulation system
+  - Drag and drop functionality with touch support for mobile devices
+  - Corner and side resize handles with aspect ratio maintenance toggle
+  - Rotation and flip controls with real-time visual feedback
+  - Manual size input controls in both desktop sidebar and mobile toolbar
+  - Canvas bounds checking to prevent images from moving outside design area
+  - Enhanced touch interaction CSS for mobile optimization
+- **Global Community Navigation System**: Implemented sticky navigation across all community pages
+  - Created shared Layout component with community navigation bar
+  - Sticky positioning at top of screen (z-index 50) with proper mobile responsiveness
+  - Active state highlighting with blue underline borders and background colors
+  - Route detection for all community pages including shortcuts (/doan, /event, /resources)
+  - Removed duplicate navigation from individual pages for cleaner architecture
+  - Mobile-responsive horizontal scrolling navigation with proper touch targets
+- **Enhanced Route Management**: Added support for shortcut URLs and improved navigation logic
+  - `/doan` → `/community/design-share` (도안공유)
+  - `/event` → `/community/events` (이벤트)
+  - `/resources` → `/community/resources` (자료실)
+  - `/community/qna` → `/community/question` (궁금햄물어바)
+  - Proper active state detection for all navigation variants
+- **Layout Architecture**: Centralized layout management with conditional community navigation
+  - Layout component wraps all routes with showCommunityNav prop
+  - Clean separation of concerns between global header/footer and community navigation
+  - Consistent user experience across all community-related pages
+
 ### 2025-01-12: Product Detail Page Enhancement - Product Overview Section
 - **Comprehensive Product Overview Section**: Added "상품목록 한눈에 보기" (Product Overview at a Glance) to product detail pages
 - **6 Product Categories**: Organized into responsive grid layout with emoji icons and Korean/English/Japanese/Chinese translations
