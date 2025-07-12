@@ -4,6 +4,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global Floating Action Button Animations */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.fab-slide-in-right {
+  animation: slide-in-right 0.5s ease-out forwards;
+}
+
+.fab-slide-in-left {
+  animation: slide-in-left 0.5s ease-out forwards;
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);

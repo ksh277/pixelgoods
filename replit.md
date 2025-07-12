@@ -285,6 +285,21 @@ Preferred communication style: Simple, everyday language.
   - Clean separation of concerns between global header/footer and community navigation
   - Consistent user experience across all community-related pages
 
+### 2025-01-12: Global Floating Action Button (FAB) Implementation
+- **Global FAB System**: Implemented global floating action buttons accessible from all pages
+- **Updated Button Text**: Changed "문의하기" to "문의" for more concise design
+- **Dual-Position Layout**: 
+  - Bottom-right: "문의" (Inquiry) button with MessageCircle icon
+  - Bottom-left: "올댓에디터" (AllThat Editor) button with Puzzle icon
+- **Enhanced UX Features**:
+  - Smooth slide-in animations on page load (fab-slide-in-right, fab-slide-in-left)
+  - Hover effects with scale transformation (hover:scale-105)
+  - Shadow effects and visual feedback
+  - Multi-language support (Korean/English/Japanese/Chinese)
+- **Mobile Responsiveness**: Touch-optimized button sizes and spacing
+- **Z-index Management**: Proper layering (z-50) to stay above scrollable content
+- **Integration**: Moved from page-specific to global Layout component for consistent availability
+
 ### 2025-01-12: Product Detail Page Enhancement - Product Overview Section
 - **Comprehensive Product Overview Section**: Added "상품목록 한눈에 보기" (Product Overview at a Glance) to product detail pages
 - **6 Product Categories**: Organized into responsive grid layout with emoji icons and Korean/English/Japanese/Chinese translations
