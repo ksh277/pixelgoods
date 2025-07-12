@@ -468,3 +468,20 @@ Preferred communication style: Simple, everyday language.
   - Enhanced error messages to guide users on missing required selections
   - Toast notifications now accurately reflect actual cart operations
 - **Technical Architecture**: Complete localStorage-based cart system with event-driven updates across components
+
+### 2025-01-12: Inquiry Button UI Enhancement - "문의" Label Addition
+- **Visual Clarity Improvement**: Added "문의" text label above the Beluga mascot inquiry button for better user understanding
+- **Label Design**: Clean white rounded pill design with blue border and shadow matching site aesthetics
+- **Responsive Implementation**: 
+  - Text scales from `text-xs` on mobile to `text-sm` on larger screens
+  - Maintains consistent spacing and alignment across all screen sizes
+  - Proper touch target spacing for mobile interaction
+- **Accessibility Enhancement**: 
+  - Added `aria-label` attribute for screen reader compatibility
+  - Multi-language support: Korean "문의", English "Inquiry", Japanese "お問い合わせ", Chinese "咨询"
+  - Descriptive button labels for assistive technologies
+- **Animation Integration**: 
+  - Smooth slide-in animation matching the existing FAB animation system
+  - Coordinated fade-in and zoom-in effects for professional appearance
+  - Adjusted tooltip positioning to account for the new label
+- **Design Consistency**: Maintains visual harmony with existing blue color scheme and rounded button design

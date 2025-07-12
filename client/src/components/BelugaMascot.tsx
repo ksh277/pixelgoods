@@ -130,11 +130,19 @@ export function BelugaMascot({ variant, className = "" }: BelugaMascotProps) {
   if (variant === 'inquiry') {
     return (
       <div className={`${config.position} ${className}`}>
-        <div className="relative">
+        <div className="relative flex flex-col items-center">
+          {/* Label above the button */}
+          <div className="mb-2 px-3 py-1 bg-white rounded-full border border-blue-200 shadow-sm fab-slide-in-right animate-in fade-in-0 zoom-in-95">
+            <span className="text-xs sm:text-sm font-medium text-blue-800">
+              {t({ ko: "문의", en: "Inquiry", ja: "お問い合わせ", zh: "咨询" })}
+            </span>
+          </div>
+          
           <Button
             className={`${config.size} rounded-full bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 border-2 border-blue-300 shadow-lg transition-all duration-300 hover:scale-110 active:scale-95`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            aria-label={t({ ko: "문의 버튼", en: "Inquiry button", ja: "お問い合わせボタン", zh: "咨询按钮" })}
           >
             <div className="flex items-center justify-center">
               <img 
@@ -146,7 +154,7 @@ export function BelugaMascot({ variant, className = "" }: BelugaMascotProps) {
           </Button>
           
           {config.showTooltip && isHovered && (
-            <div className="absolute bottom-full right-0 mb-2 p-3 bg-white rounded-lg shadow-xl border border-blue-200 whitespace-nowrap animate-in fade-in-0 zoom-in-95">
+            <div className="absolute bottom-full right-0 mb-16 p-3 bg-white rounded-lg shadow-xl border border-blue-200 whitespace-nowrap animate-in fade-in-0 zoom-in-95">
               <div className="text-sm font-medium text-blue-900">{config.message}</div>
               <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
             </div>
