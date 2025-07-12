@@ -130,31 +130,30 @@ export function BelugaMascot({ variant, className = "" }: BelugaMascotProps) {
   if (variant === 'inquiry') {
     return (
       <div className={`${config.position} ${className}`}>
-        <div className="relative flex flex-col items-center">
-          {/* Label above the button */}
-          <div className="mb-2 px-3 py-1 bg-white rounded-full border border-blue-200 shadow-sm fab-slide-in-right animate-in fade-in-0 zoom-in-95">
-            <span className="text-xs sm:text-sm font-medium text-blue-800">
-              {t({ ko: "문의", en: "Inquiry", ja: "お問い合わせ", zh: "咨询" })}
-            </span>
-          </div>
-          
+        <div className="relative">
           <Button
-            className={`${config.size} rounded-full bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 border-2 border-blue-300 shadow-lg transition-all duration-300 hover:scale-110 active:scale-95`}
+            className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 border-2 border-blue-300 shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 p-1 flex flex-col items-center justify-center"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             aria-label={t({ ko: "문의 버튼", en: "Inquiry button", ja: "お問い合わせボタン", zh: "咨询按钮" })}
           >
-            <div className="flex items-center justify-center">
+            {/* Beluga Character - Main Focus */}
+            <div className="flex-1 flex items-center justify-center mb-1">
               <img 
                 src={belugaImage} 
                 alt="Beluga Mascot" 
-                className="w-10 h-10 object-contain"
+                className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
               />
+            </div>
+            
+            {/* Text Label - Below Character */}
+            <div className="text-xs font-medium text-blue-800">
+              {t({ ko: "문의", en: "Inquiry", ja: "お問い合わせ", zh: "咨询" })}
             </div>
           </Button>
           
           {config.showTooltip && isHovered && (
-            <div className="absolute bottom-full right-0 mb-16 p-3 bg-white rounded-lg shadow-xl border border-blue-200 whitespace-nowrap animate-in fade-in-0 zoom-in-95">
+            <div className="absolute bottom-full right-0 mb-2 p-3 bg-white rounded-lg shadow-xl border border-blue-200 whitespace-nowrap animate-in fade-in-0 zoom-in-95">
               <div className="text-sm font-medium text-blue-900">{config.message}</div>
               <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
             </div>
