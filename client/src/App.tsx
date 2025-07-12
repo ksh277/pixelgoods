@@ -23,6 +23,7 @@ import Events from "@/pages/Events";
 import CommunityShare from "@/pages/CommunityShare";
 import CommunityQuestion from "@/pages/CommunityQuestion";
 import Collections from "@/pages/Collections";
+import Rewards from "@/pages/Rewards";
 
 function Router() {
   return (
@@ -48,6 +49,7 @@ function Router() {
       <Route path="/editor" component={Editor} />
       <Route path="/inquiry" component={Inquiry} />
       <Route path="/support" component={Inquiry} />
+      <Route path="/rewards" component={Rewards} />
       
       {/* Category and section routes */}
       <Route path="/popular" component={Products} />

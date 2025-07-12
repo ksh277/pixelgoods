@@ -1,0 +1,43 @@
+Create a responsive website section with the following layout and features:
+
+1. **Title**: "Reward Points / Membership Tier Benefits Guide"
+   - Bold, centered, large font.
+   - Subtitle: "Join AllThatPrinting and enjoy point rewards and exclusive tier benefits!"
+
+2. **Top Banner**:
+   - Left side: Text block with description:
+     "When you join AllThatPrinting, you receive reward points and tier-based benefits right away!"
+     Highlight key words like "reward points" and "tier benefits" in bold.
+   - Right side: Image of money/cash and coins (use illustration if possible).
+
+3. **Reward Coupon Section (3 Boxes in a Row)**:
+   - Title: "Sign up now and get 3 reward coupons instantly!"
+   - Each box should show:
+     - Coupon title
+     - Amount (bold and large font)
+     - Short description and validity
+   - Layout (three columns):
+     - Box 1: "Membership Join Reward - 2,000 KRW"
+     - Box 2: "First Purchase Thanks - 1,000 KRW"
+     - Box 3: "Birthday Celebration - 1,000 KRW"
+   - Include note below: “*Coupons are automatically issued. Validity may vary (e.g., 30~60 days)."
+
+4. **Tier Benefits Table (Grid layout)**:
+   - Title: "Compare Membership Benefits by Tier"
+   - Column headers: BASIC, SPECIAL, VIP, VVIP (with icons for each tier)
+   - Row items:
+     - Tier Requirement (e.g. "Under 3 million KRW per year", "Over 10 million KRW", etc.)
+     - Points (1% of purchase for all tiers)
+     - Shipping (e.g. "Free shipping over 50,000 KRW", "Free shipping on all orders")
+     - Benefits (additional discount %, brochure/sample for VIP/VVIP)
+
+5. **Styling Tips**:
+   - Use soft, friendly colors (blue, gray, white)
+   - Make it mobile-responsive
+   - Use icons or badges for each membership tier
+   - Emphasize benefit percentages (like "+2%", "+4%") using color or bold
+
+6. **Additional Notes**:
+   - Add a note below the table: “*Tiers are based on actual payment amounts from Jan 9 to Dec 31 annually.”
+
+Generate this section as part of the homepage or as a standalone "Benefits" page.

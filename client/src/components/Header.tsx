@@ -38,7 +38,7 @@ export function Header() {
     { id: 'events', label: { ko: "이벤트", en: "Events", ja: "イベント", zh: "活动" }, href: "/events" },
     { id: 'support', label: { ko: "문의게시판", en: "Support", ja: "お問い合わせ", zh: "咨询版" }, href: "/support" },
     { id: 'payment', label: { ko: "추가결제", en: "Payment", ja: "追加支払い", zh: "追加付款" }, href: "/payment" },
-    { id: 'benefits', label: { ko: "회원등급혜택", en: "Member Benefits", ja: "会员特典", zh: "会员福利" }, href: "/benefits" }
+    { id: 'benefits', label: { ko: "회원등급혜택", en: "Member Benefits", ja: "会员特典", zh: "会员福利" }, href: "/rewards" }
   ];
 
   // Mobile menu structure with sections
