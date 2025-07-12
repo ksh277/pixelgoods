@@ -469,21 +469,21 @@ Preferred communication style: Simple, everyday language.
   - Toast notifications now accurately reflect actual cart operations
 - **Technical Architecture**: Complete localStorage-based cart system with event-driven updates across components
 
-### 2025-01-12: Inquiry Button Redesign - Character-Focused Unified Design
-- **Character-Centered Layout**: Redesigned inquiry button with Beluga mascot as the main visual focus
-- **Unified Button Design**: Single circular button containing both character and text in one cohesive element
-- **Layout Structure**:
-  - Beluga character positioned at top center as primary visual element
-  - "문의" text label positioned directly below character within same button
-  - Eliminated separate label/button structure for cleaner unified appearance
-- **Enhanced Responsive Design**:
-  - Button sizes: 20x20 (80px) on mobile, 24x24 (96px) on desktop
-  - Character scales: 10x10 (40px) on mobile, 12x12 (48px) on desktop
-  - Text remains readable at 12px across all screen sizes
-- **Improved User Experience**:
-  - Entire button area clickable for better touch targets
-  - Character prominence draws immediate attention
-  - Text provides clear functional context
-  - Maintains blue gradient background and hover animations
-- **Multi-language Support**: Korean "문의", English "Inquiry", Japanese "お問い合わせ", Chinese "咨询"
-- **Accessibility**: Enhanced aria-label descriptions for screen reader compatibility
+### 2025-01-12: Inquiry Button Final Design - Character-Filled with Overlay Text
+- **Character-Filled Design**: Beluga mascot now fills the entire circular button area with no margins
+- **Overlay Text Layout**: "문의하기" text overlaid at bottom center of button for optimal readability
+- **Enhanced Visual Design**:
+  - Character image covers full button area using `object-cover` and `rounded-full`
+  - Semi-transparent white background (`bg-white/80`) behind text for readability
+  - Text positioned at bottom center using absolute positioning
+  - Removed padding (`p-0`) and added `overflow-hidden` for clean edges
+- **Improved Accessibility**: 
+  - Updated aria-label to "문의하기 버튼" (Inquiry button)
+  - Text changed from "문의" to "문의하기" for clarity
+  - Maintains multi-language support: Korean "문의하기", English "Inquiry", Japanese "お問い合わせ", Chinese "咨询"
+- **Technical Implementation**:
+  - Button maintains 80px (mobile) to 96px (desktop) responsive sizing
+  - Character image uses `w-full h-full` for complete coverage
+  - Text uses `whitespace-nowrap` to prevent wrapping
+  - Hover animations and blue gradient border preserved
+- **User Experience**: Single-click button with character as primary visual element and clear functional text

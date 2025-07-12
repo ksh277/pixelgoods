@@ -132,23 +132,23 @@ export function BelugaMascot({ variant, className = "" }: BelugaMascotProps) {
       <div className={`${config.position} ${className}`}>
         <div className="relative">
           <Button
-            className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 border-2 border-blue-300 shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 p-1 flex flex-col items-center justify-center"
+            className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 border-2 border-blue-300 shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 p-0 overflow-hidden relative"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            aria-label={t({ ko: "문의 버튼", en: "Inquiry button", ja: "お問い合わせボタン", zh: "咨询按钮" })}
+            aria-label={t({ ko: "문의하기 버튼", en: "Inquiry button", ja: "お問い合わせボタン", zh: "咨询按钮" })}
           >
-            {/* Beluga Character - Main Focus */}
-            <div className="flex-1 flex items-center justify-center mb-1">
-              <img 
-                src={belugaImage} 
-                alt="Beluga Mascot" 
-                className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
-              />
-            </div>
+            {/* Beluga Character - Fill entire button */}
+            <img 
+              src={belugaImage} 
+              alt="Beluga Mascot" 
+              className="w-full h-full object-cover rounded-full"
+            />
             
-            {/* Text Label - Below Character */}
-            <div className="text-xs font-medium text-blue-800">
-              {t({ ko: "문의", en: "Inquiry", ja: "お問い合わせ", zh: "咨询" })}
+            {/* Text Label - Overlaid at bottom center */}
+            <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 rounded-full">
+              <span className="text-xs font-bold text-blue-800 whitespace-nowrap">
+                {t({ ko: "문의하기", en: "Inquiry", ja: "お問い合わせ", zh: "咨询" })}
+              </span>
             </div>
           </Button>
           
