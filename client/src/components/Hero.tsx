@@ -72,16 +72,16 @@ export function Hero() {
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2, duration: 0.6 }}
-                  className="text-white z-10"
+                  className="text-white z-10 px-2 sm:px-0"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.6 }}
-                    className="flex items-center gap-2 mb-4"
+                    className="flex items-center gap-2 mb-4 flex-wrap"
                   >
-                    <Sparkles className="h-6 w-6 text-yellow-300" />
-                    <span className="text-sm font-medium text-yellow-300 text-korean">
+                    <Sparkles className="h-6 w-6 text-yellow-300 flex-shrink-0" />
+                    <span className="text-sm font-medium text-yellow-300 text-korean mobile-hero-text break-keep">
                       {t({ ko: "올댓프린팅 특별 서비스", en: "AllThatPrinting Special Service" })}
                     </span>
                   </motion.div>
@@ -90,7 +90,7 @@ export function Hero() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-korean text-tight leading-tight"
+                    className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-korean text-tight leading-tight break-keep mobile-hero-text"
                   >
                     {t(heroSlides[currentSlide].title)}
                   </motion.h1>
@@ -99,7 +99,7 @@ export function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.6 }}
-                    className="text-lg md:text-xl mb-6 text-white/90 text-korean leading-relaxed"
+                    className="text-lg md:text-xl mb-6 text-white/90 text-korean leading-relaxed break-keep mobile-hero-text"
                   >
                     {t(heroSlides[currentSlide].subtitle)}
                   </motion.p>
