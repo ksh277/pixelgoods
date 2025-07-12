@@ -14,7 +14,7 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedSections, setExpandedSections] = useState<string[]>(['customer', 'participation', 'goods']);
   const { theme, toggleTheme } = useThemeContext();
-  const { language, setSpecificLanguage, t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => 
@@ -50,6 +50,7 @@ export function Header() {
         { id: 'printing', label: { ko: "프린팅", en: "Printing", ja: "印刷", zh: "印刷" }, href: "/products" },
         { id: 'community', label: { ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" }, href: "/community" },
         { id: 'editor', label: { ko: "굿즈 에디터", en: "Goods Editor", ja: "グッズエディタ", zh: "商品编辑器" }, href: "/editor" },
+        { id: 'cart', label: { ko: "장바구니", en: "Shopping Cart", ja: "ショッピングカート", zh: "购物车" }, href: "/cart" },
         { id: 'login', label: { ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" }, href: "/login" },
         { id: 'register', label: { ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" }, href: "/register" }
       ]
@@ -145,7 +146,7 @@ export function Header() {
                 {languages.map((lang) => (
                   <DropdownMenuItem
                     key={lang.code}
-                    onClick={() => setSpecificLanguage(lang.code as any)}
+                    onClick={() => setLanguage(lang.code as any)}
                     className={language === lang.code ? "bg-muted" : ""}
                   >
                     <span className="mr-2">{lang.flag}</span>
@@ -229,16 +230,18 @@ export function Header() {
               </Button>
 
               {/* Cart */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground relative"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs">
-                  3
-                </Badge>
-              </Button>
+              <Link href="/cart">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:text-foreground relative"
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs">
+                    3
+                  </Badge>
+                </Button>
+              </Link>
             </div>
 
             {/* Mobile Menu */}

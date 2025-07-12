@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,35 +25,59 @@ interface CartItem {
 
 export default function Cart() {
   const { toast } = useToast();
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      productId: 1,
-      name: "Acrylic Keychain",
-      nameKo: "아크릴 키링",
-      price: 8900,
-      quantity: 2,
-      imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
-      customization: {
-        size: "Medium",
-        color: "Clear",
-        text: "My Custom Text"
+  const [, setLocation] = useLocation();
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        setCartItems(JSON.parse(savedCart));
+      } else {
+        // Initialize with sample data if no cart exists
+        const sampleCart = [
+          {
+            id: 1,
+            productId: 1,
+            name: "Acrylic Keychain",
+            nameKo: "아크릴 키링",
+            price: 8900,
+            quantity: 2,
+            imageUrl: "/api/placeholder/400/400",
+            customization: {
+              size: "Medium",
+              color: "Clear",
+              text: "My Custom Text"
+            }
+          },
+          {
+            id: 2,
+            productId: 2,
+            name: "Custom Phone Case",
+            nameKo: "커스텀 폰케이스",
+            price: 15900,
+            quantity: 1,
+            imageUrl: "/api/placeholder/400/400",
+            customization: {
+              size: "iPhone 14",
+              color: "Clear"
+            }
+          }
+        ];
+        setCartItems(sampleCart);
+        localStorage.setItem('cart', JSON.stringify(sampleCart));
       }
-    },
-    {
-      id: 2,
-      productId: 2,
-      name: "Custom Phone Case",
-      nameKo: "커스텀 폰케이스",
-      price: 15900,
-      quantity: 1,
-      imageUrl: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400",
-      customization: {
-        size: "iPhone 14",
-        color: "Clear"
-      }
+    } catch (error) {
+      console.error('Failed to load cart:', error);
+      setCartItems([]);
     }
-  ]);
+  }, []);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const updateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -253,7 +277,11 @@ export default function Cart() {
                   <span className="text-primary">{formatPrice(total)}</span>
                 </div>
                 
-                <Button className="w-full btn-primary" size="lg">
+                <Button 
+                  className="w-full btn-primary" 
+                  size="lg"
+                  onClick={() => setLocation('/checkout')}
+                >
                   <span>주문하기</span>
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>

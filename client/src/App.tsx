@@ -15,6 +15,8 @@ import CategoryPage from "@/pages/CategoryPage";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Cart from "@/pages/Cart";
+import Checkout from "@/pages/Checkout";
+import OrderComplete from "@/pages/OrderComplete";
 import Community from "@/pages/Community";
 import Editor from "@/pages/Editor";
 import Inquiry from "@/pages/Inquiry";
@@ -60,6 +62,8 @@ function Router() {
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/cart" component={Cart} />
+        <Route path="/checkout" component={Checkout} />
+        <Route path="/order-complete" component={OrderComplete} />
         <Route path="/community" component={Community} />
         <Route path="/reviews/:id" component={ReviewDetail} />
         <Route path="/resources" component={Resources} />
