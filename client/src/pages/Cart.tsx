@@ -30,59 +30,38 @@ export default function Cart() {
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        const parsedCart = JSON.parse(savedCart);
-        setCartItems(parsedCart);
-        setSelectedItems(parsedCart.map((item: CartItem) => item.id));
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
-      }
-    } else {
-      // Initialize with sample data if no cart exists
-      const sampleCart = [
-        {
-          id: 1,
-          name: "Acrylic Keychain",
-          nameKo: "아크릴 키링",
-          price: 8900,
-          quantity: 2,
-          image: "/api/placeholder/100/100",
-          options: {
-            size: "5x5cm",
-            color: "투명"
-          }
-        },
-        {
-          id: 2,
-          name: "Custom Sticker",
-          nameKo: "커스텀 스티커",
-          price: 5500,
-          quantity: 1,
-          image: "/api/placeholder/100/100",
-          options: {
-            size: "10x10cm",
-            color: "컬러"
-          }
-        },
-        {
-          id: 3,
-          name: "Acrylic Stand",
-          nameKo: "아크릴 스탠드",
-          price: 15000,
-          quantity: 1,
-          image: "/api/placeholder/100/100",
-          options: {
-            size: "15x20cm",
-            color: "투명"
-          }
+    const loadCart = () => {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        try {
+          const parsedCart = JSON.parse(savedCart);
+          setCartItems(parsedCart);
+          setSelectedItems(parsedCart.map((item: CartItem) => item.id));
+        } catch (error) {
+          console.error('Error loading cart from localStorage:', error);
+          setCartItems([]);
+          setSelectedItems([]);
         }
-      ];
-      setCartItems(sampleCart);
-      setSelectedItems(sampleCart.map(item => item.id));
-      localStorage.setItem('cart', JSON.stringify(sampleCart));
-    }
+      } else {
+        // Initialize empty cart if no cart exists
+        setCartItems([]);
+        setSelectedItems([]);
+      }
+    };
+
+    // Load cart on mount
+    loadCart();
+
+    // Listen for cart updates
+    const handleCartUpdate = () => {
+      loadCart();
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    
+    return () => {
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+    };
   }, []);
 
   // Save cart to localStorage whenever it changes

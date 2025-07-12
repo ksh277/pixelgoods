@@ -53,7 +53,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedBase, setSelectedBase] = useState("");
-  const [selectedPackaging, setSelectedPackaging] = useState("");
+  const [selectedPackaging, setSelectedPackaging] = useState("기본 포장"); // Default packaging
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const [activeTab, setActiveTab] = useState("pdf");
@@ -183,10 +183,70 @@ export default function ProductDetail() {
   };
 
   const handleAddToCart = () => {
-    toast({
-      title: t({ ko: "장바구니에 추가됨", en: "Added to cart" }),
-      description: t({ ko: `${mockProduct.nameKo}이(가) 장바구니에 추가되었습니다.`, en: `${mockProduct.nameKo} has been added to cart.` }),
-    });
+    // Validate required selections
+    if (!selectedSize || !selectedBase) {
+      toast({
+        title: t({ ko: "옵션을 선택해주세요", en: "Please select options" }),
+        description: t({ ko: "사이즈와 받침을 선택해야 합니다.", en: "Size and base must be selected." }),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Create cart item object
+      const cartItem = {
+        id: mockProduct.id,
+        name: mockProduct.name,
+        nameKo: mockProduct.nameKo,
+        price: calculateTotalPrice(),
+        quantity: quantity,
+        image: mockProduct.images[0],
+        options: {
+          size: selectedSize,
+          base: selectedBase,
+          packaging: selectedPackaging,
+          uploadedFile: uploadedFile?.name || null,
+          customText: customText || null,
+          activeTab: activeTab
+        }
+      };
+
+      // Get existing cart from localStorage
+      const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+      
+      // Check if item already exists with same options
+      const existingItemIndex = existingCart.findIndex((item: any) => 
+        item.id === cartItem.id && 
+        JSON.stringify(item.options) === JSON.stringify(cartItem.options)
+      );
+
+      if (existingItemIndex !== -1) {
+        // Update quantity if item exists
+        existingCart[existingItemIndex].quantity += quantity;
+      } else {
+        // Add new item to cart
+        existingCart.push(cartItem);
+      }
+
+      // Save to localStorage
+      localStorage.setItem('cart', JSON.stringify(existingCart));
+
+      // Dispatch cart update event to notify header
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+
+      toast({
+        title: t({ ko: "장바구니에 추가됨", en: "Added to cart" }),
+        description: t({ ko: `${mockProduct.nameKo}이(가) 장바구니에 추가되었습니다.`, en: `${mockProduct.nameKo} has been added to cart.` }),
+      });
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast({
+        title: t({ ko: "오류", en: "Error" }),
+        description: t({ ko: "장바구니 추가 중 오류가 발생했습니다.", en: "An error occurred while adding to cart." }),
+        variant: "destructive",
+      });
+    }
   };
 
   const handleToggleFavorite = () => {
@@ -521,7 +581,7 @@ export default function ProductDetail() {
             <div className="flex gap-3">
               <Button
                 onClick={handleAddToCart}
-                disabled={!selectedSize || !selectedBase || !selectedPackaging}
+                disabled={!selectedSize || !selectedBase}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-medium"
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
