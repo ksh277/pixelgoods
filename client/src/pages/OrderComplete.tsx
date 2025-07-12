@@ -1,38 +1,26 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
+import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle, Package, Home, Phone, Mail } from "lucide-react";
-import { useLanguage } from "@/hooks/useLanguage";
+import { CheckCircle, Package, MapPin, CreditCard, Home, User, Calendar, Clock } from "lucide-react";
 
 interface OrderData {
-  id: number;
-  items: Array<{
-    id: number;
-    name: string;
-    nameKo: string;
-    price: number;
-    quantity: number;
-    image: string;
-    options?: string;
-  }>;
+  id: string;
+  items: any[];
   customer: {
     name: string;
     email: string;
     phone: string;
     address: string;
-    detailAddress: string;
-    postalCode: string;
-    memo: string;
+    addressDetail: string;
+    zipCode: string;
+    paymentMethod: string;
   };
-  amounts: {
-    subtotal: number;
-    shipping: number;
-    total: number;
-  };
-  date: string;
+  total: number;
+  orderDate: string;
   status: string;
 }
 
@@ -42,31 +30,55 @@ export default function OrderComplete() {
   const [orderData, setOrderData] = useState<OrderData | null>(null);
 
   useEffect(() => {
-    try {
-      const savedOrder = localStorage.getItem('lastOrder');
-      if (savedOrder) {
-        setOrderData(JSON.parse(savedOrder));
+    // Load order data from localStorage
+    const lastOrder = localStorage.getItem('lastOrder');
+    if (lastOrder) {
+      try {
+        const parsedOrder = JSON.parse(lastOrder);
+        setOrderData(parsedOrder);
+      } catch (error) {
+        console.error('Error loading order data:', error);
       }
-    } catch (error) {
-      console.error('Failed to load order data:', error);
     }
   }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getPaymentMethodName = (method: string) => {
+    switch (method) {
+      case 'card':
+        return t({ ko: "신용카드", en: "Credit Card" });
+      case 'kakao':
+        return t({ ko: "카카오페이", en: "KakaoPay" });
+      case 'naver':
+        return t({ ko: "네이버페이", en: "NaverPay" });
+      default:
+        return method;
+    }
+  };
 
   if (!orderData) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
-            <Package className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
               {t({ ko: "주문 정보를 찾을 수 없습니다", en: "Order information not found" })}
             </h2>
-            <p className="text-gray-600 mb-6">
-              {t({ ko: "주문 내역을 확인해주세요", en: "Please check your order history" })}
-            </p>
-            <Button onClick={() => setLocation('/')}>
-              {t({ ko: "홈으로 돌아가기", en: "Back to Home" })}
-            </Button>
+            <Link href="/">
+              <Button className="px-8 py-3">
+                {t({ ko: "홈으로 이동", en: "Go to Home" })}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -78,257 +90,255 @@ export default function OrderComplete() {
       <div className="max-w-4xl mx-auto px-4">
         {/* Success Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-            <CheckCircle className="h-10 w-10 text-green-600" />
+          <div className="w-20 h-20 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+            <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t({ ko: "주문이 완료되었습니다", en: "Order Completed Successfully" })} 🎉
+            {t({ ko: "주문이 완료되었습니다!", en: "Order Complete!" })}
           </h1>
-          <p className="text-lg text-gray-600 mb-4">
-            {t({ ko: "주문번호", en: "Order Number" })}: #{orderData.id}
+          <p className="text-gray-600 text-lg">
+            {t({ ko: "주문해주셔서 감사합니다", en: "Thank you for your order" })}
           </p>
-          <Badge variant="secondary" className="bg-green-100 text-green-800">
-            {t({ ko: "주문 확인됨", en: "Order Confirmed" })}
-          </Badge>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Order Details */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Package className="h-5 w-5 mr-2" />
-                  {t({ ko: "주문 상품", en: "Order Items" })}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {orderData.items.map((item) => (
-                    <div key={item.id} className="flex items-center space-x-4">
-                      <img
-                        src={item.image}
-                        alt={item.nameKo}
-                        className="w-16 h-16 rounded-lg object-cover"
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-medium text-gray-900">{item.nameKo}</h3>
-                        {item.options && (
-                          <p className="text-sm text-gray-600">{item.options}</p>
-                        )}
-                        <p className="text-sm text-gray-600">
-                          {t({ ko: "수량", en: "Qty" })}: {item.quantity}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium">
-                          ₩{(item.price * item.quantity).toLocaleString()}
-                        </p>
-                      </div>
+        <div className="space-y-6">
+          {/* Order Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Package className="h-5 w-5 mr-2" />
+                {t({ ko: "주문 정보", en: "Order Information" })}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div className="flex items-center space-x-3 mb-4">
+                    <Calendar className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm text-gray-600">
+                        {t({ ko: "주문번호", en: "Order Number" })}
+                      </p>
+                      <p className="font-semibold">#{orderData.id}</p>
                     </div>
-                  ))}
-                </div>
-
-                <Separator className="my-4" />
-
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>{t({ ko: "상품 금액", en: "Subtotal" })}</span>
-                    <span>₩{orderData.amounts.subtotal.toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>{t({ ko: "배송비", en: "Shipping" })}</span>
-                    <span>
-                      {orderData.amounts.shipping === 0 ? (
-                        <span className="text-green-600">{t({ ko: "무료", en: "Free" })}</span>
-                      ) : (
-                        `₩${orderData.amounts.shipping.toLocaleString()}`
-                      )}
+                  <div className="flex items-center space-x-3">
+                    <Clock className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm text-gray-600">
+                        {t({ ko: "주문일시", en: "Order Date" })}
+                      </p>
+                      <p className="font-semibold">{formatDate(orderData.orderDate)}</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center space-x-3 mb-4">
+                    <CreditCard className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm text-gray-600">
+                        {t({ ko: "결제 방법", en: "Payment Method" })}
+                      </p>
+                      <p className="font-semibold">{getPaymentMethodName(orderData.customer.paymentMethod)}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">
+                        {t({ ko: "결제 상태", en: "Payment Status" })}
+                      </p>
+                      <Badge variant="secondary" className="bg-green-100 text-green-800">
+                        {t({ ko: "결제완료", en: "Paid" })}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Order Items */}
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {t({ ko: "주문 상품", en: "Order Items" })}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {orderData.items.map((item) => (
+                  <div key={item.id} className="flex items-center space-x-4 p-4 border rounded-lg">
+                    <img
+                      src={item.image}
+                      alt={item.nameKo}
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900">{item.nameKo}</h3>
+                      <div className="flex items-center space-x-2 mt-1">
+                        {Object.entries(item.options).map(([key, value]) => (
+                          <Badge key={key} variant="secondary" className="text-xs">
+                            {value}
+                          </Badge>
+                        ))}
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">
+                        ₩{item.price.toLocaleString()} × {item.quantity}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-gray-900">
+                        ₩{(item.price * item.quantity).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <Separator className="my-4" />
+              
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-bold">
+                  {t({ ko: "총 결제 금액", en: "Total Amount" })}
+                </span>
+                <span className="text-2xl font-bold text-blue-600">
+                  ₩{orderData.total.toLocaleString()}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Delivery Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <MapPin className="h-5 w-5 mr-2" />
+                {t({ ko: "배송 정보", en: "Delivery Information" })}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">
+                    {t({ ko: "받는 분", en: "Recipient" })}
+                  </p>
+                  <p className="font-semibold">{orderData.customer.name}</p>
+                  <p className="text-gray-600">{orderData.customer.phone}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">
+                    {t({ ko: "배송 주소", en: "Delivery Address" })}
+                  </p>
+                  <p className="font-semibold">
+                    ({orderData.customer.zipCode}) {orderData.customer.address}
+                  </p>
+                  {orderData.customer.addressDetail && (
+                    <p className="text-gray-600">{orderData.customer.addressDetail}</p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Next Steps */}
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {t({ ko: "다음 단계", en: "Next Steps" })}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-bold text-blue-600">1</span>
+                  </div>
+                  <div>
+                    <p className="font-medium">
+                      {t({ ko: "주문 확인", en: "Order Confirmation" })}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {t({ ko: "이메일로 주문 확인서가 발송됩니다", en: "Order confirmation will be sent to your email" })}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-bold text-gray-400">2</span>
+                  </div>
+                  <div>
+                    <p className="font-medium">
+                      {t({ ko: "제작 시작", en: "Production Start" })}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {t({ ko: "1-2일 내에 제작이 시작됩니다", en: "Production will begin within 1-2 days" })}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-bold text-gray-400">3</span>
+                  </div>
+                  <div>
+                    <p className="font-medium">
+                      {t({ ko: "배송 완료", en: "Delivery Complete" })}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {t({ ko: "3-5일 내에 배송이 완료됩니다", en: "Delivery will be completed within 3-5 days" })}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/">
+              <Button variant="outline" className="w-full sm:w-auto">
+                <Home className="w-4 h-4 mr-2" />
+                {t({ ko: "메인으로", en: "Go to Main" })}
+              </Button>
+            </Link>
+            <Link href="/mypage">
+              <Button className="w-full sm:w-auto">
+                <User className="w-4 h-4 mr-2" />
+                {t({ ko: "마이페이지로", en: "Go to My Page" })}
+              </Button>
+            </Link>
+          </div>
+
+          {/* Customer Service */}
+          <Card className="bg-blue-50">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <h3 className="font-semibold text-blue-900 mb-2">
+                  {t({ ko: "문의사항이 있으신가요?", en: "Have any questions?" })}
+                </h3>
+                <p className="text-blue-800 text-sm mb-4">
+                  {t({ 
+                    ko: "주문 관련 문의는 고객센터로 연락해주세요", 
+                    en: "Please contact customer service for order-related inquiries" 
+                  })}
+                </p>
+                <div className="flex items-center justify-center space-x-4 text-sm">
+                  <div className="flex items-center space-x-1">
+                    <span className="text-blue-600">📞</span>
+                    <span className="text-blue-800">1588-1234</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span className="text-blue-600">⏰</span>
+                    <span className="text-blue-800">
+                      {t({ ko: "평일 09:00-18:00", en: "Weekdays 09:00-18:00" })}
                     </span>
                   </div>
-                  <Separator />
-                  <div className="flex justify-between text-lg font-bold">
-                    <span>{t({ ko: "총 결제 금액", en: "Total" })}</span>
-                    <span>₩{orderData.amounts.total.toLocaleString()}</span>
-                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Customer & Shipping Info */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Home className="h-5 w-5 mr-2" />
-                  {t({ ko: "배송 정보", en: "Shipping Information" })}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <div className="flex items-center text-sm text-gray-600 mb-1">
-                    <Package className="h-4 w-4 mr-2" />
-                    {t({ ko: "받는 분", en: "Recipient" })}
-                  </div>
-                  <p className="font-medium">{orderData.customer.name}</p>
-                </div>
-
-                <div>
-                  <div className="flex items-center text-sm text-gray-600 mb-1">
-                    <Phone className="h-4 w-4 mr-2" />
-                    {t({ ko: "연락처", en: "Phone" })}
-                  </div>
-                  <p className="font-medium">{orderData.customer.phone}</p>
-                </div>
-
-                {orderData.customer.email && (
-                  <div>
-                    <div className="flex items-center text-sm text-gray-600 mb-1">
-                      <Mail className="h-4 w-4 mr-2" />
-                      {t({ ko: "이메일", en: "Email" })}
-                    </div>
-                    <p className="font-medium">{orderData.customer.email}</p>
-                  </div>
-                )}
-
-                <div>
-                  <div className="flex items-center text-sm text-gray-600 mb-1">
-                    <Home className="h-4 w-4 mr-2" />
-                    {t({ ko: "배송 주소", en: "Shipping Address" })}
-                  </div>
-                  <p className="font-medium">
-                    {orderData.customer.postalCode && `(${orderData.customer.postalCode}) `}
-                    {orderData.customer.address}
-                    {orderData.customer.detailAddress && ` ${orderData.customer.detailAddress}`}
-                  </p>
-                </div>
-
-                {orderData.customer.memo && (
-                  <div>
-                    <div className="text-sm text-gray-600 mb-1">
-                      {t({ ko: "배송 메모", en: "Delivery Memo" })}
-                    </div>
-                    <p className="font-medium text-sm bg-gray-50 p-2 rounded">
-                      {orderData.customer.memo}
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Next Steps */}
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  {t({ ko: "다음 단계", en: "Next Steps" })}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-blue-600">1</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      {t({ ko: "주문 확인", en: "Order Confirmation" })}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {t({ ko: "주문이 확인되었습니다", en: "Your order has been confirmed" })}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-gray-600">2</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      {t({ ko: "제작 시작", en: "Production Started" })}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {t({ ko: "1-2일 내에 제작을 시작합니다", en: "Production will begin within 1-2 days" })}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-gray-600">3</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      {t({ ko: "배송 준비", en: "Shipping Preparation" })}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {t({ ko: "제작 완료 후 배송 준비를 시작합니다", en: "Shipping preparation begins after production" })}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-gray-600">4</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      {t({ ko: "배송 완료", en: "Delivery Complete" })}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {t({ ko: "3-5일 내에 배송됩니다", en: "Delivery within 3-5 days" })}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-8">
-          <Button
-            onClick={() => setLocation('/')}
-            variant="outline"
-            className="flex-1"
-          >
-            {t({ ko: "홈으로 돌아가기", en: "Back to Home" })}
-          </Button>
-          <Button
-            onClick={() => setLocation('/products')}
-            className="flex-1"
-          >
-            {t({ ko: "계속 쇼핑하기", en: "Continue Shopping" })}
-          </Button>
-        </div>
-
-        {/* Contact Info */}
-        <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-          <h3 className="font-medium text-gray-900 mb-2">
-            {t({ ko: "궁금한 점이 있으신가요?", en: "Have any questions?" })}
-          </h3>
-          <p className="text-sm text-gray-600">
-            {t({ 
-              ko: "주문 관련 문의사항이 있으시면 언제든지 고객센터로 연락해주세요.", 
-              en: "Feel free to contact our customer service for any order-related inquiries." 
-            })}
-          </p>
-          <div className="mt-4 flex flex-col sm:flex-row gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setLocation('/inquiry')}
-            >
-              {t({ ko: "문의하기", en: "Contact Us" })}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.open('tel:1588-0000')}
-            >
-              {t({ ko: "전화 문의: 1588-0000", en: "Call: 1588-0000" })}
-            </Button>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

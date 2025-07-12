@@ -34,6 +34,9 @@ import CommunityEvents from "@/pages/CommunityEvents";
 import CommunityResources from "@/pages/CommunityResources";
 import UserContentShowcase from "@/pages/UserContentShowcase";
 import CommunityQA from "@/pages/CommunityQA";
+import MyPage from "@/pages/MyPage";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function Router() {
   const [location] = useLocation();
@@ -62,8 +65,21 @@ function Router() {
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/cart" component={Cart} />
-        <Route path="/checkout" component={Checkout} />
+        <Route path="/checkout">
+          {() => (
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          )}
+        </Route>
         <Route path="/order-complete" component={OrderComplete} />
+        <Route path="/mypage">
+          {() => (
+            <ProtectedRoute>
+              <MyPage />
+            </ProtectedRoute>
+          )}
+        </Route>
         <Route path="/community" component={Community} />
         <Route path="/reviews/:id" component={ReviewDetail} />
         <Route path="/resources" component={Resources} />
@@ -110,14 +126,16 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <TooltipProvider>
-          <div className="min-h-screen bg-background text-foreground">
-            <Header />
-            <main>
-              <Router />
-            </main>
-            <Footer />
-          </div>
-          <Toaster />
+          <AuthProvider>
+            <div className="min-h-screen bg-background text-foreground">
+              <Header />
+              <main>
+                <Router />
+              </main>
+              <Footer />
+            </div>
+            <Toaster />
+          </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>

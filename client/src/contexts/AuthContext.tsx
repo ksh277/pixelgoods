@@ -1,0 +1,99 @@
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  points: number;
+  coupons: number;
+  totalOrders: number;
+  totalSpent: number;
+}
+
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => void;
+  redirectPath: string | null;
+  setRedirectPath: (path: string | null) => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('Failed to parse saved user:', error);
+        localStorage.removeItem('user');
+      }
+    }
+    setIsLoading(false);
+  }, []);
+
+  const login = async (email: string, password: string): Promise<boolean> => {
+    setIsLoading(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Mock authentication - in real app, this would be an API call
+    if (email === 'test@example.com' && password === 'password') {
+      const userData: User = {
+        id: '1',
+        name: '김승환',
+        email: 'test@example.com',
+        points: 15000,
+        coupons: 3,
+        totalOrders: 8,
+        totalSpent: 245000
+      };
+      
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+      setIsLoading(false);
+      return true;
+    }
+    
+    setIsLoading(false);
+    return false;
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
+    setRedirectPath(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{
+      user,
+      isAuthenticated: !!user,
+      isLoading,
+      login,
+      logout,
+      redirectPath,
+      setRedirectPath
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}

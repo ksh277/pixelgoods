@@ -1,240 +1,258 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "wouter";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
+import { Link } from "wouter";
+import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Minus, Plus, X, ShoppingCart, CreditCard, AlertTriangle } from "lucide-react";
 
 interface CartItem {
   id: number;
-  productId: number;
   name: string;
   nameKo: string;
   price: number;
   quantity: number;
-  imageUrl: string;
-  customization?: {
+  image: string;
+  options: {
     size?: string;
     color?: string;
-    text?: string;
+    [key: string]: any;
   };
 }
 
 export default function Cart() {
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
+  const { t } = useLanguage();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart) {
-        setCartItems(JSON.parse(savedCart));
-      } else {
-        // Initialize with sample data if no cart exists
-        const sampleCart = [
-          {
-            id: 1,
-            productId: 1,
-            name: "Acrylic Keychain",
-            nameKo: "아크릴 키링",
-            price: 8900,
-            quantity: 2,
-            imageUrl: "/api/placeholder/400/400",
-            customization: {
-              size: "Medium",
-              color: "Clear",
-              text: "My Custom Text"
-            }
-          },
-          {
-            id: 2,
-            productId: 2,
-            name: "Custom Phone Case",
-            nameKo: "커스텀 폰케이스",
-            price: 15900,
-            quantity: 1,
-            imageUrl: "/api/placeholder/400/400",
-            customization: {
-              size: "iPhone 14",
-              color: "Clear"
-            }
-          }
-        ];
-        setCartItems(sampleCart);
-        localStorage.setItem('cart', JSON.stringify(sampleCart));
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        setCartItems(parsedCart);
+        setSelectedItems(parsedCart.map((item: CartItem) => item.id));
+      } catch (error) {
+        console.error('Error loading cart from localStorage:', error);
       }
-    } catch (error) {
-      console.error('Failed to load cart:', error);
-      setCartItems([]);
+    } else {
+      // Initialize with sample data if no cart exists
+      const sampleCart = [
+        {
+          id: 1,
+          name: "Acrylic Keychain",
+          nameKo: "아크릴 키링",
+          price: 8900,
+          quantity: 2,
+          image: "/api/placeholder/100/100",
+          options: {
+            size: "5x5cm",
+            color: "투명"
+          }
+        },
+        {
+          id: 2,
+          name: "Custom Sticker",
+          nameKo: "커스텀 스티커",
+          price: 5500,
+          quantity: 1,
+          image: "/api/placeholder/100/100",
+          options: {
+            size: "10x10cm",
+            color: "컬러"
+          }
+        },
+        {
+          id: 3,
+          name: "Acrylic Stand",
+          nameKo: "아크릴 스탠드",
+          price: 15000,
+          quantity: 1,
+          image: "/api/placeholder/100/100",
+          options: {
+            size: "15x20cm",
+            color: "투명"
+          }
+        }
+      ];
+      setCartItems(sampleCart);
+      setSelectedItems(sampleCart.map(item => item.id));
+      localStorage.setItem('cart', JSON.stringify(sampleCart));
     }
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
+    if (cartItems.length > 0) {
+      localStorage.setItem('cart', JSON.stringify(cartItems));
+      // Dispatch custom event to notify header of cart changes
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    }
   }, [cartItems]);
 
   const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      removeItem(id);
-      return;
-    }
-    
-    setCartItems(prev => 
-      prev.map(item => 
+    if (newQuantity <= 0) return;
+    setCartItems(items =>
+      items.map(item =>
         item.id === id ? { ...item, quantity: newQuantity } : item
       )
     );
   };
 
   const removeItem = (id: number) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-    toast({
-      title: "상품이 삭제되었습니다",
-      description: "장바구니에서 상품이 제거되었습니다.",
-    });
+    setCartItems(items => items.filter(item => item.id !== id));
+    setSelectedItems(selected => selected.filter(itemId => itemId !== id));
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = subtotal >= 30000 ? 0 : 3000;
-  const total = subtotal + shipping;
-
-  const formatPrice = (price: number) => {
-    return `₩${price.toLocaleString()}`;
+  const toggleSelectItem = (id: number) => {
+    setSelectedItems(selected =>
+      selected.includes(id)
+        ? selected.filter(itemId => itemId !== id)
+        : [...selected, id]
+    );
   };
+
+  const toggleSelectAll = () => {
+    if (selectedItems.length === cartItems.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(cartItems.map(item => item.id));
+    }
+  };
+
+  const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
+  const subtotal = selectedCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const shippingFee = subtotal >= 50000 ? 0 : 3000;
+  const total = subtotal + shippingFee;
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto px-4">
-          <ShoppingBag className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h2 className="text-2xl font-bold text-foreground mb-2">
-            장바구니가 비어있습니다
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            마음에 드는 상품을 장바구니에 담아보세요
-          </p>
-          <Link href="/products">
-            <Button className="btn-primary">
-              쇼핑 계속하기
-            </Button>
-          </Link>
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center py-16">
+            <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+              <AlertTriangle className="w-12 h-12 text-gray-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              {t({ ko: "장바구니가 비어 있습니다", en: "Your cart is empty" })}
+            </h2>
+            <p className="text-gray-600 mb-8">
+              {t({ ko: "원하는 상품을 장바구니에 담아보세요", en: "Add items to your cart to get started" })}
+            </p>
+            <Link href="/products">
+              <Button className="px-8 py-3">
+                {t({ ko: "쇼핑 계속하기", en: "Continue Shopping" })}
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-muted/50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            장바구니
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">
+            {t({ ko: "장바구니", en: "Shopping Cart" })}
           </h1>
-          <p className="text-lg text-muted-foreground">
-            주문하실 상품들을 확인하고 결제를 진행하세요
+          <p className="text-gray-600 mt-2">
+            {t({ ko: `총 ${cartItems.length}개의 상품이 있습니다`, en: `${cartItems.length} items in your cart` })}
           </p>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span>주문 상품 ({cartItems.length}개)</span>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center">
+                    <Checkbox
+                      checked={selectedItems.length === cartItems.length}
+                      onCheckedChange={toggleSelectAll}
+                      className="mr-3"
+                    />
+                    {t({ ko: "전체 선택", en: "Select All" })}
+                  </CardTitle>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
-                    onClick={() => setCartItems([])}
-                    className="text-muted-foreground hover:text-destructive"
+                    onClick={() => {
+                      selectedItems.forEach(id => removeItem(id));
+                    }}
+                    disabled={selectedItems.length === 0}
                   >
-                    전체 삭제
+                    {t({ ko: "선택 삭제", en: "Remove Selected" })}
                   </Button>
-                </CardTitle>
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex items-center space-x-4 p-4 border rounded-lg">
+                    <Checkbox
+                      checked={selectedItems.includes(item.id)}
+                      onCheckedChange={() => toggleSelectItem(item.id)}
+                    />
+                    
                     <img
-                      src={item.imageUrl}
+                      src={item.image}
                       alt={item.nameKo}
                       className="w-20 h-20 object-cover rounded-lg"
                     />
                     
                     <div className="flex-1">
-                      <h3 className="font-semibold text-foreground">
-                        {item.nameKo}
-                      </h3>
-                      
-                      {item.customization && (
-                        <div className="flex gap-2 mt-2">
-                          {item.customization.size && (
-                            <Badge variant="outline">{item.customization.size}</Badge>
-                          )}
-                          {item.customization.color && (
-                            <Badge variant="outline">{item.customization.color}</Badge>
-                          )}
-                          {item.customization.text && (
-                            <Badge variant="outline">"{item.customization.text}"</Badge>
-                          )}
-                        </div>
-                      )}
-                      
-                      <p className="text-lg font-bold text-foreground mt-2">
-                        {formatPrice(item.price)}
-                      </p>
+                      <h3 className="font-semibold text-gray-900">{item.nameKo}</h3>
+                      <p className="text-sm text-gray-600">{item.name}</p>
+                      <div className="flex items-center space-x-2 mt-1">
+                        {Object.entries(item.options).map(([key, value]) => (
+                          <Badge key={key} variant="secondary" className="text-xs">
+                            {value}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                     
                     <div className="flex items-center space-x-2">
                       <Button
                         variant="outline"
-                        size="icon"
+                        size="sm"
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="h-8 w-8"
+                        disabled={item.quantity <= 1}
                       >
-                        <Minus className="h-4 w-4" />
+                        <Minus className="w-4 h-4" />
                       </Button>
-                      
-                      <Input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 0)}
-                        className="w-16 text-center"
-                        min="1"
-                      />
-                      
+                      <span className="w-8 text-center">{item.quantity}</span>
                       <Button
                         variant="outline"
-                        size="icon"
+                        size="sm"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="h-8 w-8"
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="w-4 h-4" />
                       </Button>
                     </div>
                     
                     <div className="text-right">
-                      <p className="text-lg font-bold text-foreground">
-                        {formatPrice(item.price * item.quantity)}
+                      <p className="font-semibold text-gray-900">
+                        ₩{(item.price * item.quantity).toLocaleString()}
                       </p>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeItem(item.id)}
-                        className="text-muted-foreground hover:text-destructive mt-2"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <p className="text-sm text-gray-600">
+                        ₩{item.price.toLocaleString()} × {item.quantity}
+                      </p>
                     </div>
+                    
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeItem(item.id)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
                   </div>
                 ))}
               </CardContent>
@@ -242,86 +260,67 @@ export default function Cart() {
           </div>
 
           {/* Order Summary */}
-          <div className="lg:col-span-4 mt-8 lg:mt-0">
-            <Card>
+          <div className="lg:col-span-1">
+            <Card className="sticky top-8">
               <CardHeader>
-                <CardTitle>주문 요약</CardTitle>
+                <CardTitle>
+                  {t({ ko: "주문 요약", en: "Order Summary" })}
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span>상품 금액</span>
-                  <span>{formatPrice(subtotal)}</span>
+                  <span className="text-gray-600">
+                    {t({ ko: "상품 금액", en: "Subtotal" })}
+                  </span>
+                  <span className="font-semibold">₩{subtotal.toLocaleString()}</span>
                 </div>
                 
                 <div className="flex justify-between">
-                  <span>배송비</span>
-                  <span>
-                    {shipping === 0 ? (
-                      <span className="text-green-600">무료</span>
+                  <span className="text-gray-600">
+                    {t({ ko: "배송비", en: "Shipping" })}
+                  </span>
+                  <span className="font-semibold">
+                    {shippingFee === 0 ? (
+                      <span className="text-green-600">
+                        {t({ ko: "무료", en: "Free" })}
+                      </span>
                     ) : (
-                      formatPrice(shipping)
+                      `₩${shippingFee.toLocaleString()}`
                     )}
                   </span>
                 </div>
                 
-                {shipping > 0 && (
-                  <p className="text-sm text-muted-foreground">
-                    {formatPrice(30000 - subtotal)} 더 주문하시면 배송비가 무료입니다!
-                  </p>
+                {subtotal < 50000 && (
+                  <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded">
+                    {t({ 
+                      ko: `₩${(50000 - subtotal).toLocaleString()} 더 구매하시면 무료배송!`, 
+                      en: `₩${(50000 - subtotal).toLocaleString()} more for free shipping!` 
+                    })}
+                  </div>
                 )}
                 
                 <Separator />
                 
                 <div className="flex justify-between text-lg font-bold">
-                  <span>총 결제 금액</span>
-                  <span className="text-primary">{formatPrice(total)}</span>
+                  <span>{t({ ko: "총 결제 금액", en: "Total" })}</span>
+                  <span className="text-blue-600">₩{total.toLocaleString()}</span>
                 </div>
                 
-                <Button 
-                  className="w-full btn-primary" 
-                  size="lg"
-                  onClick={() => setLocation('/checkout')}
-                >
-                  <span>주문하기</span>
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link href="/checkout">
+                  <Button 
+                    className="w-full py-3 text-lg" 
+                    disabled={selectedItems.length === 0}
+                  >
+                    <CreditCard className="w-5 h-5 mr-2" />
+                    {t({ ko: "주문하기", en: "Proceed to Checkout" })}
+                  </Button>
+                </Link>
                 
-                <div className="text-center">
-                  <Link href="/products">
-                    <Button variant="outline" className="w-full">
-                      쇼핑 계속하기
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* Payment Methods */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-lg">결제 수단</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-5 bg-yellow-400 rounded text-xs flex items-center justify-center text-black font-bold">
-                      K
-                    </div>
-                    <span className="text-sm">카카오페이</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-5 bg-green-500 rounded text-xs flex items-center justify-center text-white font-bold">
-                      N
-                    </div>
-                    <span className="text-sm">네이버페이</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-5 bg-gray-600 rounded text-xs flex items-center justify-center text-white">
-                      💳
-                    </div>
-                    <span className="text-sm">신용카드</span>
-                  </div>
-                </div>
+                <Link href="/products">
+                  <Button variant="outline" className="w-full">
+                    {t({ ko: "쇼핑 계속하기", en: "Continue Shopping" })}
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

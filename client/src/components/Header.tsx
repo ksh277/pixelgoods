@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Search, ShoppingCart, Moon, Sun, Menu, User, Heart, ChevronDown, ChevronRight, ChevronUp, Globe } from "lucide-react";
 import { useThemeContext } from "./ThemeProvider";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,8 +14,43 @@ export function Header() {
   const [location] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedSections, setExpandedSections] = useState<string[]>(['customer', 'participation', 'goods']);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const { theme, toggleTheme } = useThemeContext();
   const { language, setLanguage, t } = useLanguage();
+  const { user, logout } = useAuth();
+
+  // Update cart count when localStorage changes
+  useEffect(() => {
+    const updateCartCount = () => {
+      try {
+        const cart = localStorage.getItem('cart');
+        if (cart) {
+          const parsedCart = JSON.parse(cart);
+          const totalItems = parsedCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+          setCartItemCount(totalItems);
+        } else {
+          setCartItemCount(0);
+        }
+      } catch (error) {
+        console.error('Error parsing cart:', error);
+        setCartItemCount(0);
+      }
+    };
+
+    updateCartCount();
+    
+    // Listen for storage changes
+    window.addEventListener('storage', updateCartCount);
+    
+    // Custom event listener for cart updates
+    const handleCartUpdate = () => updateCartCount();
+    window.addEventListener('cartUpdated', handleCartUpdate);
+
+    return () => {
+      window.removeEventListener('storage', updateCartCount);
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+    };
+  }, []);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => 
@@ -211,14 +247,50 @@ export function Header() {
                 )}
               </Button>
 
-              {/* Profile */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <User className="h-5 w-5" />
-              </Button>
+              {/* Profile/Account */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>{user.name}</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="/mypage" className="flex items-center w-full">
+                        <User className="mr-2 h-4 w-4" />
+                        {t({ ko: "마이페이지", en: "My Page", ja: "マイページ", zh: "我的页面" })}
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Heart className="mr-2 h-4 w-4" />
+                      {t({ ko: "찜한 상품", en: "Favorites", ja: "お気に入り", zh: "收藏" })}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={logout}>
+                      <span className="mr-2">🚪</span>
+                      {t({ ko: "로그아웃", en: "Logout", ja: "ログアウト", zh: "登出" })}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <User className="h-5 w-5" />
+                  </Button>
+                </Link>
+              )}
 
               {/* Favorites */}
               <Button
@@ -237,9 +309,11 @@ export function Header() {
                   className="text-muted-foreground hover:text-foreground relative"
                 >
                   <ShoppingCart className="h-5 w-5" />
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs">
-                    3
-                  </Badge>
+                  {cartItemCount > 0 && (
+                    <Badge className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs">
+                      {cartItemCount}
+                    </Badge>
+                  )}
                 </Button>
               </Link>
             </div>
