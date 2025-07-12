@@ -32,6 +32,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DraggableImage } from "@/components/DraggableImage";
 
 interface ProductType {
   id: string;
@@ -50,6 +51,8 @@ interface CanvasImage {
   width: number;
   height: number;
   rotation: number;
+  flipped: boolean;
+  maintainAspectRatio: boolean;
 }
 
 export default function Editor() {
@@ -176,7 +179,9 @@ export default function Editor() {
         y: 10,
         width: 100,
         height: 100,
-        rotation: 0
+        rotation: 0,
+        flipped: false,
+        maintainAspectRatio: true
       };
       
       setImages([...images, newImage]);
@@ -207,6 +212,41 @@ export default function Editor() {
   const handleImageResize = (id: string, newWidth: number, newHeight: number) => {
     setImages(images.map(img => 
       img.id === id ? { ...img, width: newWidth, height: newHeight } : img
+    ));
+  };
+
+  const handleImageRotate = (id: string, rotation: number) => {
+    setImages(images.map(img => 
+      img.id === id ? { ...img, rotation } : img
+    ));
+  };
+
+  const handleImageFlip = (id: string) => {
+    setImages(images.map(img => 
+      img.id === id ? { ...img, flipped: !img.flipped } : img
+    ));
+  };
+
+  const handleAspectRatioToggle = (id: string) => {
+    setImages(images.map(img => 
+      img.id === id ? { ...img, maintainAspectRatio: !img.maintainAspectRatio } : img
+    ));
+  };
+
+  const centerImage = (id: string) => {
+    const image = images.find(img => img.id === id);
+    if (image) {
+      const centerX = (canvasSize.width - image.width) / 2;
+      const centerY = (canvasSize.height - image.height) / 2;
+      setImages(images.map(img => 
+        img.id === id ? { ...img, x: centerX, y: centerY } : img
+      ));
+    }
+  };
+
+  const resetImagePosition = (id: string) => {
+    setImages(images.map(img => 
+      img.id === id ? { ...img, x: 10, y: 10 } : img
     ));
   };
 
@@ -458,6 +498,73 @@ export default function Editor() {
                 onChange={handleImageUpload}
                 className="hidden"
               />
+
+              {/* Mobile Image Controls */}
+              {selectedImage && (
+                <div className="space-y-3 p-3 border rounded-lg bg-gray-50">
+                  <Label className="text-sm font-medium block">
+                    {t({ ko: '이미지 제어', en: 'Image Controls', ja: '画像コントロール', zh: '图像控制' })}
+                  </Label>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => selectedImage && centerImage(selectedImage)}
+                    >
+                      {t({ ko: '중앙 정렬', en: 'Center', ja: '中央', zh: '居中' })}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => selectedImage && resetImagePosition(selectedImage)}
+                    >
+                      {t({ ko: '위치 초기화', en: 'Reset Pos', ja: 'リセット', zh: '重置位置' })}
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-xs text-gray-500">
+                        {t({ ko: '가로', en: 'Width', ja: '幅', zh: '宽' })}
+                      </Label>
+                      <Input
+                        type="number"
+                        value={images.find(img => img.id === selectedImage)?.width || 0}
+                        onChange={(e) => {
+                          const newWidth = parseInt(e.target.value) || 0;
+                          const image = images.find(img => img.id === selectedImage);
+                          if (image) {
+                            handleImageResize(selectedImage, newWidth, image.height);
+                          }
+                        }}
+                        className="text-sm"
+                        min="20"
+                        max="350"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-500">
+                        {t({ ko: '세로', en: 'Height', ja: '高さ', zh: '高' })}
+                      </Label>
+                      <Input
+                        type="number"
+                        value={images.find(img => img.id === selectedImage)?.height || 0}
+                        onChange={(e) => {
+                          const newHeight = parseInt(e.target.value) || 0;
+                          const image = images.find(img => img.id === selectedImage);
+                          if (image) {
+                            handleImageResize(selectedImage, image.width, newHeight);
+                          }
+                        }}
+                        className="text-sm"
+                        min="20"
+                        max="350"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -564,6 +671,74 @@ export default function Editor() {
                 </div>
               )}
 
+              {/* Selected Image Controls */}
+              {selectedImage && (
+                <div className="space-y-4 p-4 border rounded-lg bg-gray-50">
+                  <Label className="text-sm font-medium block">
+                    {t({ ko: '선택된 이미지 제어', en: 'Selected Image Controls', ja: '選択画像コントロール', zh: '选定图像控制' })}
+                  </Label>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => selectedImage && centerImage(selectedImage)}
+                    >
+                      {t({ ko: '중앙 정렬', en: 'Center', ja: '中央揃え', zh: '居中对齐' })}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => selectedImage && resetImagePosition(selectedImage)}
+                    >
+                      {t({ ko: '위치 초기화', en: 'Reset Position', ja: '位置リセット', zh: '重置位置' })}
+                    </Button>
+                  </div>
+
+                  {/* Manual Size Controls */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-xs text-gray-500">
+                        {t({ ko: '가로 (px)', en: 'Width (px)', ja: '幅 (px)', zh: '宽度 (px)' })}
+                      </Label>
+                      <Input
+                        type="number"
+                        value={images.find(img => img.id === selectedImage)?.width || 0}
+                        onChange={(e) => {
+                          const newWidth = parseInt(e.target.value) || 0;
+                          const image = images.find(img => img.id === selectedImage);
+                          if (image) {
+                            handleImageResize(selectedImage, newWidth, image.height);
+                          }
+                        }}
+                        className="text-sm"
+                        min="20"
+                        max="500"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-500">
+                        {t({ ko: '세로 (px)', en: 'Height (px)', ja: '高さ (px)', zh: '高度 (px)' })}
+                      </Label>
+                      <Input
+                        type="number"
+                        value={images.find(img => img.id === selectedImage)?.height || 0}
+                        onChange={(e) => {
+                          const newHeight = parseInt(e.target.value) || 0;
+                          const image = images.find(img => img.id === selectedImage);
+                          if (image) {
+                            handleImageResize(selectedImage, image.width, newHeight);
+                          }
+                        }}
+                        className="text-sm"
+                        min="20"
+                        max="500"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Clear Canvas */}
               <Button
                 variant="destructive"
@@ -581,7 +756,7 @@ export default function Editor() {
         <div className="flex-1 flex flex-col">
           {/* Canvas */}
           <div className="flex-1 flex items-center justify-center p-2 sm:p-8">
-            <div className="relative bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden">
+            <div className="relative bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden canvas-container">
               <div
                 className="relative bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg"
                 style={{
@@ -596,52 +771,30 @@ export default function Editor() {
                 
                 {/* Uploaded Images */}
                 {images.map((image) => (
-                  <div
+                  <DraggableImage
                     key={image.id}
-                    className={cn(
-                      "absolute border-2 cursor-move select-none",
-                      selectedImage === image.id ? "border-blue-500 bg-blue-50" : "border-transparent",
-                      imageLoadErrors.includes(image.id) && "border-red-500 bg-red-50"
-                    )}
-                    style={{
-                      left: `${image.x}px`,
-                      top: `${image.y}px`,
-                      width: `${image.width}px`,
-                      height: `${image.height}px`,
-                      transform: `rotate(${image.rotation}deg)`,
-                      zIndex: selectedImage === image.id ? 10 : 5
+                    id={image.id}
+                    src={image.src}
+                    position={{ x: image.x, y: image.y }}
+                    size={{ width: image.width, height: image.height }}
+                    rotation={image.rotation}
+                    isSelected={selectedImage === image.id}
+                    onSelect={setSelectedImage}
+                    onMove={handleImageMove}
+                    onResize={handleImageResize}
+                    onRotate={handleImageRotate}
+                    onFlip={handleImageFlip}
+                    onDelete={(id) => {
+                      setImages(images.filter(img => img.id !== id));
+                      setSelectedImage(null);
                     }}
-                    onClick={() => setSelectedImage(image.id)}
-                    onMouseDown={(e) => setDraggedImage(image.id)}
-                  >
-                    {imageLoadErrors.includes(image.id) ? (
-                      <div className="w-full h-full flex items-center justify-center text-red-500 text-xs">
-                        <div className="text-center">
-                          <AlertCircle className="h-6 w-6 mx-auto mb-1" />
-                          <div>{t({ ko: '이미지 로드 실패', en: 'Image Load Failed', ja: '画像読み込み失敗', zh: '图片加载失败' })}</div>
-                        </div>
-                      </div>
-                    ) : (
-                      <img
-                        src={image.src}
-                        alt="Uploaded"
-                        className="w-full h-full object-contain rounded"
-                        onLoad={() => handleImageLoad(image.id)}
-                        onError={() => handleImageError(image.id)}
-                        draggable={false}
-                      />
-                    )}
-                    
-                    {/* Selection Handles */}
-                    {selectedImage === image.id && (
-                      <>
-                        <div className="absolute -top-1 -left-1 w-2 h-2 bg-blue-500 rounded-full cursor-nw-resize"></div>
-                        <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full cursor-ne-resize"></div>
-                        <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-blue-500 rounded-full cursor-sw-resize"></div>
-                        <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-blue-500 rounded-full cursor-se-resize"></div>
-                      </>
-                    )}
-                  </div>
+                    canvasBounds={{
+                      width: isMobile ? Math.min(canvasSize.width * 3, 350) : canvasSize.width * 4,
+                      height: isMobile ? Math.min(canvasSize.height * 3, 350) : canvasSize.height * 4
+                    }}
+                    maintainAspectRatio={image.maintainAspectRatio}
+                    onAspectRatioToggle={handleAspectRatioToggle}
+                  />
                 ))}
                 
                 {/* Empty State */}
