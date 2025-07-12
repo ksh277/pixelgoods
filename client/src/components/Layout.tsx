@@ -52,7 +52,7 @@ const communityNavItems: CommunityNavItem[] = [
   {
     id: "qa",
     label: { ko: "궁금햄물어바", en: "Q&A", ja: "質問・回答", zh: "问答" },
-    href: "/community/question",
+    href: "/community/qna",
     icon: MessageSquare
   }
 ];
@@ -74,8 +74,8 @@ function CommunityTopNav() {
     if (item.href === '/community/resources') {
       return location === '/community/resources' || location === '/resources';
     }
-    if (item.href === '/community/question') {
-      return location === '/community/question' || location === '/community/qna';
+    if (item.href === '/community/qna') {
+      return location === '/community/qna' || location === '/community/question';
     }
     return location.startsWith(item.href);
   };

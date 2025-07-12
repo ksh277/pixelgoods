@@ -31,6 +31,7 @@ import CommunityDesignShare from "@/pages/CommunityDesignShare";
 import CommunityEvents from "@/pages/CommunityEvents";
 import CommunityResources from "@/pages/CommunityResources";
 import UserContentShowcase from "@/pages/UserContentShowcase";
+import CommunityQA from "@/pages/CommunityQA";
 
 function Router() {
   const [location] = useLocation();
@@ -69,7 +70,7 @@ function Router() {
         <Route path="/community/design-share" component={CommunityDesignShare} />
         <Route path="/community/events" component={CommunityEvents} />
         <Route path="/community/resources" component={CommunityResources} />
-        <Route path="/community/qna" component={CommunityQuestion} />
+        <Route path="/community/qna" component={CommunityQA} />
         <Route path="/showcase" component={UserContentShowcase} />
         
         {/* Shortcut routes */}
