@@ -85,7 +85,7 @@ export default function Editor() {
     {
       id: 'keyring',
       name: { ko: '키링', en: 'Keyring', ja: 'キーリング', zh: '钥匙扣' },
-      description: { ko: '가장 기본적인 아크릴 키링 타공 포함', en: 'Basic acrylic keyring with hole', ja: '基本的なアクリルキーリング（穴あき）', zh: '基本亚克力钥匙扣带孔' },
+      description: { ko: '타공 포함 아크릴 키링', en: 'Acrylic keyring with hole', ja: '穴あきアクリルキーリング', zh: '带孔亚克力钥匙扣' },
       icon: '🔑',
       defaultSize: { width: 50, height: 50 },
       available: true
@@ -93,7 +93,7 @@ export default function Editor() {
     {
       id: 'stand',
       name: { ko: '스탠드', en: 'Stand', ja: 'スタンド', zh: '支架' },
-      description: { ko: '받침대 포함 자립형 아크릴', en: 'Self-standing acrylic with base', ja: '台座付き自立式アクリル', zh: '带底座的自立式亚克力' },
+      description: { ko: '받침대 포함 자립형', en: 'Self-standing with base', ja: '台座付き自立式', zh: '带底座自立式' },
       icon: '🎯',
       defaultSize: { width: 60, height: 80 },
       available: true
@@ -109,7 +109,7 @@ export default function Editor() {
     {
       id: 'photoholder',
       name: { ko: '포카홀더', en: 'Photo Holder', ja: 'フォトホルダー', zh: '相片夹' },
-      description: { ko: '카드 형태의 프레임형 굿즈', en: 'Card-type frame goods', ja: 'カード型フレームグッズ', zh: '卡片式框架商品' },
+      description: { ko: '카드 프레임형 굿즈', en: 'Card frame goods', ja: 'カード型フレーム', zh: '卡片框架商品' },
       icon: '🖼️',
       defaultSize: { width: 55, height: 85 },
       available: true
@@ -117,7 +117,7 @@ export default function Editor() {
     {
       id: 'smarttok',
       name: { ko: '스마트톡', en: 'Smart Tok', ja: 'スマートトック', zh: '智能支架' },
-      description: { ko: '후면에 접착 가능한 톡형 악세사리', en: 'Adhesive tok-type accessory', ja: '背面接着可能なトック型アクセサリー', zh: '后面可粘贴的支架配件' },
+      description: { ko: '후면 접착 톡형 악세사리', en: 'Adhesive tok accessory', ja: '背面接着トック型', zh: '后面粘贴支架配件' },
       icon: '📱',
       defaultSize: { width: 40, height: 40 },
       available: true
@@ -125,7 +125,7 @@ export default function Editor() {
     {
       id: 'badge',
       name: { ko: '뱃지', en: 'Badge', ja: 'バッジ', zh: '徽章' },
-      description: { ko: '원형/사각형 금속 또는 아크릴', en: 'Round/square metal or acrylic', ja: '円形/四角形金属またはアクリル', zh: '圆形/方形金属或亚克力' },
+      description: { ko: '원형/사각형 뱃지', en: 'Round/square badge', ja: '円形/四角形バッジ', zh: '圆形/方形徽章' },
       icon: '🏅',
       defaultSize: { width: 44, height: 44 },
       available: true
@@ -133,7 +133,7 @@ export default function Editor() {
     {
       id: 'magnet',
       name: { ko: '자석/문구류', en: 'Magnet/Stationery', ja: '磁石/文具類', zh: '磁铁/文具' },
-      description: { ko: '냉장고 부착, 문구형 굿즈', en: 'Refrigerator attachment, stationery goods', ja: '冷蔵庫取付、文具型グッズ', zh: '冰箱贴，文具商品' },
+      description: { ko: '냉장고 부착용 굿즈', en: 'Refrigerator goods', ja: '冷蔵庫取付グッズ', zh: '冰箱贴商品' },
       icon: '🧲',
       defaultSize: { width: 50, height: 50 },
       available: true
@@ -141,7 +141,7 @@ export default function Editor() {
     {
       id: 'carabiner',
       name: { ko: '카라비너', en: 'Carabiner', ja: 'カラビナ', zh: '登山扣' },
-      description: { ko: '고리형 연결 장치 (준비 중)', en: 'Ring-type connector (Coming Soon)', ja: 'リング型接続装置（準備中）', zh: '环形连接装置（准备中）' },
+      description: { ko: '고리형 연결 장치', en: 'Ring-type connector', ja: 'リング型接続装置', zh: '环形连接装置' },
       icon: '🔗',
       defaultSize: { width: 30, height: 60 },
       available: false
@@ -264,58 +264,116 @@ export default function Editor() {
 
   if (showProductSelector) {
     return (
-      <div className="min-h-screen bg-gray-100 p-4">
-        <div className="max-w-4xl mx-auto">
-          <Card className="shadow-lg">
-            <CardContent className="p-8">
-              <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {t({ ko: '제작할 제품을 선택해주세요', en: 'Select Product to Create', ja: '製作する製品を選択してください', zh: '请选择要制作的产品' })}
-                </h1>
-                <p className="text-gray-600">
-                  {t({ ko: '원하는 굿즈를 클릭하여 에디터를 시작하세요', en: 'Click desired goods to start editor', ja: 'お好みのグッズをクリックしてエディタを開始', zh: '点击所需商品开始编辑器' })}
-                </p>
-              </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+        <div className="max-w-6xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              {t({ ko: '제작할 제품을 선택해주세요', en: 'Select Product to Create', ja: '製作する製品を選択してください', zh: '请选择要制作的产品' })}
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {t({ ko: '원하는 굿즈를 클릭하여 전문 에디터를 시작하세요', en: 'Click your desired goods to start the professional editor', ja: 'お好みのグッズをクリックしてプロエディタを開始', zh: '点击所需商品开始专业编辑器' })}
+            </p>
+          </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {productTypes.map((product) => (
-                  <Card 
-                    key={product.id}
-                    className={cn(
-                      "cursor-pointer transition-all hover:shadow-lg border-2",
-                      product.available 
-                        ? "hover:border-blue-500 hover:bg-blue-50" 
-                        : "opacity-50 cursor-not-allowed bg-gray-50"
-                    )}
-                    onClick={() => handleProductSelect(product)}
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="text-4xl mb-4">{product.icon}</div>
-                      <h3 className="text-xl font-semibold mb-2 text-gray-900">
-                        {t(product.name)}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-4">
-                        {t(product.description)}
-                      </p>
-                      <div className="text-xs text-gray-500">
-                        {t({ ko: '기본 사이즈', en: 'Default Size', ja: 'デフォルトサイズ', zh: '默认尺寸' })}: {product.defaultSize.width}×{product.defaultSize.height}mm
+          {/* Product Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+            {productTypes.map((product) => (
+              <Card 
+                key={product.id}
+                className={cn(
+                  "group relative cursor-pointer transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2 border-2",
+                  product.available 
+                    ? "hover:border-blue-500 hover:bg-gradient-to-br hover:from-blue-50 hover:to-indigo-50 bg-white" 
+                    : "opacity-60 cursor-not-allowed bg-gray-50 border-gray-200"
+                )}
+                onClick={() => handleProductSelect(product)}
+              >
+                {/* Status Badge */}
+                {product.available && (
+                  <div className="absolute top-3 right-3 z-10">
+                    <div className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                      {t({ ko: '제작가능', en: 'Available', ja: '製作可能', zh: '可制作' })}
+                    </div>
+                  </div>
+                )}
+
+                {!product.available && (
+                  <div className="absolute top-3 right-3 z-10">
+                    <div className="bg-gray-400 text-white text-xs px-2 py-1 rounded-full font-medium">
+                      {t({ ko: '준비중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })}
+                    </div>
+                  </div>
+                )}
+
+                <CardContent className="p-6 text-center h-full flex flex-col justify-between">
+                  {/* Product Icon */}
+                  <div className="mb-4">
+                    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <span className="text-3xl filter drop-shadow-sm">{product.icon}</span>
+                    </div>
+                    
+                    {/* Product Name */}
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                      {t(product.name)}
+                    </h3>
+                    
+                    {/* Description */}
+                    <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                      {t(product.description)}
+                    </p>
+                  </div>
+
+                  {/* Size Info */}
+                  <div className="mt-auto">
+                    <div className="bg-gray-100 rounded-lg p-3 mb-2">
+                      <div className="text-xs text-gray-500 mb-1">
+                        {t({ ko: '기본 사이즈', en: 'Default Size', ja: 'デフォルトサイズ', zh: '默认尺寸' })}
                       </div>
-                      {!product.available && (
-                        <div className="mt-2 text-xs text-red-500 font-medium">
-                          {t({ ko: '준비 중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })}
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                      <div className="text-sm font-semibold text-gray-700">
+                        {product.defaultSize.width}×{product.defaultSize.height}mm
+                      </div>
+                    </div>
+                    
+                    {/* Action Button */}
+                    <div className={cn(
+                      "mt-3 py-2 px-4 rounded-lg text-sm font-medium transition-all",
+                      product.available 
+                        ? "bg-blue-500 text-white group-hover:bg-blue-600" 
+                        : "bg-gray-300 text-gray-500"
+                    )}>
+                      {product.available 
+                        ? t({ ko: '제작 시작', en: 'Start Creating', ja: '製作開始', zh: '开始制作' })
+                        : t({ ko: '준비 중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })
+                      }
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-              <div className="mt-8 text-center">
-                <Button variant="outline" onClick={() => setShowHelp(true)}>
-                  <HelpCircle className="h-4 w-4 mr-2" />
-                  {t({ ko: '제작 필독사항', en: 'Production Guide', ja: '製作必読事項', zh: '制作必读事项' })}
-                </Button>
+          {/* Help Section */}
+          <Card className="bg-white shadow-lg border-2 border-blue-100">
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <HelpCircle className="h-8 w-8 text-blue-600" />
               </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {t({ ko: '제작 가이드가 필요하신가요?', en: 'Need Production Guide?', ja: '製作ガイドが必要ですか？', zh: '需要制作指南吗？' })}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {t({ ko: '고품질 제작을 위한 필수 정보를 확인해보세요', en: 'Check essential information for high-quality production', ja: '高品質製作のための必須情報をご確認ください', zh: '查看高质量制作的必要信息' })}
+              </p>
+              <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => setShowHelp(true)}
+                className="bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
+              >
+                <HelpCircle className="h-5 w-5 mr-2" />
+                {t({ ko: '제작 필독사항', en: 'Production Guide', ja: '製作必読事項', zh: '制作必读事项' })}
+              </Button>
             </CardContent>
           </Card>
         </div>
