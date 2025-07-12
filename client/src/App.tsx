@@ -26,6 +26,9 @@ import Collections from "@/pages/Collections";
 import Rewards from "@/pages/Rewards";
 import ReviewsAll from "@/pages/ReviewsAll";
 import DesignServiceProduct from "@/pages/DesignServiceProduct";
+import CommunityDesignShare from "@/pages/CommunityDesignShare";
+import CommunityEvents from "@/pages/CommunityEvents";
+import CommunityResources from "@/pages/CommunityResources";
 
 function Router() {
   return (
@@ -48,6 +51,9 @@ function Router() {
       <Route path="/collections" component={Collections} />
       <Route path="/community/share" component={CommunityShare} />
       <Route path="/community/question" component={CommunityQuestion} />
+      <Route path="/community/design-share" component={CommunityDesignShare} />
+      <Route path="/community/events" component={CommunityEvents} />
+      <Route path="/community/resources" component={CommunityResources} />
       <Route path="/editor" component={Editor} />
       <Route path="/inquiry" component={Inquiry} />
       <Route path="/support" component={Inquiry} />
