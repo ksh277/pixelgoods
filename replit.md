@@ -557,8 +557,24 @@ Preferred communication style: Simple, everyday language.
 - **Card Layout Enhancement**: Maintained existing size information (50×50mm, etc.) and blue CTA buttons
 - **Korean E-commerce Pattern**: Complete 4×2 grid layout with proper spacing and hover effects
 
-### 2025-01-12: Inquiry Button Size Optimization
-- **Size Reduction**: Reduced inquiry button size from 64px to 48px (approximately 25% reduction)
-- **Improved Proportions**: Button now has better visual balance and is less overwhelming
-- **Maintained Functionality**: Kept all existing functionality including hover effects, character image, and overlay text
-- **Enhanced User Experience**: More comfortable size while maintaining visibility and accessibility
+### 2025-01-12: Inquiry Button Size Optimization & Responsive Design
+- **Responsive Button Sizing**: Implemented responsive inquiry button with optimal sizing for different devices
+  - Mobile: 64px (w-16 h-16) for comfortable touch interaction
+  - Desktop: 96px (w-24 h-24) for better visibility on larger screens
+- **Improved User Experience**: Button size now adapts to screen size for optimal usability
+- **Collections Page Integration**: Verified Collections page properly displays global inquiry button through Layout wrapper
+- **Maintained Functionality**: All existing features preserved including hover effects, character image, and overlay text
+
+### 2025-01-13: Beluga Character Merchandise Design Initiative
+- **Comprehensive Design Brief**: Created detailed specification for 7 merchandise-specific Beluga character variations
+- **Template Integration**: Designed to work with AllThatPrinting template resources from official materials library
+- **Product Type Specifications**: Detailed requirements for each merchandise type:
+  - 키링 (Keyring): Top hole consideration with circular ring alignment
+  - 스탠드 (Stand): Bottom support base connection with adhesive surface separation
+  - 스마트톡 (Smart Tok): Circular/square compatible with centered character placement
+  - 코롯토 (Corot): Flat frontal style without 3D depth, expression emphasis
+  - 포카홀더 (Photo Holder): Half-body character with vertical alignment
+  - 스트랩키링 (Strap Keyring): Elongated character layout compatibility
+  - 카라비너 (Carabiner): Head-top hook space consideration
+- **Design Standards**: White-filled vector style, transparent PNG background, 2000px+ resolution, 300dpi+
+- **Future Implementation**: Planned integration with template preview system and automated clip-art generation
