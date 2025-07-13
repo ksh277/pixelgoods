@@ -247,12 +247,12 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Responsive Product Grid: 2 mobile → 3 tablet → 4 desktop */}
+          {/* 통일된 그리드 시스템 */}
           {isLoading ? (
             <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
           ) : (
             <motion.div 
-              className="product-grid"
+              className="unified-grid"
               variants={containerVariants}
               style={{ opacity: 1 }}
             >
@@ -298,52 +298,65 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="unified-mobile-grid md:grid-cols-3 lg:grid-cols-4 md:gap-3 lg:gap-4"
+            className="unified-grid"
             variants={containerVariants}
           >
             {creatorReviews.map((review) => (
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/product/${review.id}`} className="block">
-                  <div className="unified-mobile-card">
-                    <div className="relative">
-                      {/* HOT Badge */}
-                      <div className="absolute top-2 left-2 z-10">
-                        <Badge className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
-                          HOT
-                        </Badge>
-                      </div>
-                      
+                  <div className="unified-card">
+                    {/* 뱃지 영역 */}
+                    <div className="unified-card-badge">
+                      <Badge className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        HOT
+                      </Badge>
+                    </div>
+                    
+                    {/* 하트 버튼 - 오른쪽 상단 */}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="unified-card-heart p-1.5 rounded-full bg-gray-100 text-gray-700 shadow-sm transition-all duration-200 active:scale-95">
+                      <Heart className="h-3 w-3" />
+                    </button>
+                    
+                    {/* 이미지 영역 */}
+                    <div className="unified-card-image">
                       <img
                         src={review.productImage}
                         alt={review.productName}
-                        className="unified-mobile-image"
+                        className="w-full h-full object-cover rounded-md"
                         loading="lazy"
                       />
-                      
                       <div className="absolute top-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-xs">
                         {review.reviewCount}개 리뷰
                       </div>
                     </div>
                     
-                    <div className="unified-mobile-content">
-                      <div className="space-y-1">
-                        <div className="flex items-center mb-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                            />
-                          ))}
-                        </div>
-                        <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
-                          {review.productName}
-                        </h3>
-                        <p className="text-xs text-gray-600 line-clamp-1">
-                          {review.comment}
-                        </p>
-                        <div className="text-xs text-gray-500">
-                          {review.userName} • {review.date}
-                        </div>
+                    {/* 정보 영역 */}
+                    <div className="unified-card-info">
+                      <div className="flex items-center mb-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                          />
+                        ))}
+                      </div>
+                      <h3 className="unified-card-title">
+                        {review.productName}
+                      </h3>
+                      <p className="text-xs text-gray-600 line-clamp-1">
+                        {review.comment}
+                      </p>
+                    </div>
+                    
+                    {/* 푸터 영역 */}
+                    <div className="unified-card-footer">
+                      <div className="text-xs text-gray-500">
+                        {review.userName} • {review.date}
                       </div>
                     </div>
                   </div>
@@ -380,27 +393,38 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="unified-mobile-grid md:grid-cols-3 lg:grid-cols-4 md:gap-3 lg:gap-4"
+            className="unified-grid"
             variants={containerVariants}
           >
             {communityShowcase.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
                 <Link href={`/community/${item.id}`} className="block">
-                  <div className="unified-mobile-card">
-                    <div className="relative">
-                      <div className="absolute top-2 left-2 z-10">
-                        <Badge className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
-                          인기
-                        </Badge>
-                      </div>
-                      
+                  <div className="unified-card">
+                    {/* 뱃지 영역 */}
+                    <div className="unified-card-badge">
+                      <Badge className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        인기
+                      </Badge>
+                    </div>
+                    
+                    {/* 하트 버튼 */}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="unified-card-heart p-1.5 rounded-full bg-gray-100 text-gray-700 shadow-sm transition-all duration-200 active:scale-95">
+                      <Heart className="h-3 w-3" />
+                    </button>
+                    
+                    {/* 이미지 영역 */}
+                    <div className="unified-card-image">
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="unified-mobile-image"
+                        className="w-full h-full object-cover rounded-md"
                         loading="lazy"
                       />
-                      
                       <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
@@ -415,21 +439,20 @@ export default function Home() {
                       </div>
                     </div>
                     
-                    <div className="unified-mobile-content">
-                      <div className="space-y-1">
-                        <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
-                          {item.title}
-                        </h3>
-                        <div className="text-xs text-gray-500">
-                          {item.author}
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {item.tags.slice(0, 2).map((tag, i) => (
-                            <Badge key={i} variant="secondary" className="text-xs">
-                              #{tag}
-                            </Badge>
-                          ))}
-                        </div>
+                    {/* 정보 영역 */}
+                    <div className="unified-card-info">
+                      <h3 className="unified-card-title">
+                        {item.title}
+                      </h3>
+                      <div className="text-xs text-gray-500 mb-1">
+                        {item.author}
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {item.tags.slice(0, 2).map((tag, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">
+                            #{tag}
+                          </Badge>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -466,66 +489,69 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="unified-mobile-grid md:grid-cols-3 lg:grid-cols-4 md:gap-3 lg:gap-4"
+            className="unified-grid"
             variants={containerVariants}
           >
             {materialRecommendations.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
                 <Link href={`/product/${item.id}`} className="block">
-                  <div className="unified-mobile-card">
-                    <div className="relative">
-                      <Badge className={`absolute top-2 left-2 z-10 ${
+                  <div className="unified-card">
+                    {/* 뱃지 영역 */}
+                    <div className="unified-card-badge">
+                      <Badge className={`${
                         item.badge === 'HIT' ? 'bg-red-500' : 
                         item.badge === 'NEW' ? 'bg-green-500' : 'bg-orange-500'
                       } text-white text-xs font-bold px-2 py-1 rounded`}>
                         {item.badge}
                       </Badge>
-                      
+                    </div>
+                    
+                    {/* 하트 버튼 */}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="unified-card-heart p-1.5 rounded-full bg-gray-100 text-gray-700 shadow-sm transition-all duration-200 active:scale-95">
+                      <Heart className="h-3 w-3" />
+                    </button>
+                    
+                    {/* 이미지 영역 */}
+                    <div className="unified-card-image">
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="unified-mobile-image"
+                        className="w-full h-full object-cover rounded-md"
                         loading="lazy"
                       />
-                      
-                      {/* Heart Button - Top Right */}
-                      <button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
-                        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors">
-                        <Heart className="w-3 h-3 text-gray-600" />
-                      </button>
-                      
                       {item.discount > 0 && (
-                        <div className="absolute top-10 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+                        <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
                           -{item.discount}%
                         </div>
                       )}
                     </div>
                     
-                    <div className="unified-mobile-content">
-                      <div className="space-y-1">
-                        <Badge variant="outline" className="text-xs mb-1">
-                          {item.material}
-                        </Badge>
-                        <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
-                          {item.title}
-                        </h3>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm font-medium text-gray-900">
-                            {item.price.toLocaleString()} won
-                          </span>
-                          {item.originalPrice && (
-                            <span className="text-xs text-gray-500 line-through">
-                              {item.originalPrice.toLocaleString()}
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {t({ ko: "리뷰", en: "Reviews" })} {item.reviewCount}개
-                        </div>
+                    {/* 정보 영역 */}
+                    <div className="unified-card-info">
+                      <Badge variant="outline" className="text-xs mb-1">
+                        {item.material}
+                      </Badge>
+                      <h3 className="unified-card-title">
+                        {item.title}
+                      </h3>
+                      <div className="unified-card-price">
+                        ₩{item.price.toLocaleString()}</div>
+                      {item.originalPrice && (
+                        <span className="text-xs text-gray-500 line-through">
+                          ₩{item.originalPrice.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                    
+                    {/* 푸터 영역 */}
+                    <div className="unified-card-footer">
+                      <div className="text-xs text-gray-500">
+                        리뷰 {item.reviewCount}개
                       </div>
                     </div>
                   </div>
@@ -560,29 +586,32 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="unified-mobile-grid md:grid-cols-4 md:gap-3 lg:gap-4"
+            className="unified-grid"
             variants={containerVariants}
           >
             {instagramFeed.map((post) => (
               <motion.div key={post.id} variants={itemVariants}>
-                <div className="unified-mobile-card">
-                  <div className="relative group cursor-pointer">
-                    <img
-                      src={post.image}
-                      alt={`Instagram post ${post.id}`}
-                      className="unified-mobile-image"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors rounded-lg" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="flex items-center space-x-4 text-white">
-                        <div className="flex items-center space-x-1">
-                          <Heart className="h-4 w-4" />
-                          <span className="text-sm font-medium">{post.likes}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <MessageCircle className="h-4 w-4" />
-                          <span className="text-sm font-medium">{post.comments}</span>
+                <div className="unified-card">
+                  {/* 이미지 영역 */}
+                  <div className="unified-card-image">
+                    <div className="relative group cursor-pointer">
+                      <img
+                        src={post.image}
+                        alt={`Instagram post ${post.id}`}
+                        className="w-full h-full object-cover rounded-md"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors rounded-lg" />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center space-x-4 text-white">
+                          <div className="flex items-center space-x-1">
+                            <Heart className="h-4 w-4" />
+                            <span className="text-sm font-medium">{post.likes}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <MessageCircle className="h-4 w-4" />
+                            <span className="text-sm font-medium">{post.comments}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
