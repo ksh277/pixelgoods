@@ -248,7 +248,7 @@ export default function Register() {
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="username">아이디 (영문+숫자 4~16자)</Label>
+          <Label htmlFor="username">아이디</Label>
           <Input
             id="username"
             type="text"
@@ -278,6 +278,7 @@ export default function Register() {
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
+          <p className="text-sm text-gray-500 mt-1">영문 대소문자, 숫자, 특수문자 포함 8~16자</p>
         </div>
 
         <div>
