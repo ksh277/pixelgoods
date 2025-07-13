@@ -8,6 +8,7 @@ import { useLocation } from "wouter";
 import { 
   Package, 
   Users, 
+  User,
   ShoppingCart, 
   TrendingUp, 
   Plus, 
@@ -109,9 +110,10 @@ export default function AdminDashboard() {
 
         {/* Management Tabs */}
         <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-7">
             <TabsTrigger value="products">상품 관리</TabsTrigger>
             <TabsTrigger value="sections">섹션 관리</TabsTrigger>
+            <TabsTrigger value="templates">템플릿 관리</TabsTrigger>
             <TabsTrigger value="services">추가서비스</TabsTrigger>
             <TabsTrigger value="users">회원 관리</TabsTrigger>
             <TabsTrigger value="orders">주문 관리</TabsTrigger>
@@ -274,21 +276,83 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <h3 className="font-medium">admin</h3>
-                      <p className="text-sm text-gray-600">관리자</p>
-                      <p className="text-sm text-gray-500">admin@allthatprinting.com</p>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <User className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium">admin</h3>
+                        <p className="text-sm text-gray-600">관리자</p>
+                        <p className="text-sm text-gray-500">admin@allthatprinting.com</p>
+                        <p className="text-sm text-green-600">포인트: 50,000P | 주문: 50건</p>
+                      </div>
                     </div>
-                    <Badge variant="secondary">관리자</Badge>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary">관리자</Badge>
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                   
                   <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <h3 className="font-medium">superadmin</h3>
-                      <p className="text-sm text-gray-600">슈퍼관리자</p>
-                      <p className="text-sm text-gray-500">superadmin@allthatprinting.com</p>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <User className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium">superadmin</h3>
+                        <p className="text-sm text-gray-600">슈퍼관리자</p>
+                        <p className="text-sm text-gray-500">superadmin@allthatprinting.com</p>
+                        <p className="text-sm text-green-600">포인트: 100,000P | 주문: 100건</p>
+                      </div>
                     </div>
-                    <Badge variant="secondary">슈퍼관리자</Badge>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary">슈퍼관리자</Badge>
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                        <User className="w-6 h-6 text-gray-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium">user1</h3>
+                        <p className="text-sm text-gray-600">일반회원</p>
+                        <p className="text-sm text-gray-500">user1@example.com</p>
+                        <p className="text-sm text-green-600">포인트: 5,000P | 주문: 10건</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline">일반회원</Badge>
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <User className="w-6 h-6 text-green-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium">ham5752</h3>
+                        <p className="text-sm text-gray-600">김승환</p>
+                        <p className="text-sm text-gray-500">ham5752@example.com</p>
+                        <p className="text-sm text-green-600">포인트: 2,000P | 주문: 0건 | 평생회원</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="bg-green-50 text-green-700">평생회원</Badge>
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -320,6 +384,310 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="templates" className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">템플릿 관리</h2>
+              <div className="flex space-x-2">
+                <Button variant="outline">
+                  <Settings className="w-4 h-4 mr-2" />
+                  카테고리 관리
+                </Button>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  템플릿 추가
+                </Button>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <Card className="bg-blue-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">기본 템플릿</p>
+                      <p className="text-2xl font-bold text-blue-600">7개</p>
+                    </div>
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-blue-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-purple-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">렌티큘러 템플릿</p>
+                      <p className="text-2xl font-bold text-purple-600">3개</p>
+                    </div>
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-purple-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-green-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">일반 템플릿</p>
+                      <p className="text-2xl font-bold text-green-600">5개</p>
+                    </div>
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-green-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-orange-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">총 다운로드</p>
+                      <p className="text-2xl font-bold text-orange-600">7,234</p>
+                    </div>
+                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-orange-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* 렌야드 스트랩 키링 */}
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">렌야드 스트랩 키링</CardTitle>
+                    <div className="flex space-x-1">
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <span className="text-sm text-gray-500">템플릿 이미지</span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <p>크기: 50×50mm</p>
+                      <p>다운로드: 1,247회</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        AI (2.4MB)
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        PSD (8.1MB)
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 렌티큘러 스탠드 */}
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">렌티큘러 스탠드</CardTitle>
+                    <div className="flex space-x-1">
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <span className="text-sm text-gray-500">템플릿 이미지</span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <p>크기: 70×140mm</p>
+                      <p>다운로드: 934회</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        AI (3.2MB)
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        PSD (9.7MB)
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 스마트톡 */}
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">스마트톡</CardTitle>
+                    <div className="flex space-x-1">
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <span className="text-sm text-gray-500">템플릿 이미지</span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <p>크기: 40×40mm</p>
+                      <p>다운로드: 1,567회</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        AI (1.8MB)
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        PSD (6.3MB)
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 코롯토 */}
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">코롯토</CardTitle>
+                    <div className="flex space-x-1">
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <span className="text-sm text-gray-500">템플릿 이미지</span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <p>크기: 60×80mm</p>
+                      <p>다운로드: 756회</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        AI (2.1MB)
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        PSD (7.8MB)
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 포카홀더 */}
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">포카홀더</CardTitle>
+                    <div className="flex space-x-1">
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <span className="text-sm text-gray-500">템플릿 이미지</span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <p>크기: 55×85mm</p>
+                      <p>다운로드: 1,023회</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        AI (2.7MB)
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        PSD (8.9MB)
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 자석/문구류 */}
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">자석/문구류</CardTitle>
+                    <div className="flex space-x-1">
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <span className="text-sm text-gray-500">템플릿 이미지</span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <p>크기: 50×50mm</p>
+                      <p>다운로드: 634회</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        AI (1.9MB)
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <FileText className="w-4 h-4 mr-1" />
+                        PSD (5.2MB)
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="services" className="space-y-4">
@@ -363,6 +731,54 @@ export default function AdminDashboard() {
                   
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center">
+                        <DollarSign className="w-8 h-8 text-green-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium">프리미엄 도안작업</h3>
+                        <p className="text-sm text-gray-600">₩5,000</p>
+                        <p className="text-sm text-gray-500">12시간 내 완성</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <ArrowUpDown className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <DollarSign className="w-8 h-8 text-purple-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium">디럭스 도안작업</h3>
+                        <p className="text-sm text-gray-600">₩7,000</p>
+                        <p className="text-sm text-gray-500">6시간 내 완성</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <ArrowUpDown className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-4">
                       <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center">
                         <DollarSign className="w-8 h-8 text-orange-600" />
                       </div>
@@ -387,8 +803,8 @@ export default function AdminDashboard() {
                   
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <DollarSign className="w-8 h-8 text-purple-600" />
+                      <div className="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center">
+                        <DollarSign className="w-8 h-8 text-red-600" />
                       </div>
                       <div>
                         <h3 className="font-medium">급한작업 서비스</h3>
@@ -450,6 +866,58 @@ export default function AdminDashboard() {
                   <Button variant="outline" className="w-full">
                     추가결제 메뉴 관리
                   </Button>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Users className="w-5 h-5 mr-2" />
+                    커뮤니티 메뉴
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 mb-4">
+                    커뮤니티 메뉴 항목을 관리합니다.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <span className="text-sm">이벤트 (구: 행사/공모전)</span>
+                      <Badge variant="outline" className="text-green-600 bg-green-50">NEW</Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <span className="text-sm">자료실 (구: 올댓노트)</span>
+                      <Badge variant="outline" className="text-green-600 bg-green-50">NEW</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Package className="w-5 h-5 mr-2" />
+                    템플릿 라이브러리
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 mb-4">
+                    벨루가 굿즈 템플릿을 관리합니다.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-blue-50 rounded">
+                      <span className="text-sm">기본 템플릿</span>
+                      <Badge variant="outline" className="text-blue-600 bg-blue-50">7개</Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-purple-50 rounded">
+                      <span className="text-sm">렌티큘러 템플릿</span>
+                      <Badge variant="outline" className="text-purple-600 bg-purple-50">3개</Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-green-50 rounded">
+                      <span className="text-sm">일반 템플릿</span>
+                      <Badge variant="outline" className="text-green-600 bg-green-50">5개</Badge>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
