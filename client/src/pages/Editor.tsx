@@ -278,12 +278,13 @@ export default function Editor() {
           </div>
 
           {/* Product Grid - Responsive Korean E-commerce Layout */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-4 py-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 px-4 py-2">
             {productTypes.map((product) => (
               <div
                 key={product.id}
                 className={cn(
                   "bg-white rounded-xl shadow-md p-3 relative cursor-pointer transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1",
+                  "flex flex-col justify-between min-h-[420px] max-h-[420px] overflow-hidden",
                   product.available 
                     ? "hover:border-blue-200 border border-gray-200" 
                     : "opacity-60 cursor-not-allowed border border-gray-200"
@@ -303,8 +304,8 @@ export default function Editor() {
                   )}
                 </div>
 
-                {/* Product Image Placeholder - Ready for Dynamic Insertion */}
-                <div className="product-thumbnail w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center border border-gray-200">
+                {/* Product Image Placeholder - Fixed Height */}
+                <div className="product-thumbnail w-full h-36 bg-gray-100 rounded-lg mb-3 flex items-center justify-center border border-gray-200 flex-shrink-0">
                   <div className="text-center">
                     <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-1" />
                     <span className="text-xs text-gray-500">
@@ -313,82 +314,88 @@ export default function Editor() {
                   </div>
                 </div>
 
-                {/* Product Tags */}
-                <div className="mb-2">
-                  <span className="inline-block border border-gray-300 text-xs text-gray-600 px-2 py-0.5 rounded-full">
-                    {product.id === 'keyring' && t({ ko: '타공포함', en: 'With Hole', ja: '穴あき', zh: '带孔' })}
-                    {product.id === 'stand' && t({ ko: '자립형', en: 'Self-standing', ja: '自立式', zh: '自立式' })}
-                    {product.id === 'corot' && t({ ko: '평면형', en: 'Flat Type', ja: '平面型', zh: '平面型' })}
-                    {product.id === 'photoholder' && t({ ko: '프레임형', en: 'Frame Type', ja: 'フレーム型', zh: '框架型' })}
-                    {product.id === 'smarttok' && t({ ko: '접착형', en: 'Adhesive', ja: '接着型', zh: '粘贴型' })}
-                    {product.id === 'badge' && t({ ko: '원형/사각', en: 'Round/Square', ja: '円形/四角', zh: '圆形/方形' })}
-                    {product.id === 'magnet' && t({ ko: '자석형', en: 'Magnetic', ja: '磁石型', zh: '磁铁型' })}
-                    {product.id === 'carabiner' && t({ ko: '고리형', en: 'Hook Type', ja: 'フック型', zh: '钩型' })}
-                  </span>
-                </div>
-
-                {/* Product Name */}
-                <div className="font-semibold text-sm mb-1 text-gray-900 line-clamp-2">
-                  {t(product.name)} ({product.defaultSize.width}×{product.defaultSize.height}mm)
-                </div>
-
-                {/* Price */}
-                <div className="mb-1">
-                  <div className="text-sm font-bold text-black">
-                    {product.id === 'keyring' && '1,500원'}
-                    {product.id === 'stand' && '2,500원'}
-                    {product.id === 'corot' && '1,800원'}
-                    {product.id === 'photoholder' && '2,200원'}
-                    {product.id === 'smarttok' && '2,800원'}
-                    {product.id === 'badge' && '1,200원'}
-                    {product.id === 'magnet' && '1,800원'}
-                    {product.id === 'carabiner' && '3,200원'}
+                {/* Content Area - Flexible grow */}
+                <div className="flex-grow flex flex-col">
+                  {/* Product Tags */}
+                  <div className="mb-2">
+                    <span className="inline-block border border-gray-300 text-xs text-gray-600 px-2 py-0.5 rounded-full">
+                      {product.id === 'keyring' && t({ ko: '타공포함', en: 'With Hole', ja: '穴あき', zh: '带孔' })}
+                      {product.id === 'stand' && t({ ko: '자립형', en: 'Self-standing', ja: '自立式', zh: '自立式' })}
+                      {product.id === 'corot' && t({ ko: '평면형', en: 'Flat Type', ja: '平面型', zh: '平面型' })}
+                      {product.id === 'photoholder' && t({ ko: '프레임형', en: 'Frame Type', ja: 'フレーム型', zh: '框架型' })}
+                      {product.id === 'smarttok' && t({ ko: '접착형', en: 'Adhesive', ja: '接着型', zh: '粘贴型' })}
+                      {product.id === 'badge' && t({ ko: '원형/사각', en: 'Round/Square', ja: '円形/四角', zh: '圆形/方形' })}
+                      {product.id === 'magnet' && t({ ko: '자석형', en: 'Magnetic', ja: '磁石型', zh: '磁铁型' })}
+                      {product.id === 'carabiner' && t({ ko: '고리형', en: 'Hook Type', ja: 'フック型', zh: '钩型' })}
+                    </span>
                   </div>
-                  <div className="text-xs line-through text-gray-400">
-                    {product.id === 'keyring' && '2,000원'}
-                    {product.id === 'stand' && '3,000원'}
-                    {product.id === 'corot' && '2,200원'}
-                    {product.id === 'photoholder' && '2,800원'}
-                    {product.id === 'smarttok' && '3,500원'}
-                    {product.id === 'badge' && '1,600원'}
-                    {product.id === 'magnet' && '2,200원'}
-                    {product.id === 'carabiner' && '3,800원'}
+
+                  {/* Product Name */}
+                  <div className="font-semibold text-sm mb-1 text-gray-900 line-clamp-2">
+                    {t(product.name)} ({product.defaultSize.width}×{product.defaultSize.height}mm)
                   </div>
                 </div>
 
-                {/* Reviews */}
-                <div className="text-xs text-gray-500 mb-2">
-                  {product.available ? (
-                    <>
-                      {product.id === 'keyring' && t({ ko: '리뷰 342개', en: '342 reviews', ja: 'レビュー342件', zh: '342个评论' })}
-                      {product.id === 'stand' && t({ ko: '리뷰 189개', en: '189 reviews', ja: 'レビュー189件', zh: '189个评论' })}
-                      {product.id === 'corot' && t({ ko: '리뷰 256개', en: '256 reviews', ja: 'レビュー256件', zh: '256个评论' })}
-                      {product.id === 'photoholder' && t({ ko: '리뷰 134개', en: '134 reviews', ja: 'レビュー134件', zh: '134个评论' })}
-                      {product.id === 'smarttok' && t({ ko: '리뷰 298개', en: '298 reviews', ja: 'レビュー298件', zh: '298个评论' })}
-                      {product.id === 'badge' && t({ ko: '리뷰 167개', en: '167 reviews', ja: 'レビュー167件', zh: '167个评论' })}
-                      {product.id === 'magnet' && t({ ko: '리뷰 223개', en: '223 reviews', ja: 'レビュー223件', zh: '223个评论' })}
-                      {product.id === 'carabiner' && t({ ko: '곧 출시', en: 'Coming soon', ja: '近日発売', zh: '即将推出' })}
-                    </>
-                  ) : (
-                    t({ ko: '곧 출시', en: 'Coming soon', ja: '近日発売', zh: '即将推出' })
-                  )}
-                </div>
+                {/* Bottom Section - Always at bottom */}
+                <div className="mt-auto space-y-2">
+                  {/* Price */}
+                  <div>
+                    <div className="text-sm font-bold text-black">
+                      {product.id === 'keyring' && '1,500원'}
+                      {product.id === 'stand' && '2,500원'}
+                      {product.id === 'corot' && '1,800원'}
+                      {product.id === 'photoholder' && '2,200원'}
+                      {product.id === 'smarttok' && '2,800원'}
+                      {product.id === 'badge' && '1,200원'}
+                      {product.id === 'magnet' && '1,800원'}
+                      {product.id === 'carabiner' && '3,200원'}
+                    </div>
+                    <div className="text-xs line-through text-gray-400">
+                      {product.id === 'keyring' && '2,000원'}
+                      {product.id === 'stand' && '3,000원'}
+                      {product.id === 'corot' && '2,200원'}
+                      {product.id === 'photoholder' && '2,800원'}
+                      {product.id === 'smarttok' && '3,500원'}
+                      {product.id === 'badge' && '1,600원'}
+                      {product.id === 'magnet' && '2,200원'}
+                      {product.id === 'carabiner' && '3,800원'}
+                    </div>
+                  </div>
 
-                {/* Action Button */}
-                <Button 
-                  className={cn(
-                    "w-full text-xs font-medium transition-all py-2",
-                    product.available 
-                      ? "bg-blue-500 hover:bg-blue-600 text-white" 
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  )}
-                  disabled={!product.available}
-                >
-                  {product.available 
-                    ? t({ ko: '제작 시작', en: 'Start Creating', ja: '製作開始', zh: '开始制作' })
-                    : t({ ko: '준비 중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })
-                  }
-                </Button>
+                  {/* Reviews */}
+                  <div className="text-xs text-gray-500">
+                    {product.available ? (
+                      <>
+                        {product.id === 'keyring' && t({ ko: '리뷰 342개', en: '342 reviews', ja: 'レビュー342件', zh: '342个评论' })}
+                        {product.id === 'stand' && t({ ko: '리뷰 189개', en: '189 reviews', ja: 'レビュー189件', zh: '189个评论' })}
+                        {product.id === 'corot' && t({ ko: '리뷰 256개', en: '256 reviews', ja: 'レビュー256件', zh: '256个评论' })}
+                        {product.id === 'photoholder' && t({ ko: '리뷰 134개', en: '134 reviews', ja: 'レビュー134件', zh: '134个评论' })}
+                        {product.id === 'smarttok' && t({ ko: '리뷰 298개', en: '298 reviews', ja: 'レビュー298件', zh: '298个评论' })}
+                        {product.id === 'badge' && t({ ko: '리뷰 167개', en: '167 reviews', ja: 'レビュー167件', zh: '167个评论' })}
+                        {product.id === 'magnet' && t({ ko: '리뷰 223개', en: '223 reviews', ja: 'レビュー223件', zh: '223个评论' })}
+                        {product.id === 'carabiner' && t({ ko: '곧 출시', en: 'Coming soon', ja: '近日発売', zh: '即将推出' })}
+                      </>
+                    ) : (
+                      t({ ko: '곧 출시', en: 'Coming soon', ja: '近日発売', zh: '即将推出' })
+                    )}
+                  </div>
+
+                  {/* Action Button */}
+                  <Button 
+                    className={cn(
+                      "w-full text-xs font-medium transition-all py-2",
+                      product.available 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white" 
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    )}
+                    disabled={!product.available}
+                  >
+                    {product.available 
+                      ? t({ ko: '제작 시작', en: 'Start Creating', ja: '製作開始', zh: '开始制作' })
+                      : t({ ko: '준비 중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })
+                    }
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
