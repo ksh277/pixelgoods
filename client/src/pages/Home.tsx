@@ -203,12 +203,12 @@ export default function Home() {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 10, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.5
+        duration: 0.3
       }
     }
   };
@@ -222,9 +222,9 @@ export default function Home() {
         {/* Popular Products Section */}
         <motion.section
           variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          initial="visible"
+          animate="visible"
+          viewport={{ once: true, margin: "-50px" }}
         >
           {/* Mobile-Optimized Section Header */}
           <div className="flex items-center justify-between mb-6">
@@ -253,11 +253,12 @@ export default function Home() {
             <motion.div 
               className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4"
               variants={containerVariants}
+              style={{ opacity: 1 }}
             >
               {products?.slice(0, 4).map((product: Product) => (
-                <motion.div key={product.id} variants={itemVariants}>
+                <motion.div key={product.id} variants={itemVariants} style={{ opacity: 1 }}>
                   <Link href={`/product/${product.id}`} className="block">
-                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer" style={{ opacity: 1, visibility: 'visible' }}>
                       <div className="relative aspect-square">
                         {/* HOT Badge - Top Left */}
                         <div className="absolute top-2 left-2 z-10">
