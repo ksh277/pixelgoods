@@ -209,7 +209,8 @@ body {
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    min-height: 370px;
+    min-height: 360px;
+    max-height: 360px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
@@ -317,24 +318,26 @@ body {
     gap: 8px;
   }
 
-  /* 모바일 최적화 그리드 */
+  /* 모바일 최적화 그리드 - 2열 고정 */
   .unified-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
     justify-content: space-between;
-    padding: 0 16px;
+    gap: 10px;
+    padding: 0 12px;
   }
 
   .unified-grid .unified-card {
     flex: 0 0 48%;
     max-width: 48%;
+    min-height: 360px;
   }
 
   /* 반응형 조정 */
   @media (min-width: 768px) {
     .unified-grid {
       padding: 0;
+      gap: 12px;
     }
     
     .unified-grid .unified-card {

@@ -75,27 +75,40 @@ export function ProductCard({
           </motion.button>
         </div>
 
-        {/* 이미지 영역 - 스크린샷과 같은 회색 박스 */}
+        {/* 이미지 영역 */}
         <div className="unified-card-image">
-          <div className="w-full h-full bg-gray-300 rounded-md">
-            {/* 항상 회색 박스로 표시 */}
-          </div>
+          {product.imageUrl ? (
+            <img 
+              src={product.imageUrl} 
+              alt={product.name} 
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-md">
+              <ImageIcon className="h-8 w-8 text-gray-400" />
+            </div>
+          )}
         </div>
 
-        {/* 제품명 - 회색 박스 */}
-        <div className="mt-2 mb-1">
-          <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+        {/* 제품명 */}
+        <div className="unified-card-title">
+          {language === 'ko' ? product.nameKo : product.name}
         </div>
 
-        {/* 가격 - 회색 박스 */}
-        <div className="mb-2">
-          <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+        {/* 가격 */}
+        <div className="unified-card-price">
+          ₩{formattedPrice}
         </div>
 
-        {/* 리뷰/찜 정보 - 회색 박스들 */}
-        <div className="flex justify-between items-center mt-auto">
-          <div className="h-3 bg-gray-300 rounded w-16"></div>
-          <div className="h-3 bg-gray-300 rounded w-12"></div>
+        {/* 하단 메타 정보 */}
+        <div className="unified-card-footer">
+          <span>
+            {t({ ko: "리뷰", en: "Reviews" })}: {reviewCount}
+          </span>
+          <span>
+            {t({ ko: "찜", en: "Likes" })}: {likeCount}
+          </span>
         </div>
       </motion.div>
     </Link>
