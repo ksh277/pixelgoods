@@ -24,7 +24,7 @@ export function BelugaMascot({ variant, className = "" }: BelugaMascotProps) {
         zh: "有什么问题都可以问我！" 
       }),
       position: "fixed bottom-4 right-4 z-50",
-      size: "w-12 h-12",
+      size: "w-8 h-8",
       showTooltip: true
     },
     'empty-cart': {
