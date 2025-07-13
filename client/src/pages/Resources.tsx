@@ -493,9 +493,7 @@ export default function Resources() {
                   </span>
                 </div>
               </div>
-              <div className="hidden sm:block">
-                <BelugaMascot variant="design" className="w-20 h-20" />
-              </div>
+
             </div>
           </div>
         </div>
