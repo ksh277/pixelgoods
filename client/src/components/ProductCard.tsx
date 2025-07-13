@@ -52,7 +52,7 @@ export function ProductCard({
         transition={{ duration: 0.5 }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        className="bg-white rounded-xl shadow-md p-3 hover:shadow-lg transition-shadow duration-200 min-h-[420px] max-h-[420px] flex flex-col justify-between"
+        className="bg-white rounded-xl shadow-md p-3 hover:shadow-lg transition-shadow duration-200 h-[420px] flex flex-col"
       >
         {/* Header: HOT badge and Like button */}
         <div className="flex justify-between items-start mb-2">
@@ -97,10 +97,10 @@ export function ProductCard({
           )}
         </div>
 
-        {/* Info Section */}
-        <div className="flex-grow flex flex-col justify-between">
+        {/* Info Section - Content Area */}
+        <div className="flex-grow flex flex-col">
           {/* Product name and price */}
-          <div className="mb-3">
+          <div className="mb-3 flex-grow">
             <h3 className="text-sm font-bold mb-1 text-korean line-clamp-1">
               {language === 'ko' ? product.nameKo : product.name}
             </h3>
@@ -108,28 +108,28 @@ export function ProductCard({
               ₩{formattedPrice}
             </p>
           </div>
+        </div>
 
-          {/* Stats Section - Read-only display */}
-          <div className="space-y-1">
-            {/* Reviews display */}
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-600">
-                {t({ ko: "리뷰", en: "Reviews" })}:
-              </span>
-              <span className="text-xs font-medium text-gray-900">
-                {reviewCount}{t({ ko: "개", en: "" })}
-              </span>
-            </div>
+        {/* Stats Section - Fixed Bottom */}
+        <div className="mt-auto space-y-1">
+          {/* Reviews display */}
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-gray-600">
+              {t({ ko: "리뷰", en: "Reviews" })}:
+            </span>
+            <span className="text-xs font-medium text-gray-900">
+              {reviewCount}{t({ ko: "개", en: "" })}
+            </span>
+          </div>
 
-            {/* Likes display */}
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-600">
-                {t({ ko: "찜", en: "Likes" })}:
-              </span>
-              <span className="text-xs font-medium text-gray-900">
-                {likeCount}{t({ ko: "회", en: "" })}
-              </span>
-            </div>
+          {/* Likes display */}
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-gray-600">
+              {t({ ko: "찜", en: "Likes" })}:
+            </span>
+            <span className="text-xs font-medium text-gray-900">
+              {likeCount}{t({ ko: "회", en: "" })}
+            </span>
           </div>
         </div>
       </motion.div>
