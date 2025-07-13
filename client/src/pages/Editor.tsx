@@ -452,83 +452,119 @@ export default function Editor() {
             </p>
           </div>
 
-          {/* Product Grid - 4x2 Layout */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12">
+          {/* Product Grid - Responsive Korean E-commerce Layout */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-4 py-2">
             {productTypes.map((product) => (
-              <Card 
+              <div
                 key={product.id}
                 className={cn(
-                  "group relative cursor-pointer transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2 border-2",
+                  "bg-white rounded-xl shadow-md p-3 relative cursor-pointer transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1",
                   product.available 
-                    ? "hover:border-blue-500 hover:bg-gradient-to-br hover:from-blue-50 hover:to-indigo-50 bg-white" 
-                    : "opacity-60 cursor-not-allowed bg-gray-50 border-gray-200"
+                    ? "hover:border-blue-200 border border-gray-200" 
+                    : "opacity-60 cursor-not-allowed border border-gray-200"
                 )}
                 onClick={() => handleProductSelect(product)}
               >
                 {/* Status Badge - Top Left */}
-                {product.available && (
-                  <div className="absolute top-3 left-3 z-10">
-                    <div className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                      {t({ ko: '제작가능', en: 'Available', ja: '製作可能', zh: '可制作' })}
-                    </div>
-                  </div>
-                )}
+                <div className="absolute top-2 left-2 z-10">
+                  {product.available ? (
+                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                      {t({ ko: 'HIT', en: 'HIT', ja: 'HIT', zh: 'HIT' })}
+                    </span>
+                  ) : (
+                    <span className="bg-gray-400 text-white text-xs font-bold px-2 py-1 rounded">
+                      {t({ ko: '준비중', en: 'SOON', ja: '準備中', zh: '准备中' })}
+                    </span>
+                  )}
+                </div>
 
-                {!product.available && (
-                  <div className="absolute top-3 left-3 z-10">
-                    <div className="bg-gray-400 text-white text-xs px-2 py-1 rounded-full font-medium">
-                      {t({ ko: '준비중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })}
-                    </div>
+                {/* Product Image with Fallback */}
+                <div className="aspect-w-1 aspect-h-1 bg-gray-100 rounded overflow-hidden mb-2">
+                  <div className="w-full h-32 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                    <div 
+                      className="w-20 h-20 group-hover:scale-110 transition-transform duration-300"
+                      dangerouslySetInnerHTML={{ __html: createBelugaProductIllustration(product.id) }}
+                    />
                   </div>
-                )}
+                </div>
 
-                <CardContent className="p-4 text-center h-full flex flex-col justify-between min-h-[280px]">
-                  {/* Beluga Character Illustration */}
-                  <div className="flex-1 flex flex-col justify-center">
-                    <div className="w-full h-20 mx-auto mb-3 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center">
-                      <div 
-                        className="w-full h-full"
-                        dangerouslySetInnerHTML={{ __html: createBelugaProductIllustration(product.id) }}
-                      />
-                    </div>
-                    
-                    {/* Product Name */}
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                      {t(product.name)}
-                    </h3>
-                    
-                    {/* Description */}
-                    <p className="text-sm text-gray-600 mb-3 leading-relaxed">
-                      {t(product.description)}
-                    </p>
-                  </div>
+                {/* Product Tags */}
+                <div className="mb-2">
+                  <span className="inline-block border border-gray-300 text-xs text-gray-600 px-2 py-0.5 rounded-full">
+                    {product.id === 'keyring' && t({ ko: '타공포함', en: 'With Hole', ja: '穴あき', zh: '带孔' })}
+                    {product.id === 'stand' && t({ ko: '자립형', en: 'Self-standing', ja: '自立式', zh: '自立式' })}
+                    {product.id === 'corot' && t({ ko: '평면형', en: 'Flat Type', ja: '平面型', zh: '平面型' })}
+                    {product.id === 'photoholder' && t({ ko: '프레임형', en: 'Frame Type', ja: 'フレーム型', zh: '框架型' })}
+                    {product.id === 'smarttok' && t({ ko: '접착형', en: 'Adhesive', ja: '接着型', zh: '粘贴型' })}
+                    {product.id === 'badge' && t({ ko: '원형/사각', en: 'Round/Square', ja: '円形/四角', zh: '圆形/方形' })}
+                    {product.id === 'magnet' && t({ ko: '자석형', en: 'Magnetic', ja: '磁石型', zh: '磁铁型' })}
+                    {product.id === 'carabiner' && t({ ko: '고리형', en: 'Hook Type', ja: 'フック型', zh: '钩型' })}
+                  </span>
+                </div>
 
-                  {/* Size Info & Action Button */}
-                  <div className="mt-auto space-y-3">
-                    <div className="bg-gray-100 rounded-lg p-2 text-center">
-                      <div className="text-sm font-semibold text-gray-700">
-                        {product.defaultSize.width}×{product.defaultSize.height}mm
-                      </div>
-                    </div>
-                    
-                    {/* Action Button */}
-                    <Button 
-                      className={cn(
-                        "w-full text-sm font-medium transition-all",
-                        product.available 
-                          ? "bg-blue-500 hover:bg-blue-600 text-white" 
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      )}
-                      disabled={!product.available}
-                    >
-                      {product.available 
-                        ? t({ ko: '제작 시작', en: 'Start Creating', ja: '製作開始', zh: '开始制作' })
-                        : t({ ko: '준비 중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })
-                      }
-                    </Button>
+                {/* Product Name */}
+                <div className="font-semibold text-sm mb-1 text-gray-900 line-clamp-2">
+                  {t(product.name)} ({product.defaultSize.width}×{product.defaultSize.height}mm)
+                </div>
+
+                {/* Price */}
+                <div className="mb-1">
+                  <div className="text-sm font-bold text-black">
+                    {product.id === 'keyring' && '1,500원'}
+                    {product.id === 'stand' && '2,500원'}
+                    {product.id === 'corot' && '1,800원'}
+                    {product.id === 'photoholder' && '2,200원'}
+                    {product.id === 'smarttok' && '2,800원'}
+                    {product.id === 'badge' && '1,200원'}
+                    {product.id === 'magnet' && '1,800원'}
+                    {product.id === 'carabiner' && '3,200원'}
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="text-xs line-through text-gray-400">
+                    {product.id === 'keyring' && '2,000원'}
+                    {product.id === 'stand' && '3,000원'}
+                    {product.id === 'corot' && '2,200원'}
+                    {product.id === 'photoholder' && '2,800원'}
+                    {product.id === 'smarttok' && '3,500원'}
+                    {product.id === 'badge' && '1,600원'}
+                    {product.id === 'magnet' && '2,200원'}
+                    {product.id === 'carabiner' && '3,800원'}
+                  </div>
+                </div>
+
+                {/* Reviews */}
+                <div className="text-xs text-gray-500 mb-2">
+                  {product.available ? (
+                    <>
+                      {product.id === 'keyring' && t({ ko: '리뷰 342개', en: '342 reviews', ja: 'レビュー342件', zh: '342个评论' })}
+                      {product.id === 'stand' && t({ ko: '리뷰 189개', en: '189 reviews', ja: 'レビュー189件', zh: '189个评论' })}
+                      {product.id === 'corot' && t({ ko: '리뷰 256개', en: '256 reviews', ja: 'レビュー256件', zh: '256个评论' })}
+                      {product.id === 'photoholder' && t({ ko: '리뷰 134개', en: '134 reviews', ja: 'レビュー134件', zh: '134个评论' })}
+                      {product.id === 'smarttok' && t({ ko: '리뷰 298개', en: '298 reviews', ja: 'レビュー298件', zh: '298个评论' })}
+                      {product.id === 'badge' && t({ ko: '리뷰 167개', en: '167 reviews', ja: 'レビュー167件', zh: '167个评论' })}
+                      {product.id === 'magnet' && t({ ko: '리뷰 223개', en: '223 reviews', ja: 'レビュー223件', zh: '223个评论' })}
+                      {product.id === 'carabiner' && t({ ko: '곧 출시', en: 'Coming soon', ja: '近日発売', zh: '即将推出' })}
+                    </>
+                  ) : (
+                    t({ ko: '곧 출시', en: 'Coming soon', ja: '近日発売', zh: '即将推出' })
+                  )}
+                </div>
+
+                {/* Action Button */}
+                <Button 
+                  className={cn(
+                    "w-full text-xs font-medium transition-all py-2",
+                    product.available 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white" 
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  )}
+                  disabled={!product.available}
+                >
+                  {product.available 
+                    ? t({ ko: '제작 시작', en: 'Start Creating', ja: '製作開始', zh: '开始制作' })
+                    : t({ ko: '준비 중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })
+                  }
+                </Button>
+              </div>
             ))}
           </div>
 
