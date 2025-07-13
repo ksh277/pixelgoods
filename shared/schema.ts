@@ -85,6 +85,24 @@ export const communityComments = pgTable("community_comments", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const belugaTemplates = pgTable("beluga_templates", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  titleKo: text("title_ko").notNull(),
+  description: text("description").notNull(),
+  descriptionKo: text("description_ko").notNull(),
+  size: text("size").notNull(), // e.g., "50×50mm"
+  format: text("format").notNull(), // e.g., "AI/PSD"
+  downloads: integer("downloads").default(0).notNull(),
+  tags: text("tags").array().default([]).notNull(),
+  status: text("status"), // e.g., "NEW", "인기", "HOT"
+  imageUrl: text("image_url"),
+  isActive: boolean("is_active").default(true).notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -127,6 +145,12 @@ export const insertCommunityCommentSchema = createInsertSchema(communityComments
   createdAt: true,
 });
 
+export const insertBelugaTemplateSchema = createInsertSchema(belugaTemplates).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -144,3 +168,5 @@ export type CommunityPost = typeof communityPosts.$inferSelect;
 export type InsertCommunityPost = z.infer<typeof insertCommunityPostSchema>;
 export type CommunityComment = typeof communityComments.$inferSelect;
 export type InsertCommunityComment = z.infer<typeof insertCommunityCommentSchema>;
+export type BelugaTemplate = typeof belugaTemplates.$inferSelect;
+export type InsertBelugaTemplate = z.infer<typeof insertBelugaTemplateSchema>;

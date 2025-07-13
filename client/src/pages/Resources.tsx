@@ -5,450 +5,16 @@ import { Download, FileText, Image, Video, Archive, ChevronRight, Star, Sparkles
 import { useLanguage } from "@/hooks/useLanguage";
 import { Link } from "wouter";
 import { BelugaMascot } from "@/components/BelugaMascot";
+import { useQuery } from "@tanstack/react-query";
+import type { BelugaTemplate } from "@shared/schema";
 
 export default function Resources() {
   const { language, t } = useLanguage();
-
-  // Create production-ready Beluga character template SVG for each merchandise type
-  const createBelugaTemplate = (productType: string) => {
-    const templateElements = {
-      keyring: `
-        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background -->
-          <rect width="400" height="400" fill="transparent"/>
-          
-          <!-- Keyring hole guide (top) -->
-          <circle cx="200" cy="40" r="8" fill="none" stroke="#3b82f6" stroke-width="3"/>
-          <text x="200" y="30" text-anchor="middle" font-size="14" fill="#3b82f6" font-weight="bold">타공 위치</text>
-          
-          <!-- Main Beluga Character (70% of template) -->
-          <g transform="translate(200, 220)">
-            <!-- Body -->
-            <ellipse cx="0" cy="20" rx="85" ry="75" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Head -->
-            <ellipse cx="0" cy="-40" rx="70" ry="55" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Eyes -->
-            <circle cx="-25" cy="-50" r="8" fill="#2d3748"/>
-            <circle cx="25" cy="-50" r="8" fill="#2d3748"/>
-            <circle cx="-23" cy="-52" r="3" fill="#ffffff"/>
-            <circle cx="27" cy="-52" r="3" fill="#ffffff"/>
-            
-            <!-- Mouth -->
-            <path d="M -15 -25 Q 0 -20 15 -25" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
-            
-            <!-- Fins -->
-            <ellipse cx="-70" cy="0" rx="20" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            <ellipse cx="70" cy="0" rx="20" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            
-            <!-- Belly -->
-            <ellipse cx="0" cy="30" rx="45" ry="35" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
-          </g>
-          
-          <!-- Template guidelines -->
-          <rect x="50" y="80" width="300" height="280" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
-          
-          <!-- Size specifications -->
-          <text x="200" y="380" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">50×50mm</text>
-          <text x="200" y="395" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
-        </svg>
-      `,
-      stand: `
-        <svg width="400" height="480" viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background -->
-          <rect width="400" height="480" fill="transparent"/>
-          
-          <!-- Stand base (bottom) -->
-          <rect x="100" y="400" width="200" height="20" fill="#4a5568" stroke="#2d3748" stroke-width="2"/>
-          <text x="200" y="440" text-anchor="middle" font-size="14" fill="#4a5568" font-weight="bold">받침대</text>
-          
-          <!-- Support structure -->
-          <rect x="180" y="350" width="40" height="50" fill="#e2e8f0" stroke="#a0aec0" stroke-width="2"/>
-          
-          <!-- Main Beluga Character (70% of template) -->
-          <g transform="translate(200, 240)">
-            <!-- Body -->
-            <ellipse cx="0" cy="40" rx="90" ry="80" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Head -->
-            <ellipse cx="0" cy="-30" rx="75" ry="60" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Eyes -->
-            <circle cx="-28" cy="-40" r="9" fill="#2d3748"/>
-            <circle cx="28" cy="-40" r="9" fill="#2d3748"/>
-            <circle cx="-26" cy="-42" r="3" fill="#ffffff"/>
-            <circle cx="30" cy="-42" r="3" fill="#ffffff"/>
-            
-            <!-- Mouth -->
-            <path d="M -18 -15 Q 0 -10 18 -15" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
-            
-            <!-- Fins -->
-            <ellipse cx="-75" cy="10" rx="22" ry="15" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            <ellipse cx="75" cy="10" rx="22" ry="15" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            
-            <!-- Belly -->
-            <ellipse cx="0" cy="50" rx="50" ry="40" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
-          </g>
-          
-          <!-- Template guidelines -->
-          <rect x="60" y="80" width="280" height="320" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
-          
-          <!-- Size specifications -->
-          <text x="200" y="465" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">60×80mm</text>
-          <text x="200" y="480" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
-        </svg>
-      `,
-      smarttok: `
-        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background -->
-          <rect width="400" height="400" fill="transparent"/>
-          
-          <!-- Smart tok center square guide -->
-          <rect x="160" y="160" width="80" height="80" fill="none" stroke="#3b82f6" stroke-width="3" stroke-dasharray="8,4"/>
-          <text x="200" y="150" text-anchor="middle" font-size="14" fill="#3b82f6" font-weight="bold">중앙 정사각형</text>
-          
-          <!-- Main Beluga Character (70% of template) -->
-          <g transform="translate(200, 200)">
-            <!-- Body -->
-            <ellipse cx="0" cy="30" rx="80" ry="70" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Head -->
-            <ellipse cx="0" cy="-25" rx="65" ry="50" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Eyes -->
-            <circle cx="-22" cy="-35" r="7" fill="#2d3748"/>
-            <circle cx="22" cy="-35" r="7" fill="#2d3748"/>
-            <circle cx="-20" cy="-37" r="2" fill="#ffffff"/>
-            <circle cx="24" cy="-37" r="2" fill="#ffffff"/>
-            
-            <!-- Mouth -->
-            <path d="M -12 -15 Q 0 -10 12 -15" stroke="#2d3748" stroke-width="3" fill="none" stroke-linecap="round"/>
-            
-            <!-- Fins -->
-            <ellipse cx="-65" cy="5" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            <ellipse cx="65" cy="5" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            
-            <!-- Belly -->
-            <ellipse cx="0" cy="40" rx="45" ry="35" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
-          </g>
-          
-          <!-- Template guidelines -->
-          <circle cx="200" cy="200" r="120" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
-          
-          <!-- Size specifications -->
-          <text x="200" y="370" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">40×40mm</text>
-          <text x="200" y="385" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
-        </svg>
-      `,
-      photoholder: `
-        <svg width="400" height="500" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background -->
-          <rect width="400" height="500" fill="transparent"/>
-          
-          <!-- Photo holder frame guide (top) -->
-          <rect x="150" y="40" width="100" height="140" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="8,4"/>
-          <text x="200" y="30" text-anchor="middle" font-size="14" fill="#8b5cf6" font-weight="bold">프레임 가이드</text>
-          
-          <!-- Main Beluga Character (70% of template) -->
-          <g transform="translate(200, 300)">
-            <!-- Body -->
-            <ellipse cx="0" cy="50" rx="85" ry="75" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Head -->
-            <ellipse cx="0" cy="-20" rx="70" ry="55" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Eyes -->
-            <circle cx="-25" cy="-30" r="8" fill="#2d3748"/>
-            <circle cx="25" cy="-30" r="8" fill="#2d3748"/>
-            <circle cx="-23" cy="-32" r="3" fill="#ffffff"/>
-            <circle cx="27" cy="-32" r="3" fill="#ffffff"/>
-            
-            <!-- Mouth -->
-            <path d="M -15 -5 Q 0 0 15 -5" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
-            
-            <!-- Fins -->
-            <ellipse cx="-70" cy="20" rx="20" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            <ellipse cx="70" cy="20" rx="20" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            
-            <!-- Belly -->
-            <ellipse cx="0" cy="60" rx="45" ry="35" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
-          </g>
-          
-          <!-- Template guidelines -->
-          <rect x="70" y="100" width="260" height="340" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
-          
-          <!-- Size specifications -->
-          <text x="200" y="470" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">55×85mm</text>
-          <text x="200" y="485" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
-        </svg>
-      `,
-      corot: `
-        <svg width="400" height="440" viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background -->
-          <rect width="400" height="440" fill="transparent"/>
-          
-          <!-- Flat character outline -->
-          <rect x="80" y="80" width="240" height="280" rx="20" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8,4"/>
-          <text x="200" y="70" text-anchor="middle" font-size="14" fill="#f59e0b" font-weight="bold">평면 캐릭터 영역</text>
-          
-          <!-- Main Beluga Character (70% of template) -->
-          <g transform="translate(200, 220)">
-            <!-- Body (flattened) -->
-            <ellipse cx="0" cy="20" rx="75" ry="65" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Head (flattened) -->
-            <ellipse cx="0" cy="-35" rx="60" ry="45" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Eyes (emphasized for flat design) -->
-            <circle cx="-22" cy="-45" r="9" fill="#2d3748"/>
-            <circle cx="22" cy="-45" r="9" fill="#2d3748"/>
-            <circle cx="-20" cy="-47" r="3" fill="#ffffff"/>
-            <circle cx="24" cy="-47" r="3" fill="#ffffff"/>
-            
-            <!-- Mouth (more prominent) -->
-            <path d="M -18 -20 Q 0 -15 18 -20" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
-            
-            <!-- Fins (flattened) -->
-            <ellipse cx="-55" cy="0" rx="15" ry="10" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            <ellipse cx="55" cy="0" rx="15" ry="10" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            
-            <!-- Belly -->
-            <ellipse cx="0" cy="30" rx="40" ry="30" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
-            
-            <!-- Decorative element -->
-            <circle cx="0" cy="50" r="12" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
-          </g>
-          
-          <!-- Size specifications -->
-          <text x="200" y="410" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">40×60mm</text>
-          <text x="200" y="425" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
-        </svg>
-      `,
-      badge: `
-        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background -->
-          <rect width="400" height="400" fill="transparent"/>
-          
-          <!-- Badge circle guide -->
-          <circle cx="200" cy="200" r="120" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="8,4"/>
-          <text x="200" y="90" text-anchor="middle" font-size="14" fill="#ef4444" font-weight="bold">원형 뱃지 영역</text>
-          
-          <!-- Main Beluga Character (70% of template) -->
-          <g transform="translate(200, 200)">
-            <!-- Body -->
-            <ellipse cx="0" cy="25" rx="75" ry="65" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Head -->
-            <ellipse cx="0" cy="-30" rx="60" ry="50" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Eyes -->
-            <circle cx="-20" cy="-40" r="7" fill="#2d3748"/>
-            <circle cx="20" cy="-40" r="7" fill="#2d3748"/>
-            <circle cx="-18" cy="-42" r="2" fill="#ffffff"/>
-            <circle cx="22" cy="-42" r="2" fill="#ffffff"/>
-            
-            <!-- Mouth -->
-            <path d="M -12 -20 Q 0 -15 12 -20" stroke="#2d3748" stroke-width="3" fill="none" stroke-linecap="round"/>
-            
-            <!-- Fins -->
-            <ellipse cx="-60" cy="0" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            <ellipse cx="60" cy="0" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            
-            <!-- Belly -->
-            <ellipse cx="0" cy="35" rx="40" ry="30" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
-            
-            <!-- Badge star -->
-            <circle cx="0" cy="20" r="18" fill="#ef4444" stroke="#dc2626" stroke-width="3"/>
-            <text x="0" y="26" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="bold">★</text>
-          </g>
-          
-          <!-- Size specifications -->
-          <text x="200" y="350" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">44×44mm</text>
-          <text x="200" y="365" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
-        </svg>
-      `,
-      magnet: `
-        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <!-- Background -->
-          <rect width="400" height="400" fill="transparent"/>
-          
-          <!-- Refrigerator background -->
-          <rect x="280" y="80" width="60" height="160" fill="#f7fafc" stroke="#a0aec0" stroke-width="3"/>
-          <rect x="290" y="130" width="30" height="20" fill="#dc2626" stroke="#b91c1c" stroke-width="2"/>
-          <text x="200" y="70" text-anchor="middle" font-size="14" fill="#4a5568" font-weight="bold">냉장고 자석</text>
-          
-          <!-- Main Beluga Character (70% of template) -->
-          <g transform="translate(200, 200)">
-            <!-- Body -->
-            <ellipse cx="0" cy="25" rx="80" ry="70" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Head -->
-            <ellipse cx="0" cy="-30" rx="65" ry="50" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
-            
-            <!-- Eyes -->
-            <circle cx="-22" cy="-40" r="8" fill="#2d3748"/>
-            <circle cx="22" cy="-40" r="8" fill="#2d3748"/>
-            <circle cx="-20" cy="-42" r="3" fill="#ffffff"/>
-            <circle cx="24" cy="-42" r="3" fill="#ffffff"/>
-            
-            <!-- Mouth -->
-            <path d="M -15 -20 Q 0 -15 15 -20" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
-            
-            <!-- Fins -->
-            <ellipse cx="-65" cy="0" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            <ellipse cx="65" cy="0" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
-            
-            <!-- Belly -->
-            <ellipse cx="0" cy="35" rx="45" ry="35" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
-          </g>
-          
-          <!-- Template guidelines -->
-          <rect x="80" y="80" width="240" height="240" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
-          
-          <!-- Size specifications -->
-          <text x="200" y="360" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">50×50mm</text>
-          <text x="200" y="375" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
-        </svg>
-      `
-    };
-
-    return templateElements[productType as keyof typeof templateElements] || templateElements.keyring;
-  };
-
-  // Beluga merchandise templates based on AllThatPrinting resources
-  const belugaTemplates = [
-    {
-      id: 'keyring',
-      title: { ko: '렌야드 스트랩 키링', en: 'Lanyard Strap Keyring', ja: 'ランヤードストラップキーリング', zh: '挂绳钥匙扣' },
-      description: { ko: '타공 고려 벨루가 키링 템플릿', en: 'Beluga keyring template with hole consideration', ja: '穴加工考慮ベルーガキーリングテンプレート', zh: '考虑打孔的白鲸钥匙扣模板' },
-      category: 'template',
-      format: 'AI/PSD',
-      size: '2000px',
-      dpi: '300dpi',
-      downloads: 1247,
-      featured: true,
-      new: false
-    },
-    {
-      id: 'stand',
-      title: { ko: '렌티큘러 스탠드', en: 'Lenticular Stand', ja: 'レンチキュラースタンド', zh: '光栅立架' },
-      description: { ko: '받침대 연결형 벨루가 스탠드', en: 'Beluga stand with base connection', ja: 'ベース接続型ベルーガスタンド', zh: '带底座连接的白鲸支架' },
-      category: 'template',
-      format: 'AI/PSD',
-      size: '2000px',
-      dpi: '300dpi',
-      downloads: 892,
-      featured: true,
-      new: true
-    },
-    {
-      id: 'smarttok',
-      title: { ko: '렌티큘러 스마트톡', en: 'Lenticular Smart Tok', ja: 'レンチキュラースマートトック', zh: '光栅智能支架' },
-      description: { ko: '원형/사각형 호환 벨루가 스마트톡', en: 'Circular/square compatible Beluga smart tok', ja: '円形/四角形対応ベルーガスマートトック', zh: '圆形/方形兼容白鲸智能支架' },
-      category: 'template',
-      format: 'AI/PSD',
-      size: '2000px',
-      dpi: '300dpi',
-      downloads: 634,
-      featured: false,
-      new: true
-    },
-    {
-      id: 'photoholder',
-      title: { ko: '증명사진 포카홀더 키링', en: 'ID Photo Holder Keyring', ja: '証明写真ホルダーキーリング', zh: '证件照夹钥匙扣' },
-      description: { ko: '세로형 반신 벨루가 포카홀더', en: 'Vertical half-body Beluga photo holder', ja: '縦型半身ベルーガフォトホルダー', zh: '竖向半身白鲸照片夹' },
-      category: 'template',
-      format: 'AI/PSD',
-      size: '2000px',
-      dpi: '300dpi',
-      downloads: 1156,
-      featured: true,
-      new: false
-    },
-    {
-      id: 'corot',
-      title: { ko: '렌티큘러 코롯토', en: 'Lenticular Corot', ja: 'レンチキュラーコロット', zh: '光栅科罗托' },
-      description: { ko: '평면 표정 강조 벨루가 코롯토', en: 'Flat expression-focused Beluga corot', ja: '平面表情強調ベルーガコロット', zh: '平面表情强调白鲸科罗托' },
-      category: 'template',
-      format: 'AI/PSD',
-      size: '2000px',
-      dpi: '300dpi',
-      downloads: 723,
-      featured: false,
-      new: true
-    },
-    {
-      id: 'badge',
-      title: { ko: '회전형 캐릭터 뱃지', en: 'Rotating Character Badge', ja: '回転型キャラクターバッジ', zh: '旋转角色徽章' },
-      description: { ko: '원형 중심 배치 벨루가 뱃지', en: 'Circular center-positioned Beluga badge', ja: '円形中心配置ベルーガバッジ', zh: '圆形居中白鲸徽章' },
-      category: 'template',
-      format: 'AI/PSD',
-      size: '2000px',
-      dpi: '300dpi',
-      downloads: 445,
-      featured: false,
-      new: false
-    },
-    {
-      id: 'magnet',
-      title: { ko: '자석/문구류 우드굿즈', en: 'Magnet/Stationery Wood Goods', ja: '磁石/文具類ウッドグッズ', zh: '磁铁/文具木制商品' },
-      description: { ko: '냉장고 부착용 벨루가 자석', en: 'Refrigerator-attachable Beluga magnet', ja: '冷蔵庫取付用ベルーガマグネット', zh: '冰箱贴白鲸磁铁' },
-      category: 'template',
-      format: 'AI/PSD',
-      size: '2000px',
-      dpi: '300dpi',
-      downloads: 567,
-      featured: false,
-      new: false
-    }
-  ];
-
-  const resourceCategories = [
-    {
-      id: 1,
-      title: { ko: "벨루가 굿즈 템플릿", en: "Beluga Goods Templates", ja: "ベルーガグッズテンプレート", zh: "白鲸商品模板" },
-      description: { ko: "올댓프린팅 공식 벨루가 캐릭터 템플릿", en: "Official AllThatPrinting Beluga character templates", ja: "オールザットプリンティング公式ベルーガキャラクターテンプレート", zh: "AllThatPrinting官方白鲸角色模板" },
-      icon: <Sparkles className="w-6 h-6" />,
-      items: belugaTemplates
-    },
-    {
-      id: 2,
-      title: { ko: "제작 가이드", en: "Production Guide", ja: "製作ガイド", zh: "制作指南" },
-      description: { ko: "벨루가 캐릭터 제작을 위한 상세 가이드", en: "Detailed guide for Beluga character production", ja: "ベルーガキャラクター製作のための詳細ガイド", zh: "白鲸角色制作详细指南" },
-      icon: <FileText className="w-6 h-6" />,
-      items: [
-        { name: "벨루가 디자인 제작 가이드", type: "PDF", size: "4MB", downloads: 2341 },
-        { name: "아크릴 커팅 가이드라인", type: "PDF", size: "2MB", downloads: 1876 },
-        { name: "해상도 및 DPI 설정", type: "PDF", size: "1MB", downloads: 1523 },
-        { name: "색상 표현 가이드", type: "PDF", size: "3MB", downloads: 1247 }
-      ]
-    },
-    {
-      id: 3,
-      title: { ko: "튜토리얼 영상", en: "Tutorial Videos", ja: "チュートリアル動画", zh: "教程视频" },
-      description: { ko: "벨루가 굿즈 제작 과정 영상", en: "Beluga goods production process videos", ja: "ベルーガグッズ製作プロセス動画", zh: "白鲸商品制作过程视频" },
-      icon: <Video className="w-6 h-6" />,
-      items: [
-        { name: "벨루가 키링 제작 과정", type: "MP4", size: "25MB", downloads: 1892 },
-        { name: "스탠드 받침대 조립법", type: "MP4", size: "18MB", downloads: 1456 },
-        { name: "올댓에디터 벨루가 활용", type: "MP4", size: "32MB", downloads: 2105 },
-        { name: "템플릿 파일 준비 과정", type: "MP4", size: "15MB", downloads: 1678 }
-      ]
-    },
-    {
-      id: 4,
-      title: { ko: "벨루가 클립아트", en: "Beluga Clip Art", ja: "ベルーガクリップアート", zh: "白鲸剪贴画" },
-      description: { ko: "다양한 포즈의 벨루가 클립아트", en: "Beluga clip art in various poses", ja: "様々なポーズのベルーガクリップアート", zh: "各种姿势的白鲸剪贴画" },
-      icon: <Image className="w-6 h-6" />,
-      items: [
-        { name: "벨루가 기본 포즈 세트", type: "PNG", size: "45MB", downloads: 3247 },
-        { name: "벨루가 표정 변화 세트", type: "PNG", size: "38MB", downloads: 2891 },
-        { name: "벨루가 액션 포즈 세트", type: "PNG", size: "52MB", downloads: 2456 },
-        { name: "벨루가 시즌 테마 세트", type: "PNG", size: "28MB", downloads: 1923 }
-      ]
-    }
-  ];
+  
+  // Fetch templates from API
+  const { data: templates = [], isLoading } = useQuery<BelugaTemplate[]>({
+    queryKey: ['/api/templates'],
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -513,91 +79,104 @@ export default function Resources() {
           
           {/* Template Cards Grid - 4 columns PC, 3 tablet, 2 mobile */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {belugaTemplates.map((template) => (
-              <Card key={template.id} className="group bg-white shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200">
-                {/* Badge Overlays */}
-                <div className="relative">
-                  {template.featured && (
-                    <Badge className="absolute top-2 left-2 z-10 bg-red-500 text-white text-xs px-2 py-1">
-                      {t({ ko: "인기", en: "HOT", ja: "人気", zh: "热门" })}
-                    </Badge>
-                  )}
-                  {template.new && (
-                    <Badge className="absolute top-2 right-2 z-10 bg-green-500 text-white text-xs px-2 py-1">
-                      {t({ ko: "NEW", en: "NEW", ja: "新着", zh: "新品" })}
-                    </Badge>
-                  )}
-                  
-                  {/* Image Placeholder - Ready for dynamic image insertion */}
-                  <div 
-                    className="image-placeholder aspect-square bg-gray-100 border-b border-gray-200 flex items-center justify-center group-hover:bg-gray-50 transition-colors"
-                    data-template-id={template.id}
-                    data-src=""
-                  >
-                    <div className="text-gray-400 text-center">
-                      <Image className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                      <span className="text-xs">이미지 준비중</span>
+            {isLoading ? (
+              // Loading skeleton
+              Array.from({ length: 8 }).map((_, i) => (
+                <Card key={i} className="group bg-white shadow-sm border border-gray-200 animate-pulse">
+                  <div className="aspect-square bg-gray-200 border-b border-gray-200"></div>
+                  <CardContent className="p-3 sm:p-4">
+                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded mb-3"></div>
+                    <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded mb-3"></div>
+                    <div className="h-8 bg-gray-200 rounded"></div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              templates.map((template) => (
+                <Card key={template.id} className="group bg-white shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200">
+                  {/* Badge Overlays */}
+                  <div className="relative">
+                    {template.status === "HOT" && (
+                      <Badge className="absolute top-2 left-2 z-10 bg-red-500 text-white text-xs px-2 py-1">
+                        HOT
+                      </Badge>
+                    )}
+                    {template.status === "NEW" && (
+                      <Badge className="absolute top-2 right-2 z-10 bg-green-500 text-white text-xs px-2 py-1">
+                        NEW
+                      </Badge>
+                    )}
+                    {template.status === "인기" && (
+                      <Badge className="absolute top-2 left-2 z-10 bg-blue-500 text-white text-xs px-2 py-1">
+                        인기
+                      </Badge>
+                    )}
+                    
+                    {/* Image Placeholder - Ready for dynamic image insertion */}
+                    <div 
+                      className="image-placeholder aspect-square bg-gray-100 border-b border-gray-200 flex items-center justify-center group-hover:bg-gray-50 transition-colors"
+                      data-template-id={template.id}
+                      data-src={template.imageUrl || ""}
+                    >
+                      <div className="text-gray-400 text-center">
+                        <Image className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                        <span className="text-xs">이미지 준비중</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <CardContent className="p-3 sm:p-4">
-                  {/* Template Name */}
-                  <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
-                    {t(template.title)}
-                  </h3>
                   
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm text-gray-600 mb-2 line-clamp-2 leading-relaxed">
-                    {t(template.description)}
-                  </p>
-                  
-                  {/* File Type & Resolution */}
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="secondary" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200">
-                      {template.format}
-                    </Badge>
-                    <span className="text-xs text-gray-500 font-medium">
-                      {template.size}
-                    </span>
-                  </div>
-                  
-                  {/* Download Count */}
-                  <div className="flex items-center text-xs text-gray-500 mb-3">
-                    <Download className="w-3 h-3 mr-1" />
-                    <span>{template.downloads.toLocaleString()}</span>
-                  </div>
-                  
-                  {/* Download Button */}
-                  <Button 
-                    className="w-full text-sm py-2 bg-blue-600 hover:bg-blue-700 text-white" 
-                    size="sm"
-                    data-template-id={template.id}
-                    data-download-url=""
-                  >
-                    <Download className="w-4 h-4 mr-1" />
-                    {t({ ko: "다운로드", en: "Download", ja: "ダウンロード", zh: "下载" })}
-                  </Button>
-                  
-                  {/* Size Information Below Button */}
-                  <div className="text-center mt-2 pt-2 border-t border-gray-100">
-                    <span className="text-xs text-gray-500 font-medium">
-                      {template.id === 'keyring' && '50×50mm'}
-                      {template.id === 'stand' && '60×80mm'}
-                      {template.id === 'smarttok' && '40×40mm'}
-                      {template.id === 'photoholder' && '55×85mm'}
-                      {template.id === 'corot' && '40×60mm'}
-                      {template.id === 'badge' && '44×44mm'}
-                      {template.id === 'magnet' && '50×50mm'}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardContent className="p-3 sm:p-4">
+                    {/* Template Name */}
+                    <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                      {language === 'ko' ? template.titleKo : template.title}
+                    </h3>
+                    
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm text-gray-600 mb-2 line-clamp-2 leading-relaxed">
+                      {language === 'ko' ? template.descriptionKo : template.description}
+                    </p>
+                    
+                    {/* File Type & Resolution */}
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge variant="secondary" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200">
+                        {template.format}
+                      </Badge>
+                      <span className="text-xs text-gray-500 font-medium">
+                        2000px
+                      </span>
+                    </div>
+                    
+                    {/* Download Count */}
+                    <div className="flex items-center text-xs text-gray-500 mb-3">
+                      <Download className="w-3 h-3 mr-1" />
+                      <span>{template.downloads.toLocaleString()}</span>
+                    </div>
+                    
+                    {/* Download Button */}
+                    <Button 
+                      className="w-full text-sm py-2 bg-blue-600 hover:bg-blue-700 text-white" 
+                      size="sm"
+                      data-template-id={template.id}
+                      data-download-url=""
+                    >
+                      <Download className="w-4 h-4 mr-1" />
+                      {t({ ko: "다운로드", en: "Download", ja: "ダウンロード", zh: "下载" })}
+                    </Button>
+                    
+                    {/* Size Information Below Button */}
+                    <div className="text-center mt-2 pt-2 border-t border-gray-100">
+                      <span className="text-xs text-gray-500 font-medium">
+                        {template.size}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         </div>
-
-
 
         {/* Notice */}
         <Card className="bg-blue-50 border-blue-200">

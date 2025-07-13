@@ -1,9 +1,9 @@
 import { 
-  users, categories, products, productReviews, cartItems, orders, communityPosts, communityComments,
+  users, categories, products, productReviews, cartItems, orders, communityPosts, communityComments, belugaTemplates,
   type User, type InsertUser, type Category, type InsertCategory, type Product, type InsertProduct,
   type ProductReview, type InsertProductReview, type CartItem, type InsertCartItem,
   type Order, type InsertOrder, type CommunityPost, type InsertCommunityPost,
-  type CommunityComment, type InsertCommunityComment
+  type CommunityComment, type InsertCommunityComment, type BelugaTemplate, type InsertBelugaTemplate
 } from "@shared/schema";
 
 export interface IStorage {
@@ -49,6 +49,14 @@ export interface IStorage {
   likeCommunityPost(id: number): Promise<CommunityPost | undefined>;
   getCommunityComments(postId: number): Promise<CommunityComment[]>;
   createCommunityComment(comment: InsertCommunityComment): Promise<CommunityComment>;
+  
+  // Template methods
+  getBelugaTemplates(): Promise<BelugaTemplate[]>;
+  getBelugaTemplate(id: number): Promise<BelugaTemplate | undefined>;
+  createBelugaTemplate(template: InsertBelugaTemplate): Promise<BelugaTemplate>;
+  updateBelugaTemplate(id: number, updates: Partial<InsertBelugaTemplate>): Promise<BelugaTemplate | undefined>;
+  deleteBelugaTemplate(id: number): Promise<boolean>;
+  reorderBelugaTemplates(templateIds: number[]): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -60,6 +68,7 @@ export class MemStorage implements IStorage {
   private orders: Map<number, Order>;
   private communityPosts: Map<number, CommunityPost>;
   private communityComments: Map<number, CommunityComment>;
+  private belugaTemplates: Map<number, BelugaTemplate>;
   private currentId: number;
 
   constructor() {
@@ -71,6 +80,7 @@ export class MemStorage implements IStorage {
     this.orders = new Map();
     this.communityPosts = new Map();
     this.communityComments = new Map();
+    this.belugaTemplates = new Map();
     this.currentId = 1;
     this.initializeData();
   }
@@ -127,7 +137,23 @@ export class MemStorage implements IStorage {
       this.products.set(prod.id, prod as Product);
     });
 
-    this.currentId = 10;
+    // Initialize templates
+    const templatesData = [
+      { id: 1, title: "Beluga Keychain Template", titleKo: "벨루가 키링 템플릿", description: "Cute beluga keychain design", descriptionKo: "귀여운 벨루가 키링 디자인", size: "50×50mm", format: "AI/PSD", downloads: 1247, tags: ["keychain", "beluga", "character"], status: "HOT", imageUrl: null, isActive: true, sortOrder: 1, createdAt: new Date(), updatedAt: new Date() },
+      { id: 2, title: "Beluga Stand Template", titleKo: "벨루가 스탠드 템플릿", description: "Standing beluga character", descriptionKo: "서 있는 벨루가 캐릭터", size: "60×80mm", format: "AI/PSD", downloads: 897, tags: ["stand", "beluga", "character"], status: "NEW", imageUrl: null, isActive: true, sortOrder: 2, createdAt: new Date(), updatedAt: new Date() },
+      { id: 3, title: "Beluga Smart Tok Template", titleKo: "벨루가 스마트톡 템플릿", description: "Smart tok with beluga design", descriptionKo: "벨루가 디자인 스마트톡", size: "40×40mm", format: "AI/PSD", downloads: 1156, tags: ["smarttok", "beluga", "phone"], status: "인기", imageUrl: null, isActive: true, sortOrder: 3, createdAt: new Date(), updatedAt: new Date() },
+      { id: 4, title: "Beluga Badge Template", titleKo: "벨루가 뱃지 템플릿", description: "Round badge with beluga", descriptionKo: "벨루가가 있는 둥근 뱃지", size: "32×32mm", format: "AI/PSD", downloads: 634, tags: ["badge", "beluga", "round"], status: null, imageUrl: null, isActive: true, sortOrder: 4, createdAt: new Date(), updatedAt: new Date() },
+      { id: 5, title: "Beluga Card Holder Template", titleKo: "벨루가 포카홀더 템플릿", description: "Photo card holder design", descriptionKo: "포토카드 홀더 디자인", size: "55×85mm", format: "AI/PSD", downloads: 789, tags: ["cardholder", "beluga", "photo"], status: "NEW", imageUrl: null, isActive: true, sortOrder: 5, createdAt: new Date(), updatedAt: new Date() },
+      { id: 6, title: "Beluga Magnet Template", titleKo: "벨루가 자석 템플릿", description: "Refrigerator magnet design", descriptionKo: "냉장고 자석 디자인", size: "50×50mm", format: "AI/PSD", downloads: 432, tags: ["magnet", "beluga", "fridge"], status: null, imageUrl: null, isActive: true, sortOrder: 6, createdAt: new Date(), updatedAt: new Date() },
+      { id: 7, title: "Beluga Korotto Template", titleKo: "벨루가 코롯토 템플릿", description: "Flat character goods", descriptionKo: "플랫 캐릭터 굿즈", size: "70×70mm", format: "AI/PSD", downloads: 923, tags: ["korotto", "beluga", "flat"], status: "HOT", imageUrl: null, isActive: true, sortOrder: 7, createdAt: new Date(), updatedAt: new Date() },
+      { id: 8, title: "Beluga Carabiner Template", titleKo: "벨루가 카라비너 템플릿", description: "Carabiner with beluga design", descriptionKo: "벨루가 디자인 카라비너", size: "45×60mm", format: "AI/PSD", downloads: 156, tags: ["carabiner", "beluga", "clip"], status: null, imageUrl: null, isActive: false, sortOrder: 8, createdAt: new Date(), updatedAt: new Date() },
+    ];
+
+    templatesData.forEach(template => {
+      this.belugaTemplates.set(template.id, template as BelugaTemplate);
+    });
+
+    this.currentId = 20;
   }
 
   // User methods
@@ -325,6 +351,60 @@ export class MemStorage implements IStorage {
     };
     this.communityComments.set(id, comment);
     return comment;
+  }
+
+  // Template methods
+  async getBelugaTemplates(): Promise<BelugaTemplate[]> {
+    return Array.from(this.belugaTemplates.values())
+      .filter(template => template.isActive)
+      .sort((a, b) => a.sortOrder - b.sortOrder);
+  }
+
+  async getBelugaTemplate(id: number): Promise<BelugaTemplate | undefined> {
+    return this.belugaTemplates.get(id);
+  }
+
+  async createBelugaTemplate(insertTemplate: InsertBelugaTemplate): Promise<BelugaTemplate> {
+    const id = this.currentId++;
+    const template: BelugaTemplate = {
+      ...insertTemplate,
+      id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.belugaTemplates.set(id, template);
+    return template;
+  }
+
+  async updateBelugaTemplate(id: number, updates: Partial<InsertBelugaTemplate>): Promise<BelugaTemplate | undefined> {
+    const template = this.belugaTemplates.get(id);
+    if (template) {
+      const updated = { ...template, ...updates, updatedAt: new Date() };
+      this.belugaTemplates.set(id, updated);
+      return updated;
+    }
+    return undefined;
+  }
+
+  async deleteBelugaTemplate(id: number): Promise<boolean> {
+    const template = this.belugaTemplates.get(id);
+    if (template) {
+      template.isActive = false;
+      this.belugaTemplates.set(id, template);
+      return true;
+    }
+    return false;
+  }
+
+  async reorderBelugaTemplates(templateIds: number[]): Promise<boolean> {
+    templateIds.forEach((id, index) => {
+      const template = this.belugaTemplates.get(id);
+      if (template) {
+        template.sortOrder = index;
+        this.belugaTemplates.set(id, template);
+      }
+    });
+    return true;
   }
 }
 

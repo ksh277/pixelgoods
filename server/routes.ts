@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema, insertProductReviewSchema, insertCartItemSchema, insertOrderSchema, insertCommunityPostSchema, insertCommunityCommentSchema } from "@shared/schema";
+import { insertUserSchema, insertProductReviewSchema, insertCartItemSchema, insertOrderSchema, insertCommunityPostSchema, insertCommunityCommentSchema, insertBelugaTemplateSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Categories
@@ -237,6 +237,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(comment);
     } catch (error) {
       res.status(400).json({ message: "Invalid comment data" });
+    }
+  });
+
+  // Beluga Templates
+  app.get("/api/templates", async (req, res) => {
+    try {
+      const templates = await storage.getBelugaTemplates();
+      res.json(templates);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch templates" });
+    }
+  });
+
+  app.get("/api/templates/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const template = await storage.getBelugaTemplate(id);
+      if (!template) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      res.json(template);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch template" });
+    }
+  });
+
+  app.post("/api/templates", async (req, res) => {
+    try {
+      const templateData = insertBelugaTemplateSchema.parse(req.body);
+      const template = await storage.createBelugaTemplate(templateData);
+      res.status(201).json(template);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid template data" });
+    }
+  });
+
+  app.patch("/api/templates/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = insertBelugaTemplateSchema.partial().parse(req.body);
+      const template = await storage.updateBelugaTemplate(id, updates);
+      if (!template) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      res.json(template);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid template data" });
+    }
+  });
+
+  app.delete("/api/templates/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteBelugaTemplate(id);
+      if (!success) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      res.json({ message: "Template deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete template" });
+    }
+  });
+
+  app.post("/api/templates/reorder", async (req, res) => {
+    try {
+      const { templateIds } = req.body;
+      if (!Array.isArray(templateIds)) {
+        return res.status(400).json({ message: "templateIds must be an array" });
+      }
+      const success = await storage.reorderBelugaTemplates(templateIds);
+      res.json({ success });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to reorder templates" });
     }
   });
 
