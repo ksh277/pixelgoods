@@ -30,7 +30,8 @@ export default function Login() {
       const success = await login(formData.username, formData.password);
       
       if (success) {
-        setLocation(redirectPath || '/');
+        // Force page refresh to ensure UI updates
+        window.location.href = redirectPath || '/';
       } else {
         setError(t({ 
           ko: "아이디 또는 비밀번호가 잘못되었습니다.", 

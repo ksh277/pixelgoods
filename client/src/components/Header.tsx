@@ -181,12 +181,33 @@ export function Header() {
       <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-2 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-end text-sm">
           <div className="flex items-center space-x-4">
-            <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">
-              {t({ ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" })}
-            </Link>
-            <Link href="/register" className="text-muted-foreground hover:text-foreground transition-colors">
-              {t({ ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" })}
-            </Link>
+            {user ? (
+              <>
+                <Link href="/mypage" className="text-muted-foreground hover:text-foreground transition-colors">
+                  {t({ ko: "마이페이지", en: "My Page", ja: "マイページ", zh: "我的页面" })}
+                </Link>
+                {user.isAdmin && (
+                  <Link href="/admin" className="text-muted-foreground hover:text-foreground transition-colors">
+                    {t({ ko: "관리자 모드", en: "Admin Mode", ja: "管理者モード", zh: "管理员模式" })}
+                  </Link>
+                )}
+                <button 
+                  onClick={logout}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t({ ko: "로그아웃", en: "Logout", ja: "ログアウト", zh: "登出" })}
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">
+                  {t({ ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" })}
+                </Link>
+                <Link href="/register" className="text-muted-foreground hover:text-foreground transition-colors">
+                  {t({ ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" })}
+                </Link>
+              </>
+            )}
             
             {/* Language Dropdown */}
             <DropdownMenu>
