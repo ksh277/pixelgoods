@@ -209,12 +209,12 @@ body {
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    min-height: 340px;
-    max-height: 340px;
+    min-height: 320px;
+    max-height: 320px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-    padding: 12px;
+    padding: 10px;
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -322,7 +322,7 @@ body {
   .unified-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 8px;
     padding: 0 12px;
   }
 
