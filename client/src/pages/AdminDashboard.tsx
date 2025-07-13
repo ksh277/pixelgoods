@@ -46,7 +46,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-center py-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">관리자 대시보드</h1>
-              <p className="text-gray-600">AllThatPrinting 관리 시스템</p>
+              <p className="text-gray-600">픽셀굿즈 관리 시스템</p>
             </div>
             <div className="flex items-center space-x-4">
               <Badge variant="outline" className="px-3 py-1">
@@ -303,7 +303,7 @@ export default function AdminDashboard() {
                       <div>
                         <h3 className="font-medium">superadmin</h3>
                         <p className="text-sm text-gray-600">슈퍼관리자</p>
-                        <p className="text-sm text-gray-500">superadmin@allthatprinting.com</p>
+                        <p className="text-sm text-gray-500">superadmin@pixelgoods.com</p>
                         <p className="text-sm text-green-600">포인트: 100,000P | 주문: 100건</p>
                       </div>
                     </div>

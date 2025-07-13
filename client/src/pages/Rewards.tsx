@@ -132,10 +132,10 @@ export default function Rewards() {
             </h1>
             <p className="text-xl opacity-90">
               {t({ 
-                ko: "올댓프린팅에 가입하고 포인트 리워드와 전용 등급 혜택을 누리세요!",
-                en: "Join AllThatPrinting and enjoy point rewards and exclusive tier benefits!",
-                ja: "AllThatPrintingに加入してポイントリワードと専用等級特典をお楽しみください！",
-                zh: "加入AllThatPrinting，享受积分奖励和专属等级优惠！"
+                ko: "픽셀굿즈에 가입하고 포인트 리워드와 전용 등급 혜택을 누리세요!",
+                en: "Join PixelGoods and enjoy point rewards and exclusive tier benefits!",
+                ja: "PixelGoodsに加入してポイントリワードと専用等級特典をお楽しみください！",
+                zh: "加入PixelGoods，享受积分奖励和专属等级优惠！"
               })}
             </p>
           </motion.div>
@@ -153,18 +153,18 @@ export default function Rewards() {
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-900">
               {t({ 
-                ko: "올댓프린팅 가입 시 즉시 혜택!",
-                en: "Instant Benefits When You Join AllThatPrinting!",
-                ja: "AllThatPrinting加入時即時特典！",
-                zh: "加入AllThatPrinting即享优惠！"
+                ko: "픽셀굿즈 가입 시 즉시 혜택!",
+                en: "Instant Benefits When You Join PixelGoods!",
+                ja: "PixelGoods加入時即時特典！",
+                zh: "加入PixelGoods即享优惠！"
               })}
             </h2>
             <p className="text-gray-700 text-lg leading-relaxed">
               {t({ 
-                ko: "올댓프린팅에 가입하시면 ", 
-                en: "When you join AllThatPrinting, you receive ",
-                ja: "AllThatPrintingに加入すると、",
-                zh: "加入AllThatPrinting后，您将立即获得"
+                ko: "픽셀굿즈에 가입하시면 ", 
+                en: "When you join PixelGoods, you receive ",
+                ja: "PixelGoodsに加入すると、",
+                zh: "加入PixelGoods后，您将立即获得"
               })}
               <span className="font-bold text-blue-600">
                 {t({ ko: "리워드 포인트", en: "reward points", ja: "リワードポイント", zh: "积分奖励" })}

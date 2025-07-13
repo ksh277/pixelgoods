@@ -13,7 +13,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <Link href="/" className="inline-block mb-4">
               <span className="text-2xl font-bold">
-                ALL<span className="text-primary">THAT</span>PRINTING
+                PIXEL<span className="text-primary">GOODS</span>
               </span>
             </Link>
             <p className="text-gray-400 mb-6 max-w-md">

@@ -51,7 +51,7 @@ export default function Collections() {
     {
       id: "background-tags",
       title: { ko: "너의 배경이 되어줄게", en: "I'll Be Your Background", ja: "あなたの背景になってあげる", zh: "我来做你的背景" },
-      subtitle: { ko: "태그, ALL프린팅에서 해결하세요", en: "Tags, solved by ALL Printing", ja: "タグ、オールプリンティングで解決しましょう", zh: "标签，由ALL印刷解决" },
+      subtitle: { ko: "태그, 픽셀굿즈에서 해결하세요", en: "Tags, solved by PixelGoods", ja: "タグ、PixelGoodsで解決しましょう", zh: "标签，由PixelGoods解决" },
       imageUrl: "/api/placeholder/400/300",
       label: { ko: "HOT", en: "HOT", ja: "HOT", zh: "HOT" },
       labelColor: "bg-orange-500",
@@ -201,16 +201,16 @@ export default function Collections() {
           <div className="text-center">
             <p className="text-lg font-medium mb-4">
               {t({ 
-                ko: "굿즈 제작이 처음이신가요? 👉 올댓에디터로 바로 제작해보세요!", 
-                en: "New to goods creation? 👉 Try making it right away with AllThat Editor!", 
-                ja: "グッズ制作が初めてですか？👉 オールザットエディターで今すぐ作ってみましょう！", 
-                zh: "第一次制作商品？👉 用AllThat编辑器立即制作！" 
+                ko: "굿즈 제작이 처음이신가요? 👉 굿즈에디터로 바로 제작해보세요!", 
+                en: "New to goods creation? 👉 Try making it right away with Goods Editor!", 
+                ja: "グッズ制作が初めてですか？👉 グッズエディターで今すぐ作ってみましょう！", 
+                zh: "第一次制作商品？👉 用商品编辑器立即制作！" 
               })}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/editor">
                 <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 font-bold">
-                  {t({ ko: "올댓에디터", en: "AllThat Editor", ja: "オールザットエディター", zh: "AllThat编辑器" })}
+                  {t({ ko: "굿즈에디터", en: "Goods Editor", ja: "グッズエディター", zh: "商品编辑器" })}
                 </Button>
               </Link>
               <Link href="/support">

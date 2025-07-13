@@ -245,7 +245,7 @@ export function Header() {
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <span className="text-3xl font-bold text-foreground">
-                ALL THAT PRINTING
+                PIXEL<span className="text-blue-600">GOODS</span>
               </span>
             </Link>
 

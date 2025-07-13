@@ -46,7 +46,7 @@ export default function Resources() {
                   {t({ ko: "🐋 벨루가 굿즈 템플릿", en: "🐋 Beluga Goods Templates", ja: "🐋 ベルーガグッズテンプレート", zh: "🐋 白鲸商品模板" })}
                 </h2>
                 <p className="text-blue-100 mb-4">
-                  {t({ ko: "올댓프린팅 공식 벨루가 캐릭터로 나만의 굿즈를 만들어보세요", en: "Create your own goods with AllThatPrinting's official Beluga character", ja: "オールザットプリンティング公式ベルーガキャラクターで自分だけのグッズを作ってみましょう", zh: "使用AllThatPrinting官方白鲸角色制作属于你的商品" })}
+                  {t({ ko: "픽셀굿즈 공식 벨루가 캐릭터로 나만의 굿즈를 만들어보세요", en: "Create your own goods with PixelGoods's official Beluga character", ja: "PixelGoods公式ベルーガキャラクターで自分だけのグッズを作ってみましょう", zh: "使用PixelGoods官方白鲸角色制作属于你的商品" })}
                 </p>
                 <div className="flex items-center space-x-4 text-sm">
                   <span className="flex items-center">

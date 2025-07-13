@@ -193,7 +193,7 @@ export function Layout({ children, showCommunityNav = false }: LayoutProps) {
             <div className="flex items-center space-x-2">
               <Puzzle className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="font-medium text-xs sm:text-sm">
-                {t({ ko: '올댓에디터', en: 'Editor', ja: 'エディタ', zh: '编辑器' })}
+                {t({ ko: '굿즈에디터', en: 'Goods Editor', ja: 'グッズエディター', zh: '商品编辑器' })}
               </span>
             </div>
           </Button>

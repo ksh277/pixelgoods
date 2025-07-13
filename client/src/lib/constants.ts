@@ -1,6 +1,6 @@
 export const APP_CONFIG = {
-  name: "AllThatPrinting",
-  nameKo: "올댓프린팅",
+  name: "PixelGoods",
+  nameKo: "픽셀굿즈",
   description: "Custom printing services for personalized merchandise",
   descriptionKo: "개인화된 굿즈를 위한 커스텀 프린팅 서비스",
   currency: "KRW",
@@ -34,10 +34,10 @@ export const APP_CONFIG = {
     }
   },
   social: {
-    instagram: "@allthatprinting",
-    twitter: "@allthatprinting",
-    line: "@allthatprinting",
-    email: "info@allthatprinting.co.kr"
+    instagram: "@pixelgoods",
+    twitter: "@pixelgoods",
+    line: "@pixelgoods",
+    email: "info@pixelgoods.co.kr"
   }
 };
 

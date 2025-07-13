@@ -182,10 +182,10 @@ Preferred communication style: Simple, everyday language.
 - **3-Tab File Upload System**: 
   - PDF 업로드: Drag & drop functionality with file validation
   - 도안 작업 의뢰: Custom design request form with pricing
-  - 올댓에디터: Direct link to editor with call-to-action
+  - 굿즈에디터: Direct link to editor with call-to-action
 - **Fixed Floating Buttons**: Bottom-right positioning with Korean design
   - 문의하기: Inquiry button with business hours tooltip
-  - 올댓에디터: Editor access with mascot styling
+  - 굿즈에디터: Editor access with mascot styling
 - **Advanced Features**:
   - Real-time price calculation based on selected options
   - Breadcrumb navigation with proper routing
@@ -290,7 +290,7 @@ Preferred communication style: Simple, everyday language.
 - **Updated Button Text**: Changed "문의하기" to "문의" for more concise design
 - **Dual-Position Layout**: 
   - Bottom-right: "문의" (Inquiry) button with MessageCircle icon
-  - Bottom-left: "올댓에디터" (AllThat Editor) button with Puzzle icon
+  - Bottom-left: "굿즈에디터" (Goods Editor) button with Puzzle icon
 - **Enhanced UX Features**:
   - Smooth slide-in animations on page load (fab-slide-in-right, fab-slide-in-left)
   - Hover effects with scale transformation (hover:scale-105)

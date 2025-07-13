@@ -35,7 +35,7 @@ export default function CommunityQuestion() {
     {
       id: 2,
       title: "파일 업로드가 안 되는데 어떻게 해야 하나요?",
-      description: "올댓에디터에서 파일 업로드를 시도하는데 계속 실패한다고 나옵니다. 파일 크기는 3MB 정도이고 PNG 파일입니다. 해결 방법을 알려주세요.",
+      description: "굿즈에디터에서 파일 업로드를 시도하는데 계속 실패한다고 나옵니다. 파일 크기는 3MB 정도이고 PNG 파일입니다. 해결 방법을 알려주세요.",
       category: "기술문의",
       status: "답변대기",
       author: "디자인러버**",
@@ -43,7 +43,7 @@ export default function CommunityQuestion() {
       createdAt: "2024-12-10 12:15",
       views: 89,
       comments: 1,
-      tags: ["파일업로드", "올댓에디터", "기술문의"],
+      tags: ["파일업로드", "굿즈에디터", "기술문의"],
       urgent: true,
       solved: false,
       adminAnswer: false

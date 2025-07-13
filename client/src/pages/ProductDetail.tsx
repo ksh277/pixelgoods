@@ -560,7 +560,7 @@ export default function ProductDetail() {
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <div className="flex items-center mb-3">
                         <Puzzle className="w-5 h-5 text-blue-600 mr-2" />
-                        <h3 className="font-medium text-blue-800">올댓에디터</h3>
+                        <h3 className="font-medium text-blue-800">굿즈에디터</h3>
                       </div>
                       <p className="text-sm text-blue-700 mb-4">
                         브라우저에서 바로 디자인을 만들어보세요! 간단한 조작으로 전문적인 굿즈를 제작할 수 있습니다.
@@ -568,7 +568,7 @@ export default function ProductDetail() {
                       <Link href="/editor">
                         <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                           <Puzzle className="w-4 h-4 mr-2" />
-                          올댓에디터 시작하기
+                          굿즈에디터 시작하기
                         </Button>
                       </Link>
                     </div>
@@ -954,7 +954,7 @@ export default function ProductDetail() {
           >
             <Puzzle className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="font-medium text-xs sm:text-sm">
-              🧩 올댓에디터
+              🧩 굿즈에디터
             </span>
           </Button>
         </Link>
