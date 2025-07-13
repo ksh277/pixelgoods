@@ -86,6 +86,16 @@ export class MemStorage implements IStorage {
   }
 
   private initializeData() {
+    // Initialize users (admin accounts)
+    const usersData = [
+      { id: 1, username: "admin", email: "admin@allthatprinting.com", password: "12345", firstName: "관리자", lastName: "", isAdmin: true, createdAt: new Date() },
+      { id: 2, username: "superadmin", email: "superadmin@allthatprinting.com", password: "12345", firstName: "슈퍼관리자", lastName: "", isAdmin: true, createdAt: new Date() },
+    ];
+    
+    usersData.forEach(user => {
+      this.users.set(user.id, user as User);
+    });
+
     // Initialize categories
     const categoriesData = [
       { id: 1, name: "T-Shirts", nameKo: "티셔츠", description: "Custom printed t-shirts", descriptionKo: "커스텀 프린팅 티셔츠", imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400", isActive: true },
@@ -153,7 +163,7 @@ export class MemStorage implements IStorage {
       this.belugaTemplates.set(template.id, template as BelugaTemplate);
     });
 
-    this.currentId = 20;
+    this.currentId = 100;
   }
 
   // User methods

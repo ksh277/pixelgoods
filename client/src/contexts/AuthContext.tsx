@@ -14,7 +14,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   redirectPath: string | null;
   setRedirectPath: (path: string | null) => void;
@@ -41,22 +41,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (username: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Mock authentication - in real app, this would be an API call
-    if (email === 'test@example.com' && password === 'password') {
+    // Mock authentication for admin accounts
+    if (username === 'admin' && password === '12345') {
       const userData: User = {
         id: '1',
-        name: '김승환',
-        email: 'test@example.com',
-        points: 15000,
-        coupons: 3,
-        totalOrders: 8,
-        totalSpent: 245000
+        name: '관리자',
+        email: 'admin@allthatprinting.com',
+        points: 50000,
+        coupons: 10,
+        totalOrders: 50,
+        totalSpent: 1000000
+      };
+      
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+      setIsLoading(false);
+      return true;
+    }
+    
+    if (username === 'superadmin' && password === '12345') {
+      const userData: User = {
+        id: '2',
+        name: '슈퍼관리자',
+        email: 'superadmin@allthatprinting.com',
+        points: 100000,
+        coupons: 20,
+        totalOrders: 100,
+        totalSpent: 2000000
       };
       
       setUser(userData);

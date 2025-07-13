@@ -16,17 +16,19 @@ declare global {
 }
 
 // Default admin credentials
-const ADMIN_CREDENTIALS = {
-  username: 'admin',
-  password: '12345'
-};
+const ADMIN_CREDENTIALS = [
+  { username: 'admin', password: '12345' },
+  { username: 'superadmin', password: '12345' }
+];
 
 export function initializeAdminAuth(app: any) {
   // Admin login endpoint
   app.post('/api/admin/login', (req: Request, res: Response) => {
     const { username, password } = req.body;
     
-    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+    const validCredentials = ADMIN_CREDENTIALS.find(cred => cred.username === username && cred.password === password);
+    
+    if (validCredentials) {
       // Set admin session
       req.session.adminSession = {
         isAdmin: true,

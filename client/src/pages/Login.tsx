@@ -13,7 +13,7 @@ import { BelugaMascot } from "@/components/BelugaMascot";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: ""
   });
   const [error, setError] = useState("");
@@ -27,15 +27,15 @@ export default function Login() {
     setError("");
     
     try {
-      const success = await login(formData.email, formData.password);
+      const success = await login(formData.username, formData.password);
       
       if (success) {
         // Redirect to the originally requested page or home
         setLocation(redirectPath || '/');
       } else {
         setError(t({ 
-          ko: "이메일 또는 비밀번호가 올바르지 않습니다.", 
-          en: "Invalid email or password." 
+          ko: "아이디 또는 비밀번호가 올바르지 않습니다.", 
+          en: "Invalid username or password." 
         }));
       }
     } catch (error) {
@@ -83,22 +83,22 @@ export default function Login() {
               {t({ ko: "테스트 계정:", en: "Demo Account:" })}
             </p>
             <div className="text-sm text-blue-800">
-              <p>Email: test@example.com</p>
-              <p>Password: password</p>
+              <p>ID: admin</p>
+              <p>Password: 12345</p>
             </div>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">
-                {t({ ko: "이메일", en: "Email" })}
+              <Label htmlFor="username">
+                {t({ ko: "아이디", en: "Username" })}
               </Label>
               <Input
-                id="email"
-                type="email"
-                placeholder={t({ ko: "example@email.com", en: "example@email.com" })}
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                id="username"
+                type="text"
+                placeholder={t({ ko: "아이디를 입력하세요", en: "Enter your username" })}
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 required
                 disabled={isLoading}
               />
