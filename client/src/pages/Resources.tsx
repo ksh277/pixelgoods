@@ -9,142 +9,306 @@ import { BelugaMascot } from "@/components/BelugaMascot";
 export default function Resources() {
   const { language, t } = useLanguage();
 
-  // Create Beluga character template SVG for each merchandise type
+  // Create production-ready Beluga character template SVG for each merchandise type
   const createBelugaTemplate = (productType: string) => {
     const templateElements = {
       keyring: `
-        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <!-- Template guideline -->
-          <circle cx="100" cy="50" r="25" fill="none" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="5,5"/>
-          <!-- Keyring hole guide -->
-          <circle cx="100" cy="25" r="3" fill="none" stroke="#3b82f6" stroke-width="2"/>
-          <text x="100" y="20" text-anchor="middle" font-size="8" fill="#3b82f6">구멍</text>
-          <!-- Beluga in keyring -->
-          <g transform="translate(100, 100)">
-            <ellipse cx="0" cy="0" rx="35" ry="30" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <ellipse cx="0" cy="-15" rx="25" ry="20" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <circle cx="-10" cy="-18" r="3" fill="#374151"/>
-            <circle cx="10" cy="-18" r="3" fill="#374151"/>
-            <path d="M -5 -10 Q 0 -8 5 -10" stroke="#6b7280" stroke-width="2" fill="none"/>
-            <ellipse cx="-30" cy="-5" rx="8" ry="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-            <ellipse cx="30" cy="-5" rx="8" ry="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background -->
+          <rect width="400" height="400" fill="transparent"/>
+          
+          <!-- Keyring hole guide (top) -->
+          <circle cx="200" cy="40" r="8" fill="none" stroke="#3b82f6" stroke-width="3"/>
+          <text x="200" y="30" text-anchor="middle" font-size="14" fill="#3b82f6" font-weight="bold">타공 위치</text>
+          
+          <!-- Main Beluga Character (70% of template) -->
+          <g transform="translate(200, 220)">
+            <!-- Body -->
+            <ellipse cx="0" cy="20" rx="85" ry="75" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Head -->
+            <ellipse cx="0" cy="-40" rx="70" ry="55" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Eyes -->
+            <circle cx="-25" cy="-50" r="8" fill="#2d3748"/>
+            <circle cx="25" cy="-50" r="8" fill="#2d3748"/>
+            <circle cx="-23" cy="-52" r="3" fill="#ffffff"/>
+            <circle cx="27" cy="-52" r="3" fill="#ffffff"/>
+            
+            <!-- Mouth -->
+            <path d="M -15 -25 Q 0 -20 15 -25" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
+            
+            <!-- Fins -->
+            <ellipse cx="-70" cy="0" rx="20" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            <ellipse cx="70" cy="0" rx="20" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            
+            <!-- Belly -->
+            <ellipse cx="0" cy="30" rx="45" ry="35" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
           </g>
-          <!-- Size guide -->
-          <text x="100" y="190" text-anchor="middle" font-size="12" fill="#6b7280">50×50mm</text>
+          
+          <!-- Template guidelines -->
+          <rect x="50" y="80" width="300" height="280" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
+          
+          <!-- Size specifications -->
+          <text x="200" y="380" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">50×50mm</text>
+          <text x="200" y="395" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
         </svg>
       `,
       stand: `
-        <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
-          <!-- Stand base guide -->
-          <rect x="50" y="200" width="100" height="10" fill="#6b7280" stroke="#374151" stroke-width="1"/>
-          <text x="100" y="225" text-anchor="middle" font-size="10" fill="#6b7280">받침대</text>
-          <!-- Beluga on stand -->
-          <g transform="translate(100, 120)">
-            <ellipse cx="0" cy="20" rx="40" ry="35" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <ellipse cx="0" cy="-10" rx="30" ry="25" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <circle cx="-12" cy="-15" r="3" fill="#374151"/>
-            <circle cx="12" cy="-15" r="3" fill="#374151"/>
-            <path d="M -6 -5 Q 0 -3 6 -5" stroke="#6b7280" stroke-width="2" fill="none"/>
-            <ellipse cx="-35" cy="10" rx="8" ry="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-            <ellipse cx="35" cy="10" rx="8" ry="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+        <svg width="400" height="480" viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background -->
+          <rect width="400" height="480" fill="transparent"/>
+          
+          <!-- Stand base (bottom) -->
+          <rect x="100" y="400" width="200" height="20" fill="#4a5568" stroke="#2d3748" stroke-width="2"/>
+          <text x="200" y="440" text-anchor="middle" font-size="14" fill="#4a5568" font-weight="bold">받침대</text>
+          
+          <!-- Support structure -->
+          <rect x="180" y="350" width="40" height="50" fill="#e2e8f0" stroke="#a0aec0" stroke-width="2"/>
+          
+          <!-- Main Beluga Character (70% of template) -->
+          <g transform="translate(200, 240)">
+            <!-- Body -->
+            <ellipse cx="0" cy="40" rx="90" ry="80" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Head -->
+            <ellipse cx="0" cy="-30" rx="75" ry="60" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Eyes -->
+            <circle cx="-28" cy="-40" r="9" fill="#2d3748"/>
+            <circle cx="28" cy="-40" r="9" fill="#2d3748"/>
+            <circle cx="-26" cy="-42" r="3" fill="#ffffff"/>
+            <circle cx="30" cy="-42" r="3" fill="#ffffff"/>
+            
+            <!-- Mouth -->
+            <path d="M -18 -15 Q 0 -10 18 -15" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
+            
+            <!-- Fins -->
+            <ellipse cx="-75" cy="10" rx="22" ry="15" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            <ellipse cx="75" cy="10" rx="22" ry="15" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            
+            <!-- Belly -->
+            <ellipse cx="0" cy="50" rx="50" ry="40" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
           </g>
-          <!-- Size guide -->
-          <text x="100" y="235" text-anchor="middle" font-size="12" fill="#6b7280">60×80mm</text>
+          
+          <!-- Template guidelines -->
+          <rect x="60" y="80" width="280" height="320" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
+          
+          <!-- Size specifications -->
+          <text x="200" y="465" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">60×80mm</text>
+          <text x="200" y="480" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
         </svg>
       `,
       smarttok: `
-        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <!-- Smart tok circle guide -->
-          <circle cx="100" cy="100" r="45" fill="none" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="5,5"/>
-          <!-- Beluga with smart tok -->
-          <g transform="translate(100, 100)">
-            <ellipse cx="0" cy="10" rx="30" ry="25" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <ellipse cx="0" cy="-10" rx="22" ry="18" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <circle cx="-8" cy="-12" r="2" fill="#374151"/>
-            <circle cx="8" cy="-12" r="2" fill="#374151"/>
-            <path d="M -4 -6 Q 0 -4 4 -6" stroke="#6b7280" stroke-width="2" fill="none"/>
-            <!-- Smart tok attachment -->
-            <circle cx="25" cy="5" r="8" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
-            <circle cx="25" cy="5" r="4" fill="#ffffff"/>
+        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background -->
+          <rect width="400" height="400" fill="transparent"/>
+          
+          <!-- Smart tok center square guide -->
+          <rect x="160" y="160" width="80" height="80" fill="none" stroke="#3b82f6" stroke-width="3" stroke-dasharray="8,4"/>
+          <text x="200" y="150" text-anchor="middle" font-size="14" fill="#3b82f6" font-weight="bold">중앙 정사각형</text>
+          
+          <!-- Main Beluga Character (70% of template) -->
+          <g transform="translate(200, 200)">
+            <!-- Body -->
+            <ellipse cx="0" cy="30" rx="80" ry="70" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Head -->
+            <ellipse cx="0" cy="-25" rx="65" ry="50" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Eyes -->
+            <circle cx="-22" cy="-35" r="7" fill="#2d3748"/>
+            <circle cx="22" cy="-35" r="7" fill="#2d3748"/>
+            <circle cx="-20" cy="-37" r="2" fill="#ffffff"/>
+            <circle cx="24" cy="-37" r="2" fill="#ffffff"/>
+            
+            <!-- Mouth -->
+            <path d="M -12 -15 Q 0 -10 12 -15" stroke="#2d3748" stroke-width="3" fill="none" stroke-linecap="round"/>
+            
+            <!-- Fins -->
+            <ellipse cx="-65" cy="5" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            <ellipse cx="65" cy="5" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            
+            <!-- Belly -->
+            <ellipse cx="0" cy="40" rx="45" ry="35" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
           </g>
-          <!-- Size guide -->
-          <text x="100" y="190" text-anchor="middle" font-size="12" fill="#6b7280">40×40mm</text>
+          
+          <!-- Template guidelines -->
+          <circle cx="200" cy="200" r="120" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
+          
+          <!-- Size specifications -->
+          <text x="200" y="370" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">40×40mm</text>
+          <text x="200" y="385" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
         </svg>
       `,
       photoholder: `
-        <svg width="200" height="250" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
-          <!-- Photo holder frame guide -->
-          <rect x="75" y="50" width="50" height="70" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,5"/>
-          <text x="100" y="45" text-anchor="middle" font-size="10" fill="#8b5cf6">포토프레임</text>
-          <!-- Beluga in photo holder -->
-          <g transform="translate(100, 150)">
-            <ellipse cx="0" cy="20" rx="35" ry="30" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <ellipse cx="0" cy="-10" rx="25" ry="20" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <circle cx="-10" cy="-12" r="3" fill="#374151"/>
-            <circle cx="10" cy="-12" r="3" fill="#374151"/>
-            <path d="M -5 -5 Q 0 -3 5 -5" stroke="#6b7280" stroke-width="2" fill="none"/>
-            <ellipse cx="-30" cy="10" rx="8" ry="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-            <ellipse cx="30" cy="10" rx="8" ry="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+        <svg width="400" height="500" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background -->
+          <rect width="400" height="500" fill="transparent"/>
+          
+          <!-- Photo holder frame guide (top) -->
+          <rect x="150" y="40" width="100" height="140" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="8,4"/>
+          <text x="200" y="30" text-anchor="middle" font-size="14" fill="#8b5cf6" font-weight="bold">프레임 가이드</text>
+          
+          <!-- Main Beluga Character (70% of template) -->
+          <g transform="translate(200, 300)">
+            <!-- Body -->
+            <ellipse cx="0" cy="50" rx="85" ry="75" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Head -->
+            <ellipse cx="0" cy="-20" rx="70" ry="55" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Eyes -->
+            <circle cx="-25" cy="-30" r="8" fill="#2d3748"/>
+            <circle cx="25" cy="-30" r="8" fill="#2d3748"/>
+            <circle cx="-23" cy="-32" r="3" fill="#ffffff"/>
+            <circle cx="27" cy="-32" r="3" fill="#ffffff"/>
+            
+            <!-- Mouth -->
+            <path d="M -15 -5 Q 0 0 15 -5" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
+            
+            <!-- Fins -->
+            <ellipse cx="-70" cy="20" rx="20" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            <ellipse cx="70" cy="20" rx="20" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            
+            <!-- Belly -->
+            <ellipse cx="0" cy="60" rx="45" ry="35" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
           </g>
-          <!-- Size guide -->
-          <text x="100" y="240" text-anchor="middle" font-size="12" fill="#6b7280">55×85mm</text>
+          
+          <!-- Template guidelines -->
+          <rect x="70" y="100" width="260" height="340" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
+          
+          <!-- Size specifications -->
+          <text x="200" y="470" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">55×85mm</text>
+          <text x="200" y="485" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
         </svg>
       `,
       corot: `
-        <svg width="200" height="220" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+        <svg width="400" height="440" viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background -->
+          <rect width="400" height="440" fill="transparent"/>
+          
           <!-- Flat character outline -->
-          <rect x="60" y="60" width="80" height="100" rx="10" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,5"/>
-          <text x="100" y="55" text-anchor="middle" font-size="10" fill="#f59e0b">평면 캐릭터</text>
-          <!-- Beluga flat design -->
-          <g transform="translate(100, 110)">
-            <ellipse cx="0" cy="0" rx="25" ry="20" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <ellipse cx="0" cy="-15" rx="20" ry="15" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <circle cx="-8" cy="-18" r="2" fill="#374151"/>
-            <circle cx="8" cy="-18" r="2" fill="#374151"/>
-            <path d="M -4 -12 Q 0 -10 4 -12" stroke="#6b7280" stroke-width="2" fill="none"/>
-            <circle cx="0" cy="15" r="5" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+          <rect x="80" y="80" width="240" height="280" rx="20" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8,4"/>
+          <text x="200" y="70" text-anchor="middle" font-size="14" fill="#f59e0b" font-weight="bold">평면 캐릭터 영역</text>
+          
+          <!-- Main Beluga Character (70% of template) -->
+          <g transform="translate(200, 220)">
+            <!-- Body (flattened) -->
+            <ellipse cx="0" cy="20" rx="75" ry="65" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Head (flattened) -->
+            <ellipse cx="0" cy="-35" rx="60" ry="45" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Eyes (emphasized for flat design) -->
+            <circle cx="-22" cy="-45" r="9" fill="#2d3748"/>
+            <circle cx="22" cy="-45" r="9" fill="#2d3748"/>
+            <circle cx="-20" cy="-47" r="3" fill="#ffffff"/>
+            <circle cx="24" cy="-47" r="3" fill="#ffffff"/>
+            
+            <!-- Mouth (more prominent) -->
+            <path d="M -18 -20 Q 0 -15 18 -20" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
+            
+            <!-- Fins (flattened) -->
+            <ellipse cx="-55" cy="0" rx="15" ry="10" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            <ellipse cx="55" cy="0" rx="15" ry="10" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            
+            <!-- Belly -->
+            <ellipse cx="0" cy="30" rx="40" ry="30" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
+            
+            <!-- Decorative element -->
+            <circle cx="0" cy="50" r="12" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
           </g>
-          <!-- Size guide -->
-          <text x="100" y="210" text-anchor="middle" font-size="12" fill="#6b7280">40×60mm</text>
+          
+          <!-- Size specifications -->
+          <text x="200" y="410" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">40×60mm</text>
+          <text x="200" y="425" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
         </svg>
       `,
       badge: `
-        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background -->
+          <rect width="400" height="400" fill="transparent"/>
+          
           <!-- Badge circle guide -->
-          <circle cx="100" cy="100" r="40" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,5"/>
-          <!-- Beluga with badge -->
-          <g transform="translate(100, 100)">
-            <ellipse cx="0" cy="10" rx="30" ry="25" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <ellipse cx="0" cy="-10" rx="22" ry="18" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <circle cx="-8" cy="-12" r="2" fill="#374151"/>
-            <circle cx="8" cy="-12" r="2" fill="#374151"/>
-            <path d="M -4 -6 Q 0 -4 4 -6" stroke="#6b7280" stroke-width="2" fill="none"/>
-            <!-- Badge on chest -->
-            <circle cx="0" cy="5" r="8" fill="#ef4444" stroke="#dc2626" stroke-width="1"/>
-            <text x="0" y="8" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold">★</text>
+          <circle cx="200" cy="200" r="120" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="8,4"/>
+          <text x="200" y="90" text-anchor="middle" font-size="14" fill="#ef4444" font-weight="bold">원형 뱃지 영역</text>
+          
+          <!-- Main Beluga Character (70% of template) -->
+          <g transform="translate(200, 200)">
+            <!-- Body -->
+            <ellipse cx="0" cy="25" rx="75" ry="65" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Head -->
+            <ellipse cx="0" cy="-30" rx="60" ry="50" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Eyes -->
+            <circle cx="-20" cy="-40" r="7" fill="#2d3748"/>
+            <circle cx="20" cy="-40" r="7" fill="#2d3748"/>
+            <circle cx="-18" cy="-42" r="2" fill="#ffffff"/>
+            <circle cx="22" cy="-42" r="2" fill="#ffffff"/>
+            
+            <!-- Mouth -->
+            <path d="M -12 -20 Q 0 -15 12 -20" stroke="#2d3748" stroke-width="3" fill="none" stroke-linecap="round"/>
+            
+            <!-- Fins -->
+            <ellipse cx="-60" cy="0" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            <ellipse cx="60" cy="0" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            
+            <!-- Belly -->
+            <ellipse cx="0" cy="35" rx="40" ry="30" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
+            
+            <!-- Badge star -->
+            <circle cx="0" cy="20" r="18" fill="#ef4444" stroke="#dc2626" stroke-width="3"/>
+            <text x="0" y="26" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="bold">★</text>
           </g>
-          <!-- Size guide -->
-          <text x="100" y="190" text-anchor="middle" font-size="12" fill="#6b7280">44×44mm</text>
+          
+          <!-- Size specifications -->
+          <text x="200" y="350" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">44×44mm</text>
+          <text x="200" y="365" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
         </svg>
       `,
       magnet: `
-        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <!-- Magnet guide -->
-          <rect x="140" y="60" width="30" height="80" fill="#f3f4f6" stroke="#d1d5db" stroke-width="2"/>
-          <rect x="145" y="85" width="15" height="10" fill="#dc2626" stroke="#b91c1c" stroke-width="1"/>
-          <text x="100" y="55" text-anchor="middle" font-size="10" fill="#6b7280">냉장고 자석</text>
-          <!-- Beluga with magnet -->
-          <g transform="translate(100, 110)">
-            <ellipse cx="0" cy="10" rx="30" ry="25" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <ellipse cx="0" cy="-10" rx="22" ry="18" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
-            <circle cx="-8" cy="-12" r="2" fill="#374151"/>
-            <circle cx="8" cy="-12" r="2" fill="#374151"/>
-            <path d="M -4 -6 Q 0 -4 4 -6" stroke="#6b7280" stroke-width="2" fill="none"/>
-            <ellipse cx="-25" cy="5" rx="6" ry="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-            <ellipse cx="25" cy="5" rx="6" ry="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background -->
+          <rect width="400" height="400" fill="transparent"/>
+          
+          <!-- Refrigerator background -->
+          <rect x="280" y="80" width="60" height="160" fill="#f7fafc" stroke="#a0aec0" stroke-width="3"/>
+          <rect x="290" y="130" width="30" height="20" fill="#dc2626" stroke="#b91c1c" stroke-width="2"/>
+          <text x="200" y="70" text-anchor="middle" font-size="14" fill="#4a5568" font-weight="bold">냉장고 자석</text>
+          
+          <!-- Main Beluga Character (70% of template) -->
+          <g transform="translate(200, 200)">
+            <!-- Body -->
+            <ellipse cx="0" cy="25" rx="80" ry="70" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Head -->
+            <ellipse cx="0" cy="-30" rx="65" ry="50" fill="#ffffff" stroke="#2d3748" stroke-width="4"/>
+            
+            <!-- Eyes -->
+            <circle cx="-22" cy="-40" r="8" fill="#2d3748"/>
+            <circle cx="22" cy="-40" r="8" fill="#2d3748"/>
+            <circle cx="-20" cy="-42" r="3" fill="#ffffff"/>
+            <circle cx="24" cy="-42" r="3" fill="#ffffff"/>
+            
+            <!-- Mouth -->
+            <path d="M -15 -20 Q 0 -15 15 -20" stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round"/>
+            
+            <!-- Fins -->
+            <ellipse cx="-65" cy="0" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            <ellipse cx="65" cy="0" rx="18" ry="12" fill="#f7fafc" stroke="#2d3748" stroke-width="3"/>
+            
+            <!-- Belly -->
+            <ellipse cx="0" cy="35" rx="45" ry="35" fill="#f7fafc" stroke="#2d3748" stroke-width="2"/>
           </g>
-          <!-- Size guide -->
-          <text x="100" y="190" text-anchor="middle" font-size="12" fill="#6b7280">50×50mm</text>
+          
+          <!-- Template guidelines -->
+          <rect x="80" y="80" width="240" height="240" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="10,5"/>
+          
+          <!-- Size specifications -->
+          <text x="200" y="360" text-anchor="middle" font-size="16" fill="#4a5568" font-weight="bold">50×50mm</text>
+          <text x="200" y="375" text-anchor="middle" font-size="12" fill="#718096">권장 사이즈</text>
         </svg>
       `
     };
