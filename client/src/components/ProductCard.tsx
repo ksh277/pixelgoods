@@ -82,17 +82,12 @@ export function ProductCard({
               alt={product.name} 
               className="w-full h-full object-cover rounded-md"
               loading="lazy"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+                (e.target as HTMLImageElement).parentElement!.style.backgroundColor = '#f0f0f0';
+              }}
             />
-          ) : (
-            <div className="w-full h-full bg-gray-100 rounded-md flex items-center justify-center">
-              <div className="text-center">
-                <ImageIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-xs text-gray-500">
-                  {t({ ko: "이미지 준비중", en: "Image Coming Soon" })}
-                </p>
-              </div>
-            </div>
-          )}
+          ) : null}
         </div>
 
         {/* 정보 영역 */}

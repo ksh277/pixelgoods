@@ -355,9 +355,12 @@ export default function Home() {
                     
                     {/* 푸터 영역 */}
                     <div className="unified-card-footer">
-                      <div className="text-xs text-gray-500">
-                        {review.userName} • {review.date}
-                      </div>
+                      <span className="text-xs text-gray-500">
+                        {t({ ko: "리뷰", en: "Reviews" })}: {review.reviewCount}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {t({ ko: "찜", en: "Likes" })}: {Math.floor(review.reviewCount * 0.3)}
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -455,6 +458,16 @@ export default function Home() {
                         ))}
                       </div>
                     </div>
+                    
+                    {/* 푸터 영역 */}
+                    <div className="unified-card-footer">
+                      <span className="text-xs text-gray-500">
+                        {t({ ko: "리뷰", en: "Reviews" })}: {item.comments}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {t({ ko: "찜", en: "Likes" })}: {item.likes}
+                      </span>
+                    </div>
                   </div>
                 </Link>
               </motion.div>
@@ -550,9 +563,12 @@ export default function Home() {
                     
                     {/* 푸터 영역 */}
                     <div className="unified-card-footer">
-                      <div className="text-xs text-gray-500">
-                        리뷰 {item.reviewCount}개
-                      </div>
+                      <span className="text-xs text-gray-500">
+                        {t({ ko: "리뷰", en: "Reviews" })}: {item.reviewCount}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {t({ ko: "찜", en: "Likes" })}: {Math.floor(item.reviewCount * 0.6)}
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -615,6 +631,16 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
+                  </div>
+                  
+                  {/* 푸터 영역 */}
+                  <div className="unified-card-footer">
+                    <span className="text-xs text-gray-500">
+                      {t({ ko: "리뷰", en: "Reviews" })}: {post.comments}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {t({ ko: "찜", en: "Likes" })}: {post.likes}
+                    </span>
                   </div>
                 </div>
               </motion.div>
