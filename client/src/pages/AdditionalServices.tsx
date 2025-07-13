@@ -36,8 +36,8 @@ interface AdditionalService {
 const mockServices: AdditionalService[] = [
   {
     id: "1",
-    name: "Basic Design Service",
-    nameKo: "기본 도안작업",
+    name: "Design Work [+3,000원]",
+    nameKo: "도안작업 [+3,000원]",
     price: 3000,
     description: "전문 디자이너가 고객님의 요청에 따라 기본적인 도안을 제작해드립니다.",
     category: "design",
@@ -45,26 +45,25 @@ const mockServices: AdditionalService[] = [
     isRecommended: false,
     features: ["기본 도안 제작", "2회 수정", "AI 파일 제공", "24시간 내 완성"],
     deliveryTime: "1-2일",
-    thumbnail: "/api/placeholder/300/200"
+    thumbnail: "#F5E6D3"
   },
   {
     id: "2",
-    name: "Premium Design Service",
-    nameKo: "프리미엄 도안작업",
+    name: "Design Work [+5,000원]",
+    nameKo: "도안작업 [+5,000원]",
     price: 5000,
-    originalPrice: 7000,
     description: "고급 디자인 도구와 전문 디자이너의 정교한 작업으로 완성도 높은 도안을 제작합니다.",
     category: "design",
     isPopular: false,
     isRecommended: true,
     features: ["고급 도안 제작", "무제한 수정", "AI/PSD 파일 제공", "12시간 내 완성", "디자인 컨셉 제안"],
     deliveryTime: "12시간",
-    thumbnail: "/api/placeholder/300/200"
+    thumbnail: "#FFF2CC"
   },
   {
     id: "3",
-    name: "Deluxe Design Service",
-    nameKo: "디럭스 도안작업",
+    name: "Design Work [+7,000원]",
+    nameKo: "도안작업 [+7,000원]",
     price: 7000,
     description: "최고급 디자인 서비스로 브랜드 수준의 완성도를 제공합니다.",
     category: "design",
@@ -72,46 +71,72 @@ const mockServices: AdditionalService[] = [
     isRecommended: false,
     features: ["최고급 도안 제작", "무제한 수정", "전 파일 포맷 제공", "6시간 내 완성", "브랜드 가이드 제공"],
     deliveryTime: "6시간",
-    thumbnail: "/api/placeholder/300/200"
+    thumbnail: "#FFD4B3"
   },
   {
     id: "4",
-    name: "Quick Service",
-    nameKo: "퀵비 서비스",
+    name: "Design Work [+10,000원]",
+    nameKo: "도안작업 [+10,000원]",
     price: 10000,
+    description: "프리미엄 디자인 서비스로 완성도 높은 도안을 제작합니다.",
+    category: "design",
+    isPopular: true,
+    isRecommended: false,
+    features: ["프리미엄 도안 제작", "무제한 수정", "전 파일 포맷 제공", "4시간 내 완성", "브랜드 가이드 제공"],
+    deliveryTime: "4시간",
+    thumbnail: "#D2B48C"
+  },
+  {
+    id: "5",
+    name: "Design Work [+15,000원]",
+    nameKo: "도안작업 [+15,000원]",
+    price: 15000,
+    description: "최고급 디자인 서비스로 전문가 수준의 도안을 제작합니다.",
+    category: "design",
+    isPopular: false,
+    isRecommended: true,
+    features: ["최고급 도안 제작", "무제한 수정", "전 파일 포맷 제공", "2시간 내 완성", "브랜드 가이드 제공"],
+    deliveryTime: "2시간",
+    thumbnail: "#8B4513"
+  },
+  {
+    id: "6",
+    name: "Design Work [+20,000원]",
+    nameKo: "도안작업 [+20,000원]",
+    price: 20000,
+    description: "최고급 디자인 서비스로 최상의 완성도를 제공합니다.",
+    category: "design",
+    isPopular: false,
+    isRecommended: false,
+    features: ["최고급 도안 제작", "무제한 수정", "전 파일 포맷 제공", "1시간 내 완성", "브랜드 가이드 제공"],
+    deliveryTime: "1시간",
+    thumbnail: "#DEB887"
+  },
+  {
+    id: "7",
+    name: "Design Work [+30,000원]",
+    nameKo: "도안작업 [+30,000원]",
+    price: 30000,
+    description: "프리미엄 디자인 서비스로 최상급 완성도를 제공합니다.",
+    category: "design",
+    isPopular: false,
+    isRecommended: false,
+    features: ["프리미엄 도안 제작", "무제한 수정", "전 파일 포맷 제공", "30분 내 완성", "브랜드 가이드 제공"],
+    deliveryTime: "30분",
+    thumbnail: "#8B7355"
+  },
+  {
+    id: "8",
+    name: "Quick Payment Additional Service",
+    nameKo: "퀵비 추가결제",
+    price: 3000,
     description: "긴급한 작업을 위한 초고속 서비스입니다.",
     category: "speed",
     isPopular: true,
     isRecommended: false,
     features: ["초고속 처리", "우선순위 작업", "실시간 진행상황 알림", "2시간 내 완성"],
     deliveryTime: "2시간",
-    thumbnail: "/api/placeholder/300/200"
-  },
-  {
-    id: "5",
-    name: "Express Service",
-    nameKo: "급한작업 서비스",
-    price: 15000,
-    description: "당일 완성이 필요한 초급한 작업을 위한 서비스입니다.",
-    category: "speed",
-    isPopular: false,
-    isRecommended: true,
-    features: ["당일 완성", "전담 디자이너 배정", "실시간 소통", "1시간 내 완성"],
-    deliveryTime: "1시간",
-    thumbnail: "/api/placeholder/300/200"
-  },
-  {
-    id: "6",
-    name: "Custom Package",
-    nameKo: "맞춤 패키지",
-    price: 20000,
-    description: "고객 맞춤형 특별 서비스 패키지입니다.",
-    category: "special",
-    isPopular: false,
-    isRecommended: false,
-    features: ["맞춤형 서비스", "전담 매니저", "VIP 고객 지원", "맞춤 일정 조정"],
-    deliveryTime: "협의",
-    thumbnail: "/api/placeholder/300/200"
+    thumbnail: "#87CEEB"
   }
 ];
 
@@ -181,86 +206,69 @@ export default function AdditionalServices() {
           </TabsList>
         </Tabs>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Services Grid - Korean E-commerce Card Style */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {filteredServices.map((service) => (
-            <Card key={service.id} className="hover:shadow-lg transition-shadow group">
-              <CardHeader className="pb-4">
-                <div className="relative">
-                  <img 
-                    src={service.thumbnail} 
-                    alt={service.nameKo}
-                    className="w-full h-48 object-cover rounded-lg"
-                  />
-                  <div className="absolute top-3 left-3 flex gap-2">
-                    {service.isPopular && (
-                      <Badge className="bg-red-500 text-white">
-                        HOT
-                      </Badge>
-                    )}
-                    {service.isRecommended && (
-                      <Badge className="bg-blue-500 text-white">
-                        추천
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="absolute top-3 right-3">
-                    <Badge className={getCategoryColor(service.category)}>
-                      {getCategoryIcon(service.category)}
-                      <span className="ml-1">
-                        {service.category === "design" && "도안작업"}
-                        {service.category === "speed" && "급한작업"}
-                        {service.category === "special" && "특별서비스"}
-                      </span>
-                    </Badge>
+            <Card key={service.id} className="hover:shadow-lg transition-shadow group bg-white border border-gray-200">
+              {/* Status Badges - Top Left */}
+              <div className="absolute top-3 left-3 flex gap-2 z-10">
+                {service.isPopular && (
+                  <Badge className="bg-red-500 text-white text-xs font-bold px-2 py-1">
+                    HOT
+                  </Badge>
+                )}
+                {service.isRecommended && (
+                  <Badge className="bg-blue-500 text-white text-xs font-bold px-2 py-1">
+                    추천
+                  </Badge>
+                )}
+              </div>
+              
+              {/* Heart Icon - Top Right */}
+              <div className="absolute top-3 right-3 z-10">
+                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-white/80 hover:bg-white">
+                  <Heart className="w-4 h-4 text-gray-600" />
+                </Button>
+              </div>
+
+              {/* Circular Thumbnail with Text */}
+              <div className="p-4 pb-2">
+                <div className="relative mx-auto mb-3" style={{ width: '120px', height: '120px' }}>
+                  <div 
+                    className="w-full h-full rounded-full flex items-center justify-center text-center"
+                    style={{ backgroundColor: service.thumbnail }}
+                  >
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-gray-800 mb-1">
+                        {service.category === "design" ? "도안작업" : "퀵비"}
+                      </div>
+                      <div className="text-lg font-black text-gray-900">
+                        {service.price.toLocaleString()}원
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </CardHeader>
+              </div>
               
-              <CardContent>
-                <div className="mb-4">
-                  <h3 className="font-bold text-lg text-gray-900 mb-2">{service.nameKo}</h3>
-                  <p className="text-sm text-gray-600 mb-3">{service.description}</p>
-                  
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center space-x-2">
-                      {service.originalPrice && (
-                        <span className="text-sm text-gray-500 line-through">
-                          ₩{service.originalPrice.toLocaleString()}
-                        </span>
-                      )}
-                      <span className="text-xl font-bold text-gray-900">
-                        ₩{service.price.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {service.deliveryTime}
-                    </div>
+              <CardContent className="p-4 pt-0">
+                <div className="text-center mb-3">
+                  <h3 className="font-bold text-sm text-gray-900 mb-1">{service.nameKo}</h3>
+                  <div className="text-sm font-bold text-gray-900 mb-1">
+                    {service.price.toLocaleString()} won
                   </div>
-                  
-                  <div className="mb-4">
-                    <h4 className="font-medium text-gray-900 mb-2">포함 서비스</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      {service.features.map((feature, index) => (
-                        <li key={index} className="flex items-center">
-                          <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></div>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="text-xs text-gray-500 flex items-center justify-center">
+                    <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" />
+                    <span>리뷰 {Math.floor(Math.random() * 200 + 50)}개</span>
                   </div>
                 </div>
                 
-                <div className="flex space-x-2">
-                  <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    장바구니
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <Heart className="w-4 h-4" />
-                  </Button>
-                </div>
+                <Button 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                  onClick={() => window.location.href = `/product/${service.id}`}
+                >
+                  <ShoppingCart className="w-4 h-4 mr-1" />
+                  장바구니
+                </Button>
               </CardContent>
             </Card>
           ))}
