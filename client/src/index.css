@@ -332,6 +332,47 @@
     }
   }
   
+  /* Admin Dashboard Mobile Optimizations */
+  .admin-product-card {
+    @apply flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors;
+    min-height: 100px;
+  }
+  
+  .admin-product-info {
+    @apply flex items-center space-x-4 flex-1 min-w-0;
+  }
+  
+  .admin-product-actions {
+    @apply flex items-center space-x-2 flex-shrink-0;
+  }
+  
+  .admin-product-image {
+    @apply w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0;
+  }
+  
+  .admin-product-details {
+    @apply flex-1 min-w-0;
+  }
+  
+  @media (max-width: 640px) {
+    .admin-product-card {
+      @apply flex-col items-start space-y-3;
+      padding: 16px;
+    }
+    
+    .admin-product-info {
+      @apply w-full;
+    }
+    
+    .admin-product-actions {
+      @apply w-full justify-end;
+    }
+    
+    .admin-product-details h3 {
+      @apply text-base;
+    }
+  }
+  
   .unified-mobile-content {
     @apply flex flex-col flex-grow;
   }

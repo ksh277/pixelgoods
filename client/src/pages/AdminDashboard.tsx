@@ -4,7 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useLocation } from "wouter";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import type { Product, Category, InsertProduct } from "@shared/schema";
 import { 
   Package, 
   Users, 
@@ -17,12 +27,161 @@ import {
   ArrowUpDown,
   Settings,
   FileText,
-  DollarSign
+  DollarSign,
+  Upload
 } from "lucide-react";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, logout } = useAuth();
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Form states
+  const [productFormData, setProductFormData] = useState({
+    name: "",
+    nameKo: "",
+    description: "",
+    descriptionKo: "",
+    basePrice: "",
+    categoryId: "",
+    imageUrl: "",
+    isFeatured: false
+  });
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
+
+  // Data fetching
+  const { data: products, isLoading: productsLoading } = useQuery({
+    queryKey: ["/api/products"],
+  });
+
+  const { data: categories } = useQuery({
+    queryKey: ["/api/categories"],
+  });
+
+  // Mutations
+  const createProductMutation = useMutation({
+    mutationFn: async (productData: InsertProduct) => {
+      await apiRequest("/api/products", {
+        method: "POST",
+        body: JSON.stringify(productData),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      toast({
+        title: "상품 추가 완료",
+        description: "새로운 상품이 성공적으로 추가되었습니다.",
+      });
+      setIsProductDialogOpen(false);
+      resetProductForm();
+    },
+    onError: (error) => {
+      toast({
+        title: "상품 추가 실패",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateProductMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Partial<InsertProduct> }) => {
+      await apiRequest(`/api/products/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      toast({
+        title: "상품 수정 완료",
+        description: "상품 정보가 성공적으로 수정되었습니다.",
+      });
+      setIsProductDialogOpen(false);
+      setEditingProduct(null);
+      resetProductForm();
+    },
+    onError: (error) => {
+      toast({
+        title: "상품 수정 실패",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteProductMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest(`/api/products/${id}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      toast({
+        title: "상품 삭제 완료",
+        description: "상품이 성공적으로 삭제되었습니다.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "상품 삭제 실패",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Form handlers
+  const resetProductForm = () => {
+    setProductFormData({
+      name: "",
+      nameKo: "",
+      description: "",
+      descriptionKo: "",
+      basePrice: "",
+      categoryId: "",
+      imageUrl: "",
+      isFeatured: false
+    });
+  };
+
+  const handleProductSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const productData = {
+      ...productFormData,
+      basePrice: parseFloat(productFormData.basePrice),
+      categoryId: parseInt(productFormData.categoryId),
+    };
+
+    if (editingProduct) {
+      updateProductMutation.mutate({ id: editingProduct.id, data: productData });
+    } else {
+      createProductMutation.mutate(productData);
+    }
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product);
+    setProductFormData({
+      name: product.name,
+      nameKo: product.nameKo || "",
+      description: product.description || "",
+      descriptionKo: product.descriptionKo || "",
+      basePrice: product.basePrice.toString(),
+      categoryId: product.categoryId.toString(),
+      imageUrl: product.imageUrl,
+      isFeatured: product.isFeatured || false
+    });
+    setIsProductDialogOpen(true);
+  };
+
+  const handleDeleteProduct = (id: number) => {
+    deleteProductMutation.mutate(id);
+  };
 
   useEffect(() => {
     if (!isAuthenticated || !user?.isAdmin) {
@@ -123,10 +282,130 @@ export default function AdminDashboard() {
           <TabsContent value="products" className="space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">상품 관리</h2>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                상품 추가
-              </Button>
+              <Dialog open={isProductDialogOpen} onOpenChange={setIsProductDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={() => { setEditingProduct(null); resetProductForm(); }}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    상품 추가
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px]">
+                  <DialogHeader>
+                    <DialogTitle>
+                      {editingProduct ? "상품 수정" : "상품 추가"}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleProductSubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="name">상품명 (영어)</Label>
+                        <Input
+                          id="name"
+                          value={productFormData.name}
+                          onChange={(e) => setProductFormData(prev => ({ ...prev, name: e.target.value }))}
+                          placeholder="Acrylic Keychain"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="nameKo">상품명 (한국어)</Label>
+                        <Input
+                          id="nameKo"
+                          value={productFormData.nameKo}
+                          onChange={(e) => setProductFormData(prev => ({ ...prev, nameKo: e.target.value }))}
+                          placeholder="아크릴 키링"
+                          required
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="description">설명 (영어)</Label>
+                      <Textarea
+                        id="description"
+                        value={productFormData.description}
+                        onChange={(e) => setProductFormData(prev => ({ ...prev, description: e.target.value }))}
+                        placeholder="Product description..."
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="descriptionKo">설명 (한국어)</Label>
+                      <Textarea
+                        id="descriptionKo"
+                        value={productFormData.descriptionKo}
+                        onChange={(e) => setProductFormData(prev => ({ ...prev, descriptionKo: e.target.value }))}
+                        placeholder="상품 설명..."
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="basePrice">가격 (₩)</Label>
+                        <Input
+                          id="basePrice"
+                          type="number"
+                          value={productFormData.basePrice}
+                          onChange={(e) => setProductFormData(prev => ({ ...prev, basePrice: e.target.value }))}
+                          placeholder="8900"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="categoryId">카테고리</Label>
+                        <Select
+                          value={productFormData.categoryId}
+                          onValueChange={(value) => setProductFormData(prev => ({ ...prev, categoryId: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="카테고리 선택" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {categories?.map((category: Category) => (
+                              <SelectItem key={category.id} value={category.id.toString()}>
+                                {category.nameKo || category.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="imageUrl">이미지 URL</Label>
+                      <Input
+                        id="imageUrl"
+                        value={productFormData.imageUrl}
+                        onChange={(e) => setProductFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+                        placeholder="/api/placeholder/300/300"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="isFeatured"
+                        checked={productFormData.isFeatured}
+                        onChange={(e) => setProductFormData(prev => ({ ...prev, isFeatured: e.target.checked }))}
+                        className="rounded border-gray-300"
+                      />
+                      <Label htmlFor="isFeatured">인기 상품으로 설정</Label>
+                    </div>
+                    
+                    <div className="flex justify-end space-x-2 pt-4">
+                      <Button type="button" variant="outline" onClick={() => setIsProductDialogOpen(false)}>
+                        취소
+                      </Button>
+                      <Button type="submit" disabled={createProductMutation.isPending || updateProductMutation.isPending}>
+                        {createProductMutation.isPending || updateProductMutation.isPending ? "저장 중..." : "저장"}
+                      </Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
             
             <Card>
@@ -134,54 +413,83 @@ export default function AdminDashboard() {
                 <CardTitle>상품 목록</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <Package className="w-8 h-8 text-gray-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium">아크릴 키링</h3>
-                        <p className="text-sm text-gray-600">₩8,900</p>
-                        <p className="text-sm text-gray-500">리뷰 234개</p>
-                      </div>
+                <div className="space-y-3 max-h-[600px] overflow-y-auto">
+                  {productsLoading ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">상품을 불러오는 중...</p>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Button variant="outline" size="sm">
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <ArrowUpDown className="w-4 h-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                  ) : products?.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">등록된 상품이 없습니다.</p>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <Package className="w-8 h-8 text-gray-400" />
+                  ) : (
+                    products?.map((product: Product) => (
+                      <div key={product.id} className="admin-product-card">
+                        <div className="admin-product-info">
+                          <div className="admin-product-image">
+                            <img 
+                              src={product.imageUrl} 
+                              alt={product.nameKo || product.name}
+                              className="w-full h-full object-cover rounded-lg"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+                              }}
+                            />
+                          </div>
+                          <div className="admin-product-details">
+                            <h3 className="font-medium text-gray-900 truncate">
+                              {product.nameKo || product.name}
+                            </h3>
+                            <p className="text-sm text-gray-600 font-medium">
+                              ₩{parseInt(product.basePrice).toLocaleString()}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              카테고리: {categories?.find(c => c.id === product.categoryId)?.nameKo || '미분류'}
+                            </p>
+                            {product.isFeatured && (
+                              <Badge variant="secondary" className="mt-1">인기 상품</Badge>
+                            )}
+                          </div>
+                        </div>
+                        <div className="admin-product-actions">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEditProduct(product)}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button variant="outline" size="sm" disabled>
+                            <ArrowUpDown className="w-4 h-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>상품을 삭제하시겠습니까?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  "{product.nameKo || product.name}" 상품을 삭제하면 복구할 수 없습니다. 정말로 삭제하시겠습니까?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>취소</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDeleteProduct(product.id)}
+                                  className="bg-red-600 hover:bg-red-700"
+                                >
+                                  삭제
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-medium">프리미엄 아크릴 키링</h3>
-                        <p className="text-sm text-gray-600">₩12,900</p>
-                        <p className="text-sm text-gray-500">리뷰 156개</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Button variant="outline" size="sm">
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <ArrowUpDown className="w-4 h-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
