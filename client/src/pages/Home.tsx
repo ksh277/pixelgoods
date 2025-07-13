@@ -219,7 +219,7 @@ export default function Home() {
       <CategoryNav />
       <Hero />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-4">
         {/* Popular Products Section */}
         <motion.section
           variants={containerVariants}
@@ -228,7 +228,7 @@ export default function Home() {
           viewport={{ once: true, margin: "-50px" }}
         >
           {/* Mobile-Optimized Section Header */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🔥</span>
               <div>
@@ -278,7 +278,7 @@ export default function Home() {
           viewport={{ once: true, margin: "-100px" }}
         >
           {/* Mobile-Optimized Section Header */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🤗</span>
               <div>
@@ -368,7 +368,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🔥</span>
               <div>
@@ -453,7 +453,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">✨</span>
               <div>
@@ -541,7 +541,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">📸</span>
               <div>
