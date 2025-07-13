@@ -566,60 +566,7 @@ export default function Resources() {
           </div>
         </div>
 
-        {/* Resource Categories */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {resourceCategories.slice(1).map((category) => (
-            <Card key={category.id} className="bg-white shadow-sm hover:shadow-md transition-shadow">
-              <CardHeader className="pb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
-                    {category.icon}
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">
-                      {t(category.title)}
-                    </CardTitle>
-                    <p className="text-sm text-gray-600 mt-1">
-                      {t(category.description)}
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {category.items.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                      <div className="flex items-center space-x-3">
-                        <Download className="w-4 h-4 text-gray-500" />
-                        <div>
-                          <p className="font-medium text-gray-900 text-sm">
-                            {item.name}
-                          </p>
-                          <div className="flex items-center space-x-2 mt-1">
-                            <Badge variant="secondary" className="text-xs">
-                              {item.type}
-                            </Badge>
-                            <span className="text-xs text-gray-500">
-                              {item.size}
-                            </span>
-                            {'downloads' in item && (
-                              <span className="text-xs text-gray-500">
-                                • {item.downloads.toLocaleString()} downloads
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <Button size="sm" variant="outline">
-                        {t({ ko: "다운로드", en: "Download", ja: "ダウンロード", zh: "下载" })}
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+
 
         {/* Notice */}
         <Card className="bg-blue-50 border-blue-200">
