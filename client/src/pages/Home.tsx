@@ -251,15 +251,15 @@ export default function Home() {
             <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
           ) : (
             <motion.div 
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4"
+              className="unified-mobile-grid md:grid-cols-3 lg:grid-cols-4 md:gap-3 lg:gap-4"
               variants={containerVariants}
               style={{ opacity: 1 }}
             >
               {products?.slice(0, 4).map((product: Product) => (
                 <motion.div key={product.id} variants={itemVariants} style={{ opacity: 1 }}>
                   <Link href={`/product/${product.id}`} className="block">
-                    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer" style={{ opacity: 1, visibility: 'visible' }}>
-                      <div className="relative aspect-square">
+                    <div className="unified-mobile-card" style={{ opacity: 1, visibility: 'visible' }}>
+                      <div className="relative">
                         {/* HOT Badge - Top Left */}
                         <div className="absolute top-2 left-2 z-10">
                           <Badge className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
@@ -271,7 +271,7 @@ export default function Home() {
                         <img
                           src="/api/placeholder/300/300"
                           alt={product.nameKo || product.name}
-                          className="w-full h-full object-cover"
+                          className="unified-mobile-image"
                           loading="lazy"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
@@ -294,7 +294,7 @@ export default function Home() {
                       </div>
                       
                       {/* Product Info */}
-                      <div className="p-3">
+                      <div className="unified-mobile-content">
                         <div className="space-y-1">
                           <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
                             {product.nameKo || product.name}
@@ -343,14 +343,14 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4"
+            className="unified-mobile-grid md:grid-cols-3 lg:grid-cols-4 md:gap-3 lg:gap-4"
             variants={containerVariants}
           >
             {creatorReviews.map((review) => (
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/product/${review.id}`} className="block">
-                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="relative aspect-square">
+                  <div className="unified-mobile-card">
+                    <div className="relative">
                       {/* HOT Badge */}
                       <div className="absolute top-2 left-2 z-10">
                         <Badge className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
@@ -361,7 +361,7 @@ export default function Home() {
                       <img
                         src={review.productImage}
                         alt={review.productName}
-                        className="w-full h-full object-cover"
+                        className="unified-mobile-image"
                         loading="lazy"
                       />
                       
@@ -370,7 +370,7 @@ export default function Home() {
                       </div>
                     </div>
                     
-                    <div className="p-3">
+                    <div className="unified-mobile-content">
                       <div className="space-y-1">
                         <div className="flex items-center mb-1">
                           {[...Array(5)].map((_, i) => (
@@ -425,14 +425,14 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+            className="unified-mobile-grid md:grid-cols-3 lg:grid-cols-4 md:gap-3 lg:gap-4"
             variants={containerVariants}
           >
             {communityShowcase.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
                 <Link href={`/community/${item.id}`} className="block">
-                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="relative aspect-square">
+                  <div className="unified-mobile-card">
+                    <div className="relative">
                       <div className="absolute top-2 left-2 z-10">
                         <Badge className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
                           인기
@@ -442,7 +442,7 @@ export default function Home() {
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover"
+                        className="unified-mobile-image"
                         loading="lazy"
                       />
                       
@@ -460,7 +460,7 @@ export default function Home() {
                       </div>
                     </div>
                     
-                    <div className="p-3">
+                    <div className="unified-mobile-content">
                       <div className="space-y-1">
                         <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
                           {item.title}
@@ -511,14 +511,14 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+            className="unified-mobile-grid md:grid-cols-3 lg:grid-cols-4 md:gap-3 lg:gap-4"
             variants={containerVariants}
           >
             {materialRecommendations.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
                 <Link href={`/product/${item.id}`} className="block">
-                  <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
-                    <div className="relative aspect-square">
+                  <div className="unified-mobile-card">
+                    <div className="relative">
                       <Badge className={`absolute top-2 left-2 z-10 ${
                         item.badge === 'HIT' ? 'bg-red-500' : 
                         item.badge === 'NEW' ? 'bg-green-500' : 'bg-orange-500'
@@ -529,7 +529,7 @@ export default function Home() {
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover"
+                        className="unified-mobile-image"
                         loading="lazy"
                       />
                       
@@ -550,7 +550,7 @@ export default function Home() {
                       )}
                     </div>
                     
-                    <div className="p-3">
+                    <div className="unified-mobile-content">
                       <div className="space-y-1">
                         <Badge variant="outline" className="text-xs mb-1">
                           {item.material}
@@ -605,28 +605,30 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4"
+            className="unified-mobile-grid md:grid-cols-4 md:gap-3 lg:gap-4"
             variants={containerVariants}
           >
             {instagramFeed.map((post) => (
               <motion.div key={post.id} variants={itemVariants}>
-                <div className="relative aspect-square group cursor-pointer">
-                  <img
-                    src={post.image}
-                    alt={`Instagram post ${post.id}`}
-                    className="w-full h-full object-cover rounded-lg"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors rounded-lg" />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="flex items-center space-x-4 text-white">
-                      <div className="flex items-center space-x-1">
-                        <Heart className="h-4 w-4" />
-                        <span className="text-sm font-medium">{post.likes}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <MessageCircle className="h-4 w-4" />
-                        <span className="text-sm font-medium">{post.comments}</span>
+                <div className="unified-mobile-card">
+                  <div className="relative group cursor-pointer">
+                    <img
+                      src={post.image}
+                      alt={`Instagram post ${post.id}`}
+                      className="unified-mobile-image"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors rounded-lg" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center space-x-4 text-white">
+                        <div className="flex items-center space-x-1">
+                          <Heart className="h-4 w-4" />
+                          <span className="text-sm font-medium">{post.likes}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <MessageCircle className="h-4 w-4" />
+                          <span className="text-sm font-medium">{post.comments}</span>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -36,7 +36,7 @@ export function ProductGrid({
 }: ProductGridProps) {
   return (
     <motion.div 
-      className={`grid grid-cols-2 gap-4 px-4 ${className}`}
+      className={`unified-mobile-grid ${className}`}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"

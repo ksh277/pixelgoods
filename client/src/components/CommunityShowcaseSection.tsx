@@ -299,14 +299,14 @@ export function CommunityShowcaseSection() {
 
         {/* Posts Grid */}
         <motion.div variants={itemVariants} className="bg-white rounded-lg shadow-sm p-6">
-          <div className="grid grid-cols-2 gap-4 px-4">
+          <div className="unified-mobile-grid">
             {sortedPosts.map((post) => (
-              <div key={post.id} className="rounded-xl bg-white shadow-md p-2 h-[270px] flex flex-col justify-between cursor-pointer hover:shadow-lg transition-shadow">
+              <div key={post.id} className="unified-mobile-card">
                 <div className="relative">
                   <img
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-[140px] object-cover rounded-md"
+                    className="unified-mobile-image"
                   />
                   
                   {/* Overlay badges */}
@@ -334,7 +334,7 @@ export function CommunityShowcaseSection() {
                   </button>
                 </div>
 
-                <div className="flex flex-col flex-grow">
+                <div className="unified-mobile-content">
                   <h3 className="text-sm font-bold mt-2 truncate">
                     {post.title}
                   </h3>

@@ -156,75 +156,73 @@ export function UserReviewsSection() {
           </div>
 
           {/* Review Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="unified-mobile-grid md:grid-cols-2 lg:grid-cols-4 md:gap-6">
             {displayedReviews.map((review, index) => (
               <motion.div key={review.id} variants={itemVariants}>
-                <Card className="h-full hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                  <Link href={`/reviews/${review.id}`}>
-                    <CardContent className="p-0">
-                      {/* Product Image */}
-                      <div className="relative aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
-                        <img
-                          src={review.productImage}
-                          alt={language === 'ko' ? review.productNameKo : review.productName}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
-                          }}
-                        />
-                        
-                        {/* Badges */}
-                        <div className="absolute top-2 left-2 flex gap-2">
-                          {review.isHot && (
-                            <Badge className="bg-red-500 text-white text-xs font-bold">
-                              HOT
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <div className="absolute top-2 right-2">
-                          <Badge className="bg-black/70 text-white text-xs">
-                            {review.totalReviews} {t({ ko: "리뷰", en: "reviews", ja: "レビュー", zh: "评价" })}
+                <Link href={`/reviews/${review.id}`}>
+                  <div className="unified-mobile-card">
+                    {/* Product Image */}
+                    <div className="relative">
+                      <img
+                        src={review.productImage}
+                        alt={language === 'ko' ? review.productNameKo : review.productName}
+                        className="unified-mobile-image"
+                        loading="lazy"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+                        }}
+                      />
+                      
+                      {/* Badges */}
+                      <div className="absolute top-2 left-2 flex gap-2">
+                        {review.isHot && (
+                          <Badge className="bg-red-500 text-white text-xs font-bold">
+                            HOT
                           </Badge>
-                        </div>
+                        )}
+                      </div>
+                      
+                      <div className="absolute top-2 right-2">
+                        <Badge className="bg-black/70 text-white text-xs">
+                          {review.totalReviews} {t({ ko: "리뷰", en: "reviews", ja: "レビュー", zh: "评价" })}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* Review Content */}
+                    <div className="unified-mobile-content">
+                      {/* Product Name */}
+                      <h3 className="font-bold text-sm text-gray-900 truncate">
+                        {language === 'ko' ? review.productNameKo : review.productName}
+                      </h3>
+
+                      {/* Rating */}
+                      <div className="flex items-center gap-1 mt-1">
+                        {renderStars(review.rating)}
+                        <span className="text-sm text-gray-600 ml-1">
+                          {review.rating}.0
+                        </span>
                       </div>
 
-                      {/* Review Content */}
-                      <div className="p-4 space-y-3">
-                        {/* Product Name */}
-                        <h3 className="font-bold text-sm text-gray-900">
-                          {language === 'ko' ? review.productNameKo : review.productName}
-                        </h3>
+                      {/* Review Text */}
+                      <p className="text-sm text-gray-700 leading-relaxed mt-1 line-clamp-2">
+                        {truncateText(review.reviewText, 45)}
+                      </p>
 
-                        {/* Rating */}
+                      {/* Reviewer Info */}
+                      <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
                         <div className="flex items-center gap-1">
-                          {renderStars(review.rating)}
-                          <span className="text-sm text-gray-600 ml-1">
-                            {review.rating}.0
-                          </span>
+                          <User className="h-3 w-3" />
+                          <span>{review.reviewerNickname}</span>
                         </div>
-
-                        {/* Review Text */}
-                        <p className="text-sm text-gray-700 leading-relaxed">
-                          {truncateText(review.reviewText)}
-                        </p>
-
-                        {/* Reviewer Info */}
-                        <div className="flex items-center justify-between text-xs text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <User className="h-3 w-3" />
-                            <span>{review.reviewerNickname}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            <span>{review.reviewDate}</span>
-                          </div>
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          <span>{review.reviewDate}</span>
                         </div>
                       </div>
-                    </CardContent>
-                  </Link>
-                </Card>
+                    </div>
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </div>

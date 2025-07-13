@@ -50,13 +50,13 @@ export function ProductCard({
         transition={{ duration: 0.5 }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        className="rounded-xl bg-white shadow-md p-2 h-[270px] flex flex-col justify-between cursor-pointer hover:shadow-lg transition-shadow"
+        className="unified-mobile-card"
       >
         <div className="relative">
           <motion.img
             src={product.imageUrl}
             alt={language === 'ko' ? product.nameKo : product.name}
-            className="w-full h-[140px] object-cover rounded-md"
+            className="unified-mobile-image"
             loading="lazy"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
@@ -84,7 +84,7 @@ export function ProductCard({
           )}
         </div>
 
-        <div className="flex flex-col flex-grow">
+        <div className="unified-mobile-content">
           {/* Product title - single line with ellipsis */}
           <h3 className="text-sm font-bold mt-2 truncate text-korean">
             {language === 'ko' ? product.nameKo : product.name}

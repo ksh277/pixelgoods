@@ -478,4 +478,37 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Chrome, Safari, Opera */
   }
+
+  /* Mobile unified card system - Fixed 2-column layout */
+  .unified-mobile-card {
+    @apply rounded-xl bg-white shadow-md p-2 cursor-pointer hover:shadow-lg transition-shadow;
+    height: 270px;
+    min-height: 270px;
+    max-height: 270px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .unified-mobile-image {
+    @apply w-full object-cover rounded-md;
+    height: 140px;
+    min-height: 140px;
+    max-height: 140px;
+  }
+
+  .unified-mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 16px;
+  }
+
+  .unified-mobile-content {
+    @apply flex flex-col flex-grow;
+    height: 120px;
+    min-height: 120px;
+    max-height: 120px;
+    overflow: hidden;
+  }
 }
