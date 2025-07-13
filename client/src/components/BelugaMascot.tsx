@@ -132,7 +132,7 @@ export function BelugaMascot({ variant, className = "" }: BelugaMascotProps) {
       <div className={`${config.position} ${className}`}>
         <div className="relative">
           <Button
-            className="w-8 h-8 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 border-2 border-blue-300 shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 p-0 overflow-hidden relative"
+            className="w-24 h-24 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 hover:from-blue-200 hover:to-blue-300 border-2 border-blue-300 shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 p-0 overflow-hidden relative"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             aria-label={t({ ko: "문의하기 버튼", en: "Inquiry button", ja: "お問い合わせボタン", zh: "咨询按钮" })}
