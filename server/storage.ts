@@ -7,7 +7,7 @@ import {
   type CommunityComment, type InsertCommunityComment, type BelugaTemplate, type InsertBelugaTemplate
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, count, and } from "drizzle-orm";
+import { eq, count, and, sql } from "drizzle-orm";
 
 export interface IStorage {
   // User methods
@@ -200,6 +200,8 @@ export class MemStorage implements IStorage {
       id,
       isAdmin: false,
       createdAt: new Date(),
+      firstName: insertUser.firstName || null,
+      lastName: insertUser.lastName || null,
     };
     this.users.set(id, user);
     return user;
@@ -216,7 +218,14 @@ export class MemStorage implements IStorage {
 
   async createCategory(insertCategory: InsertCategory): Promise<Category> {
     const id = this.currentId++;
-    const category: Category = { ...insertCategory, id };
+    const category: Category = { 
+      ...insertCategory, 
+      id,
+      description: insertCategory.description || null,
+      descriptionKo: insertCategory.descriptionKo || null,
+      imageUrl: insertCategory.imageUrl || null,
+      isActive: insertCategory.isActive ?? true,
+    };
     this.categories.set(id, category);
     return category;
   }
@@ -244,6 +253,11 @@ export class MemStorage implements IStorage {
       ...insertProduct,
       id,
       createdAt: new Date(),
+      description: insertProduct.description || null,
+      descriptionKo: insertProduct.descriptionKo || null,
+      isActive: insertProduct.isActive ?? true,
+      isFeatured: insertProduct.isFeatured ?? false,
+      customizationOptions: insertProduct.customizationOptions || null,
     };
     this.products.set(id, product);
     return product;
@@ -258,7 +272,6 @@ export class MemStorage implements IStorage {
     const updatedProduct: Product = {
       ...existingProduct,
       ...updates,
-      updatedAt: new Date(),
     };
     
     this.products.set(id, updatedProduct);
@@ -280,6 +293,7 @@ export class MemStorage implements IStorage {
       ...insertReview,
       id,
       createdAt: new Date(),
+      comment: insertReview.comment || null,
     };
     this.productReviews.set(id, review);
     return review;
@@ -296,6 +310,7 @@ export class MemStorage implements IStorage {
       ...insertCartItem,
       id,
       createdAt: new Date(),
+      customization: insertCartItem.customization || null,
     };
     this.cartItems.set(id, cartItem);
     return cartItem;
@@ -367,6 +382,8 @@ export class MemStorage implements IStorage {
       id,
       likes: 0,
       createdAt: new Date(),
+      description: insertPost.description || null,
+      productId: insertPost.productId || null,
     };
     this.communityPosts.set(id, post);
     return post;
@@ -415,6 +432,12 @@ export class MemStorage implements IStorage {
       id,
       createdAt: new Date(),
       updatedAt: new Date(),
+      imageUrl: insertTemplate.imageUrl || null,
+      isActive: insertTemplate.isActive ?? true,
+      status: insertTemplate.status || null,
+      sortOrder: insertTemplate.sortOrder || 0,
+      downloads: insertTemplate.downloads || 0,
+      tags: insertTemplate.tags || [],
     };
     this.belugaTemplates.set(id, template);
     return template;
@@ -557,7 +580,7 @@ export class DatabaseStorage implements IStorage {
 
   async deleteProduct(id: number): Promise<boolean> {
     const result = await db.delete(products).where(eq(products.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   // Review methods
@@ -585,7 +608,7 @@ export class DatabaseStorage implements IStorage {
   async unlikeProduct(productId: number, userId: number): Promise<boolean> {
     const result = await db.delete(productLikes)
       .where(and(eq(productLikes.productId, productId), eq(productLikes.userId, userId)));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async getProductLikesCount(productId: number): Promise<number> {
@@ -617,12 +640,12 @@ export class DatabaseStorage implements IStorage {
 
   async removeFromCart(id: number): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async clearCart(userId: number): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.userId, userId));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   // Order methods
@@ -662,7 +685,7 @@ export class DatabaseStorage implements IStorage {
 
   async likeCommunityPost(id: number): Promise<CommunityPost | undefined> {
     const [post] = await db.update(communityPosts)
-      .set({ likes: communityPosts.likes + 1 })
+      .set({ likes: sql`${communityPosts.likes} + 1` })
       .where(eq(communityPosts.id, id))
       .returning();
     return post;
@@ -699,7 +722,7 @@ export class DatabaseStorage implements IStorage {
 
   async deleteBelugaTemplate(id: number): Promise<boolean> {
     const result = await db.delete(belugaTemplates).where(eq(belugaTemplates.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async reorderBelugaTemplates(templateIds: number[]): Promise<boolean> {
