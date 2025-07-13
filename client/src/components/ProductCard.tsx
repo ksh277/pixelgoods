@@ -86,17 +86,23 @@ export function ProductCard({
 
         <div className="unified-mobile-content">
           {/* Product title - single line with ellipsis */}
-          <h3 className="text-sm font-bold mt-2 truncate text-korean">
+          <h3 className="text-sm font-bold mt-2 mb-2 text-korean">
             {language === 'ko' ? product.nameKo : product.name}
           </h3>
           
+          {/* Flexible spacer */}
+          <div className="flex-grow" />
+        </div>
+
+        {/* Bottom section - Always at bottom */}
+        <div className="unified-mobile-footer">
           {/* Price */}
-          <p className="text-xs text-gray-500 mt-1">
-            ₩{formattedPrice} <span className="line-through text-gray-400">₩{parseInt(product.basePrice * 1.2).toLocaleString()}</span>
+          <p className="text-sm font-medium text-gray-900 mb-1">
+            ₩{formattedPrice} <span className="line-through text-gray-400 text-xs">₩{parseInt(product.basePrice * 1.2).toLocaleString()}</span>
           </p>
           
           {/* Reviews */}
-          <div className="flex items-center mt-1 gap-1">
+          <div className="flex items-center gap-1">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
                 <Star

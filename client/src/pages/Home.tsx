@@ -295,16 +295,21 @@ export default function Home() {
                       
                       {/* Product Info */}
                       <div className="unified-mobile-content">
-                        <div className="space-y-1">
-                          <h3 className="font-bold text-sm leading-tight text-gray-900 line-clamp-2">
-                            {product.nameKo || product.name}
-                          </h3>
-                          <div className="text-sm font-medium text-gray-900">
-                            {parseInt(product.basePrice).toLocaleString()} won
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {t({ ko: "리뷰", en: "Reviews" })} {Math.floor(Math.random() * 10000) + 1000}
-                          </div>
+                        <h3 className="font-bold text-sm leading-tight text-gray-900 mt-2 mb-2 text-korean">
+                          {product.nameKo || product.name}
+                        </h3>
+                        
+                        {/* Flexible spacer */}
+                        <div className="flex-grow" />
+                      </div>
+
+                      {/* Bottom section - Always at bottom */}
+                      <div className="unified-mobile-footer">
+                        <div className="text-sm font-medium text-gray-900 mb-1">
+                          ₩{parseInt(product.basePrice).toLocaleString()}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {t({ ko: "리뷰", en: "Reviews" })} {Math.floor(Math.random() * 10000) + 1000}
                         </div>
                       </div>
                     </div>
