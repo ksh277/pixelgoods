@@ -299,89 +299,57 @@ export function CommunityShowcaseSection() {
 
         {/* Posts Grid */}
         <motion.div variants={itemVariants} className="bg-white rounded-lg shadow-sm p-6">
-          <div className={`grid gap-6 ${
-            viewMode === "grid" 
-              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" 
-              : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          }`}>
+          <div className="grid grid-cols-2 gap-4 px-4">
             {sortedPosts.map((post) => (
-              <Card key={post.id} className="group hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-0">
-                  <div className="relative">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-48 object-cover rounded-t-lg"
+              <div key={post.id} className="rounded-xl bg-white shadow-md p-2 h-[270px] flex flex-col justify-between cursor-pointer hover:shadow-lg transition-shadow">
+                <div className="relative">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-[140px] object-cover rounded-md"
+                  />
+                  
+                  {/* Overlay badges */}
+                  <div className="absolute top-2 left-2 flex gap-1">
+                    {post.isHot && (
+                      <Badge className="bg-red-500 text-white text-xs">HOT</Badge>
+                    )}
+                    {post.isNew && (
+                      <Badge className="bg-green-500 text-white text-xs">NEW</Badge>
+                    )}
+                  </div>
+
+                  {/* Like button */}
+                  <button
+                    onClick={() => handleLikeToggle(post.id)}
+                    className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 hover:bg-white transition-colors"
+                  >
+                    <Heart
+                      className={`h-3 w-3 ${
+                        likedPosts.includes(post.id)
+                          ? "text-red-500 fill-current"
+                          : "text-gray-600"
+                      }`}
                     />
-                    
-                    {/* Overlay badges */}
-                    <div className="absolute top-2 left-2 flex gap-1">
-                      {post.isHot && (
-                        <Badge className="bg-red-500 text-white text-xs">HOT</Badge>
-                      )}
-                      {post.isNew && (
-                        <Badge className="bg-green-500 text-white text-xs">NEW</Badge>
-                      )}
-                    </div>
+                  </button>
+                </div>
 
-                    {/* Category Badge */}
-                    <div className="absolute top-2 right-2">
-                      <Badge variant="secondary" className="bg-white/90 text-xs">
-                        {post.category}
-                      </Badge>
-                    </div>
-
-                    {/* Like button */}
-                    <button
-                      onClick={() => handleLikeToggle(post.id)}
-                      className="absolute bottom-2 right-2 p-2 rounded-full bg-white/80 hover:bg-white transition-colors"
-                    >
-                      <Heart
-                        className={`h-4 w-4 ${
-                          likedPosts.includes(post.id)
-                            ? "text-red-500 fill-current"
-                            : "text-gray-600"
-                        }`}
-                      />
-                    </button>
+                <div className="flex flex-col flex-grow">
+                  <h3 className="text-sm font-bold mt-2 truncate">
+                    {post.title}
+                  </h3>
+                  <p className="text-xs text-gray-400 mt-1">
+                    ❤️ {post.likes} &nbsp; 💬 {post.comments}
+                  </p>
+                  <div className="flex gap-1 mt-1">
+                    {post.tags.slice(0, 2).map((tag, index) => (
+                      <span key={index} className="text-xs bg-gray-200 rounded px-1">
+                        #{tag}
+                      </span>
+                    ))}
                   </div>
-
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-1">
-                      {post.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-3">
-                      {t({ ko: "작성자", en: "by", ja: "作成者", zh: "作者" })} {post.userNickname}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {post.tags.slice(0, 3).map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          #{tag}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1">
-                          <Heart className="h-3 w-3" />
-                          <span>{post.likes}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Eye className="h-3 w-3" />
-                          <span>{post.views}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <MessageCircle className="h-3 w-3" />
-                          <span>{post.comments}</span>
-                        </div>
-                      </div>
-                      <span className="text-xs">{post.uploadDate}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </motion.div>

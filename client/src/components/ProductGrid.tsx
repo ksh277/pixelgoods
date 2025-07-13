@@ -36,7 +36,7 @@ export function ProductGrid({
 }: ProductGridProps) {
   return (
     <motion.div 
-      className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 ${className}`}
+      className={`grid grid-cols-2 gap-4 px-4 ${className}`}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"

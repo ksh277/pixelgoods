@@ -313,6 +313,19 @@
     }
   }
 
+  /* Unified Mobile Card System */
+  .unified-mobile-card {
+    @apply rounded-xl bg-white shadow-md p-2 h-[270px] flex flex-col justify-between cursor-pointer hover:shadow-lg transition-shadow;
+  }
+  
+  .unified-mobile-image {
+    @apply w-full h-[140px] object-cover rounded-md;
+  }
+  
+  .unified-mobile-grid {
+    @apply grid grid-cols-2 gap-4 px-4;
+  }
+
   /* Mobile-specific card styling */
   @media (max-width: 768px) {
     .mobile-card {

@@ -43,56 +43,27 @@ export function ProductCard({
   const formattedPrice = parseInt(product.basePrice).toLocaleString();
 
   return (
-    <Link href={`/product/${product.id}`} className="block h-full">
+    <Link href={`/product/${product.id}`} className="block">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        className="h-full"
+        className="rounded-xl bg-white shadow-md p-2 h-[270px] flex flex-col justify-between cursor-pointer hover:shadow-lg transition-shadow"
       >
-        <Card className="group cursor-pointer overflow-hidden hover-lift bg-white shadow-sm border border-gray-200 h-full flex flex-col">
-          <div className="relative">
-          <motion.div className="aspect-[3/4] bg-gray-100 overflow-hidden">
-            <motion.img
-              src={product.imageUrl}
-              alt={language === 'ko' ? product.nameKo : product.name}
-              className="w-full h-full object-cover"
-              loading="lazy"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
-              }}
-            />
-          </motion.div>
-          
-          {/* Overlay with hover effects - only on desktop */}
-          <motion.div 
-            className="absolute inset-0 bg-black/40 items-center justify-center hidden md:flex"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="flex gap-2">
-              <Button
-                size="icon"
-                variant="secondary"
-                className="rounded-full bg-white/90 hover:bg-white text-foreground"
-                onClick={handleAddToCart}
-              >
-                <ShoppingCart className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="rounded-full bg-white/90 hover:bg-white text-foreground"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-            </div>
-          </motion.div>
+        <div className="relative">
+          <motion.img
+            src={product.imageUrl}
+            alt={language === 'ko' ? product.nameKo : product.name}
+            className="w-full h-[140px] object-cover rounded-md"
+            loading="lazy"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+            }}
+          />
 
           {/* Like button */}
           <motion.button
@@ -113,14 +84,20 @@ export function ProductCard({
           )}
         </div>
 
-        <CardContent className="p-3 flex flex-col flex-grow">
-          {/* Likes and rating section */}
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-1 text-red-500">
-              <Heart className="h-3 w-3 fill-current" />
-              <span className="text-xs font-medium">{likes}</span>
-            </div>
-            <div className="flex items-center gap-1">
+        <div className="flex flex-col flex-grow">
+          {/* Product title - single line with ellipsis */}
+          <h3 className="text-sm font-bold mt-2 truncate text-korean">
+            {language === 'ko' ? product.nameKo : product.name}
+          </h3>
+          
+          {/* Price */}
+          <p className="text-xs text-gray-500 mt-1">
+            ₩{formattedPrice} <span className="line-through text-gray-400">₩{parseInt(product.basePrice * 1.2).toLocaleString()}</span>
+          </p>
+          
+          {/* Reviews */}
+          <div className="flex items-center mt-1 gap-1">
+            <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
@@ -129,42 +106,12 @@ export function ProductCard({
                   }`}
                 />
               ))}
-              <span className="text-xs text-gray-500 ml-1">4.8</span>
             </div>
+            <span className="text-xs text-gray-400">
+              {t({ ko: "리뷰 234개", en: "234 reviews" })}
+            </span>
           </div>
-
-          {/* Product title - single line with ellipsis */}
-          <h3 className="font-bold text-sm text-gray-900 mb-1 truncate text-korean">
-            {language === 'ko' ? product.nameKo : product.name}
-          </h3>
-
-          {/* Product description - 2 lines max */}
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2 text-korean flex-grow">
-            {language === 'ko' ? product.descriptionKo : product.description}
-          </p>
-
-          {/* Price section - always at bottom */}
-          <div className="flex items-center justify-between mt-auto">
-            <div className="text-sm font-bold text-gray-900">
-              ₩{formattedPrice}
-            </div>
-            <div className="text-xs text-gray-500">
-              {t({ ko: "리뷰 234", en: "234 reviews" })}
-            </div>
-          </div>
-
-          {/* Mobile add to cart button */}
-          <div className="mt-2 md:hidden">
-            <Button
-              size="sm"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2"
-              onClick={handleAddToCart}
-            >
-              {t({ ko: "담기", en: "Add to Cart" })}
-            </Button>
-          </div>
-        </CardContent>
-        </Card>
+        </div>
       </motion.div>
     </Link>
   );
