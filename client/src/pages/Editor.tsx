@@ -293,7 +293,7 @@ export default function Editor() {
     {
       id: 'smarttok',
       name: { ko: '스마트톡', en: 'Smart Tok', ja: 'スマートトック', zh: '智能支架' },
-      description: { ko: '후면 접착 톡형 악세사리', en: 'Adhesive tok accessory', ja: '背面接着トック型', zh: '后面粘贴支架配件' },
+      description: { ko: '후면 접착 특형 악세사리', en: 'Adhesive tok accessory', ja: '背面接着トック型', zh: '后面粘贴支架配件' },
       icon: '📱',
       defaultSize: { width: 40, height: 40 },
       available: true
@@ -452,8 +452,8 @@ export default function Editor() {
             </p>
           </div>
 
-          {/* Product Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
+          {/* Product Grid - 4x2 Layout */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-12">
             {productTypes.map((product) => (
               <Card 
                 key={product.id}
@@ -465,9 +465,9 @@ export default function Editor() {
                 )}
                 onClick={() => handleProductSelect(product)}
               >
-                {/* Status Badge */}
+                {/* Status Badge - Top Left */}
                 {product.available && (
-                  <div className="absolute top-3 right-3 z-10">
+                  <div className="absolute top-3 left-3 z-10">
                     <div className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                       {t({ ko: '제작가능', en: 'Available', ja: '製作可能', zh: '可制作' })}
                     </div>
@@ -475,17 +475,17 @@ export default function Editor() {
                 )}
 
                 {!product.available && (
-                  <div className="absolute top-3 right-3 z-10">
+                  <div className="absolute top-3 left-3 z-10">
                     <div className="bg-gray-400 text-white text-xs px-2 py-1 rounded-full font-medium">
                       {t({ ko: '준비중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })}
                     </div>
                   </div>
                 )}
 
-                <CardContent className="p-6 text-center h-full flex flex-col justify-between">
+                <CardContent className="p-4 text-center h-full flex flex-col justify-between min-h-[280px]">
                   {/* Beluga Character Illustration */}
-                  <div className="mb-4">
-                    <div className="w-full h-24 mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center">
+                  <div className="flex-1 flex flex-col justify-center">
+                    <div className="w-full h-20 mx-auto mb-3 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center">
                       <div 
                         className="w-full h-full"
                         dangerouslySetInnerHTML={{ __html: createBelugaProductIllustration(product.id) }}
@@ -493,39 +493,39 @@ export default function Editor() {
                     </div>
                     
                     {/* Product Name */}
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                       {t(product.name)}
                     </h3>
                     
                     {/* Description */}
-                    <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                    <p className="text-sm text-gray-600 mb-3 leading-relaxed">
                       {t(product.description)}
                     </p>
                   </div>
 
-                  {/* Size Info */}
-                  <div className="mt-auto">
-                    <div className="bg-gray-100 rounded-lg p-3 mb-2">
-                      <div className="text-xs text-gray-500 mb-1">
-                        {t({ ko: '기본 사이즈', en: 'Default Size', ja: 'デフォルトサイズ', zh: '默认尺寸' })}
-                      </div>
+                  {/* Size Info & Action Button */}
+                  <div className="mt-auto space-y-3">
+                    <div className="bg-gray-100 rounded-lg p-2 text-center">
                       <div className="text-sm font-semibold text-gray-700">
                         {product.defaultSize.width}×{product.defaultSize.height}mm
                       </div>
                     </div>
                     
                     {/* Action Button */}
-                    <div className={cn(
-                      "mt-3 py-2 px-4 rounded-lg text-sm font-medium transition-all",
-                      product.available 
-                        ? "bg-blue-500 text-white group-hover:bg-blue-600" 
-                        : "bg-gray-300 text-gray-500"
-                    )}>
+                    <Button 
+                      className={cn(
+                        "w-full text-sm font-medium transition-all",
+                        product.available 
+                          ? "bg-blue-500 hover:bg-blue-600 text-white" 
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      )}
+                      disabled={!product.available}
+                    >
                       {product.available 
                         ? t({ ko: '제작 시작', en: 'Start Creating', ja: '製作開始', zh: '开始制作' })
                         : t({ ko: '준비 중', en: 'Coming Soon', ja: '準備中', zh: '准备中' })
                       }
-                    </div>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
