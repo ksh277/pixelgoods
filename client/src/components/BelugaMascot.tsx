@@ -179,9 +179,15 @@ export function BelugaMascot({ variant, className = "" }: BelugaMascotProps) {
           )}
         </div>
         <div className="text-center">
-          <p className="text-sm font-medium text-blue-900 bg-blue-50 px-4 py-2 rounded-full border border-blue-200">
-            {config.message}
-          </p>
+          <div className="relative inline-block">
+            <div className="bg-blue-50 px-4 py-2 rounded-full border border-blue-200 shadow-sm min-w-[120px] max-w-[240px] sm:max-w-sm">
+              <p className="text-sm font-medium text-blue-900 text-center word-break-keep-all">
+                <span className="inline-block whitespace-nowrap">{config.message}</span>
+              </p>
+            </div>
+            {/* Speech bubble tail */}
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-blue-50"></div>
+          </div>
         </div>
       </div>
     </div>
