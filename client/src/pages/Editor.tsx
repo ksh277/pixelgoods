@@ -80,182 +80,7 @@ export default function Editor() {
     window.scrollTo(0, 0);
   }, []);
 
-  // Create integrated Beluga character SVG illustrations for each product type
-  const createBelugaProductIllustration = (productType: string) => {
-    const productElements = {
-      keyring: `
-        <!-- Beluga wearing keyring around neck -->
-        <g transform="translate(60, 45)">
-          <!-- Keyring chain around neck -->
-          <circle cx="0" cy="-15" r="12" fill="none" stroke="#3b82f6" stroke-width="2"/>
-          <!-- Keyring charm -->
-          <rect x="-4" y="-30" width="8" height="8" rx="2" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
-          <!-- Beluga Body -->
-          <ellipse cx="0" cy="15" rx="22" ry="16" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Beluga Head -->
-          <ellipse cx="0" cy="-5" rx="18" ry="13" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Eyes -->
-          <circle cx="-7" cy="-7" r="2" fill="#374151"/>
-          <circle cx="7" cy="-7" r="2" fill="#374151"/>
-          <!-- Mouth -->
-          <path d="M -3 -1 Q 0 1 3 -1" stroke="#6b7280" stroke-width="1" fill="none"/>
-          <!-- Fins -->
-          <ellipse cx="-20" cy="10" rx="6" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-          <ellipse cx="20" cy="10" rx="6" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-        </g>
-      `,
-      stand: `
-        <!-- Beluga standing on base -->
-        <g transform="translate(60, 30)">
-          <!-- Stand base -->
-          <rect x="-25" y="35" width="50" height="4" fill="#6b7280" stroke="#374151" stroke-width="1"/>
-          <!-- Stand back support -->
-          <rect x="-15" y="15" width="30" height="20" fill="#10b981" stroke="#059669" stroke-width="1" opacity="0.3"/>
-          <!-- Beluga Body -->
-          <ellipse cx="0" cy="20" rx="20" ry="15" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Beluga Head -->
-          <ellipse cx="0" cy="0" rx="16" ry="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Eyes -->
-          <circle cx="-6" cy="-2" r="2" fill="#374151"/>
-          <circle cx="6" cy="-2" r="2" fill="#374151"/>
-          <!-- Mouth -->
-          <path d="M -3 2 Q 0 4 3 2" stroke="#6b7280" stroke-width="1" fill="none"/>
-          <!-- Fins -->
-          <ellipse cx="-18" cy="15" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-          <ellipse cx="18" cy="15" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-        </g>
-      `,
-      corot: `
-        <!-- Beluga as flat character goods -->
-        <g transform="translate(60, 50)">
-          <!-- Flat character outline -->
-          <rect x="-20" y="-25" width="40" height="35" rx="5" fill="#f59e0b" stroke="#d97706" stroke-width="2" opacity="0.9"/>
-          <!-- Beluga integrated into flat design -->
-          <ellipse cx="0" cy="-5" rx="15" ry="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <ellipse cx="0" cy="-15" rx="12" ry="10" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Eyes -->
-          <circle cx="-5" cy="-17" r="2" fill="#374151"/>
-          <circle cx="5" cy="-17" r="2" fill="#374151"/>
-          <!-- Mouth -->
-          <path d="M -2 -13 Q 0 -11 2 -13" stroke="#6b7280" stroke-width="1" fill="none"/>
-          <!-- Flat character details -->
-          <circle cx="0" cy="5" r="3" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
-        </g>
-      `,
-      photoholder: `
-        <!-- Beluga wearing photo holder necklace -->
-        <g transform="translate(60, 40)">
-          <!-- Photo holder necklace chain -->
-          <path d="M -10 -10 Q -15 -5 -10 0 Q 0 5 10 0 Q 15 -5 10 -10" stroke="#8b5cf6" stroke-width="2" fill="none"/>
-          <!-- Photo holder frame -->
-          <rect x="-8" y="-8" width="16" height="20" fill="#8b5cf6" stroke="#7c3aed" stroke-width="1"/>
-          <rect x="-6" y="-6" width="12" height="16" fill="#ffffff" stroke="#d1d5db" stroke-width="1"/>
-          <!-- Beluga Body -->
-          <ellipse cx="0" cy="20" rx="20" ry="15" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Beluga Head -->
-          <ellipse cx="0" cy="0" rx="16" ry="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Eyes -->
-          <circle cx="-6" cy="-2" r="2" fill="#374151"/>
-          <circle cx="6" cy="-2" r="2" fill="#374151"/>
-          <!-- Mouth -->
-          <path d="M -3 2 Q 0 4 3 2" stroke="#6b7280" stroke-width="1" fill="none"/>
-          <!-- Fins -->
-          <ellipse cx="-18" cy="15" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-          <ellipse cx="18" cy="15" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-        </g>
-      `,
-      smarttok: `
-        <!-- Beluga with smart tok attached to back -->
-        <g transform="translate(60, 45)">
-          <!-- Smart tok attached to back -->
-          <circle cx="15" cy="5" r="6" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
-          <circle cx="15" cy="5" r="3" fill="#ffffff"/>
-          <!-- Phone in fin -->
-          <rect x="-25" y="-5" width="8" height="14" rx="2" fill="#374151" stroke="#1f2937" stroke-width="1"/>
-          <!-- Beluga Body -->
-          <ellipse cx="0" cy="15" rx="20" ry="15" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Beluga Head -->
-          <ellipse cx="0" cy="-5" rx="16" ry="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Eyes -->
-          <circle cx="-6" cy="-7" r="2" fill="#374151"/>
-          <circle cx="6" cy="-7" r="2" fill="#374151"/>
-          <!-- Mouth -->
-          <path d="M -3 -3 Q 0 -1 3 -3" stroke="#6b7280" stroke-width="1" fill="none"/>
-          <!-- Fins -->
-          <ellipse cx="-18" cy="10" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-          <ellipse cx="18" cy="10" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-        </g>
-      `,
-      badge: `
-        <!-- Beluga wearing badge on chest -->
-        <g transform="translate(60, 45)">
-          <!-- Badge on chest -->
-          <circle cx="0" cy="5" r="6" fill="#ef4444" stroke="#dc2626" stroke-width="1"/>
-          <circle cx="0" cy="5" r="4" fill="#fef2f2"/>
-          <text x="0" y="7" text-anchor="middle" fill="#dc2626" font-size="6" font-weight="bold">★</text>
-          <!-- Beluga Body -->
-          <ellipse cx="0" cy="15" rx="20" ry="15" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Beluga Head -->
-          <ellipse cx="0" cy="-5" rx="16" ry="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Eyes -->
-          <circle cx="-6" cy="-7" r="2" fill="#374151"/>
-          <circle cx="6" cy="-7" r="2" fill="#374151"/>
-          <!-- Mouth -->
-          <path d="M -3 -3 Q 0 -1 3 -3" stroke="#6b7280" stroke-width="1" fill="none"/>
-          <!-- Fins -->
-          <ellipse cx="-18" cy="10" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-          <ellipse cx="18" cy="10" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-        </g>
-      `,
-      magnet: `
-        <!-- Beluga in front of refrigerator with magnet -->
-        <g transform="translate(60, 45)">
-          <!-- Refrigerator background -->
-          <rect x="10" y="-15" width="15" height="40" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-          <!-- Magnet on refrigerator -->
-          <rect x="12" y="-5" width="8" height="6" rx="1" fill="#dc2626" stroke="#b91c1c" stroke-width="1"/>
-          <text x="16" y="-1" text-anchor="middle" fill="#ffffff" font-size="4" font-weight="bold">N</text>
-          <!-- Beluga Body -->
-          <ellipse cx="0" cy="15" rx="18" ry="14" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Beluga Head -->
-          <ellipse cx="0" cy="-5" rx="15" ry="11" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Eyes looking at magnet -->
-          <circle cx="-4" cy="-7" r="2" fill="#374151"/>
-          <circle cx="4" cy="-7" r="2" fill="#374151"/>
-          <!-- Mouth -->
-          <path d="M -3 -3 Q 0 -1 3 -3" stroke="#6b7280" stroke-width="1" fill="none"/>
-          <!-- Fins -->
-          <ellipse cx="-16" cy="10" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-          <ellipse cx="16" cy="10" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-        </g>
-      `,
-      carabiner: `
-        <!-- Beluga hanging from carabiner (grayed out) -->
-        <g transform="translate(60, 30)" opacity="0.5">
-          <!-- Carabiner hook -->
-          <path d="M -5 -10 Q 5 -10 5 0 Q 5 10 -5 10 Q -10 10 -10 0 Q -10 -10 -5 -10" fill="#9ca3af" stroke="#6b7280" stroke-width="2"/>
-          <rect x="-3" y="-8" width="6" height="2" fill="#6b7280"/>
-          <!-- Beluga hanging -->
-          <ellipse cx="0" cy="25" rx="18" ry="14" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <ellipse cx="0" cy="5" rx="15" ry="11" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-          <!-- Eyes -->
-          <circle cx="-5" cy="3" r="2" fill="#374151"/>
-          <circle cx="5" cy="3" r="2" fill="#374151"/>
-          <!-- Mouth -->
-          <path d="M -3 7 Q 0 9 3 7" stroke="#6b7280" stroke-width="1" fill="none"/>
-          <!-- Fins -->
-          <ellipse cx="-16" cy="20" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-          <ellipse cx="16" cy="20" rx="5" ry="3" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
-        </g>
-      `
-    };
 
-    return `
-      <svg width="120" height="100" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
-        ${productElements[productType as keyof typeof productElements] || productElements.keyring}
-      </svg>
-    `;
-  };
 
   const productTypes: ProductType[] = [
     {
@@ -478,13 +303,13 @@ export default function Editor() {
                   )}
                 </div>
 
-                {/* Product Image with Fallback */}
-                <div className="aspect-w-1 aspect-h-1 bg-gray-100 rounded overflow-hidden mb-2">
-                  <div className="w-full h-32 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-                    <div 
-                      className="w-20 h-20 group-hover:scale-110 transition-transform duration-300"
-                      dangerouslySetInnerHTML={{ __html: createBelugaProductIllustration(product.id) }}
-                    />
+                {/* Product Image Placeholder - Ready for Dynamic Insertion */}
+                <div className="product-thumbnail w-full h-32 bg-gray-100 rounded-lg mb-2 flex items-center justify-center border border-gray-200">
+                  <div className="text-center">
+                    <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-1" />
+                    <span className="text-xs text-gray-500">
+                      {t({ ko: '이미지 준비중', en: 'Image Ready', ja: '画像準備中', zh: '图片准备中' })}
+                    </span>
                   </div>
                 </div>
 
