@@ -209,7 +209,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    min-height: 340px;
+    min-height: 370px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
@@ -263,9 +263,9 @@ body {
     transform: scale(1.1);
   }
 
-  /* 이미지 영역 고정 */
+  /* 이미지 영역 고정 - 더 정사각형에 가까운 비율 */
   .unified-card-image {
-    height: 130px;
+    height: 160px;
     width: 100%;
     background-color: #f0f0f0;
     border-radius: 8px;
