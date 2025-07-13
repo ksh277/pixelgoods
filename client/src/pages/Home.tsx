@@ -10,6 +10,7 @@ import { CategoryNav } from "@/components/CategoryNav";
 import { SectionHeader } from "@/components/SectionHeader";
 import { UserReviewsSection } from "@/components/UserReviewsSection";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
+import { ProductCard } from "@/components/ProductCard";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -251,69 +252,18 @@ export default function Home() {
             <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
           ) : (
             <motion.div 
-              className="unified-mobile-grid md:grid-cols-3 lg:grid-cols-4 md:gap-3 lg:gap-4"
+              className="grid grid-cols-2 gap-3 px-4 md:grid-cols-3 lg:grid-cols-4 md:gap-4 lg:gap-4"
               variants={containerVariants}
               style={{ opacity: 1 }}
             >
               {products?.slice(0, 4).map((product: Product) => (
                 <motion.div key={product.id} variants={itemVariants} style={{ opacity: 1 }}>
-                  <Link href={`/product/${product.id}`} className="block">
-                    <div className="unified-mobile-card" style={{ opacity: 1, visibility: 'visible' }}>
-                      <div className="relative">
-                        {/* HOT Badge - Top Left */}
-                        <div className="absolute top-2 left-2 z-10">
-                          <Badge className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                            HOT
-                          </Badge>
-                        </div>
-                        
-                        {/* Product Image */}
-                        <img
-                          src="/api/placeholder/300/300"
-                          alt={product.nameKo || product.name}
-                          className="unified-mobile-image"
-                          loading="lazy"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
-                          }}
-                        />
-                        
-                        {/* Like Button - Top Right */}
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleToggleFavorite(product);
-                          }}
-                          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors"
-                        >
-                          <Heart 
-                            className={`w-3 h-3 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
-                          />
-                        </button>
-                      </div>
-                      
-                      {/* Product Info */}
-                      <div className="unified-mobile-content">
-                        <h3 className="font-bold text-sm leading-tight text-gray-900 mt-2 mb-2 text-korean">
-                          {product.nameKo || product.name}
-                        </h3>
-                        
-                        {/* Flexible spacer */}
-                        <div className="flex-grow" />
-                      </div>
-
-                      {/* Bottom section - Always at bottom */}
-                      <div className="unified-mobile-footer">
-                        <div className="text-sm font-medium text-gray-900 mb-1">
-                          ₩{parseInt(product.basePrice).toLocaleString()}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {t({ ko: "리뷰", en: "Reviews" })} {Math.floor(Math.random() * 10000) + 1000}
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
+                  <ProductCard
+                    product={product}
+                    isFavorite={favorites.includes(product.id)}
+                    onToggleFavorite={handleToggleFavorite}
+                    onAddToCart={handleAddToCart}
+                  />
                 </motion.div>
               ))}
             </motion.div>
