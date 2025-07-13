@@ -9,7 +9,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import type { Product } from "@shared/schema";
 
 interface ProductCardProps {
-  product: Product;
+  product: Product & { reviewCount?: number; likeCount?: number };
   onAddToCart?: (product: Product) => void;
   onToggleFavorite?: (product: Product) => void;
   isFavorite?: boolean;
@@ -22,8 +22,8 @@ export function ProductCard({
   isFavorite = false 
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [likes, setLikes] = useState(0);
-  const [reviews, setReviews] = useState(0);
+  const [likes, setLikes] = useState(product.likeCount || 0);
+  const [reviews, setReviews] = useState(product.reviewCount || 0);
   const [isLiked, setIsLiked] = useState(isFavorite);
   const { language, t } = useLanguage();
 

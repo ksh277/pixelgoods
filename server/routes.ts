@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema, insertProductSchema, insertProductReviewSchema, insertCartItemSchema, insertOrderSchema, insertCommunityPostSchema, insertCommunityCommentSchema, insertBelugaTemplateSchema } from "@shared/schema";
+import { insertUserSchema, insertProductSchema, insertProductReviewSchema, insertProductLikeSchema, insertCartItemSchema, insertOrderSchema, insertCommunityPostSchema, insertCommunityCommentSchema, insertBelugaTemplateSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Categories
@@ -47,12 +47,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         products = products.filter(product => 
           product.name.toLowerCase().includes(searchTerm) ||
           product.nameKo.toLowerCase().includes(searchTerm) ||
-          product.description.toLowerCase().includes(searchTerm) ||
-          (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+          product.description?.toLowerCase().includes(searchTerm)
         );
       }
       
-      res.json(products);
+      // Add real-time counts for each product
+      const productsWithCounts = await Promise.all(
+        products.map(async (product) => {
+          const [reviewCount, likeCount] = await Promise.all([
+            storage.getProductReviewsCount(product.id),
+            storage.getProductLikesCount(product.id)
+          ]);
+          
+          return {
+            ...product,
+            reviewCount,
+            likeCount
+          };
+        })
+      );
+      
+      res.json(productsWithCounts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products" });
     }
@@ -197,6 +212,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(review);
     } catch (error) {
       res.status(400).json({ message: "Invalid review data" });
+    }
+  });
+
+  // Product Likes
+  app.post("/api/products/:id/like", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+      const { userId } = req.body;
+      
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      
+      // Check if already liked
+      const isLiked = await storage.isProductLiked(productId, userId);
+      if (isLiked) {
+        return res.status(400).json({ message: "Product already liked" });
+      }
+      
+      const like = await storage.likeProduct(productId, userId);
+      res.status(201).json(like);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to like product" });
+    }
+  });
+
+  app.delete("/api/products/:id/like", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+      const { userId } = req.body;
+      
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      
+      const success = await storage.unlikeProduct(productId, userId);
+      if (!success) {
+        return res.status(404).json({ message: "Like not found" });
+      }
+      
+      res.json({ message: "Product unliked successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to unlike product" });
+    }
+  });
+
+  app.get("/api/products/:id/liked", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+      const { userId } = req.query;
+      
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      
+      const isLiked = await storage.isProductLiked(productId, parseInt(userId as string));
+      res.json({ isLiked });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to check like status" });
     }
   });
 

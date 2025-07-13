@@ -1,10 +1,13 @@
 import { 
-  users, categories, products, productReviews, cartItems, orders, communityPosts, communityComments, belugaTemplates,
+  users, categories, products, productReviews, productLikes, cartItems, orders, communityPosts, communityComments, belugaTemplates,
   type User, type InsertUser, type Category, type InsertCategory, type Product, type InsertProduct,
-  type ProductReview, type InsertProductReview, type CartItem, type InsertCartItem,
+  type ProductReview, type InsertProductReview, type ProductLike, type InsertProductLike,
+  type CartItem, type InsertCartItem,
   type Order, type InsertOrder, type CommunityPost, type InsertCommunityPost,
   type CommunityComment, type InsertCommunityComment, type BelugaTemplate, type InsertBelugaTemplate
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, count, and } from "drizzle-orm";
 
 export interface IStorage {
   // User methods
@@ -30,6 +33,13 @@ export interface IStorage {
   // Review methods
   getProductReviews(productId: number): Promise<ProductReview[]>;
   createProductReview(review: InsertProductReview): Promise<ProductReview>;
+  
+  // Product like methods
+  isProductLiked(productId: number, userId: number): Promise<boolean>;
+  likeProduct(productId: number, userId: number): Promise<ProductLike>;
+  unlikeProduct(productId: number, userId: number): Promise<boolean>;
+  getProductLikesCount(productId: number): Promise<number>;
+  getProductReviewsCount(productId: number): Promise<number>;
   
   // Cart methods
   getCartItems(userId: number): Promise<CartItem[]>;
@@ -440,4 +450,226 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  // User methods
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  // Category methods
+  async getCategories(): Promise<Category[]> {
+    return await db.select().from(categories);
+  }
+
+  async getCategory(id: number): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.id, id));
+    return category;
+  }
+
+  async createCategory(insertCategory: InsertCategory): Promise<Category> {
+    const [category] = await db.insert(categories).values(insertCategory).returning();
+    return category;
+  }
+
+  // Product methods
+  async getProducts(): Promise<Product[]> {
+    return await db.select().from(products);
+  }
+
+  async getProductsByCategory(categoryId: number): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.categoryId, categoryId));
+  }
+
+  async getFeaturedProducts(): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.isFeatured, true));
+  }
+
+  async getProduct(id: number): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product;
+  }
+
+  async createProduct(insertProduct: InsertProduct): Promise<Product> {
+    const [product] = await db.insert(products).values(insertProduct).returning();
+    return product;
+  }
+
+  async updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product | undefined> {
+    const [product] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
+    return product;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    const result = await db.delete(products).where(eq(products.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Review methods
+  async getProductReviews(productId: number): Promise<ProductReview[]> {
+    return await db.select().from(productReviews).where(eq(productReviews.productId, productId));
+  }
+
+  async createProductReview(insertReview: InsertProductReview): Promise<ProductReview> {
+    const [review] = await db.insert(productReviews).values(insertReview).returning();
+    return review;
+  }
+
+  // Product like methods
+  async isProductLiked(productId: number, userId: number): Promise<boolean> {
+    const [like] = await db.select().from(productLikes)
+      .where(and(eq(productLikes.productId, productId), eq(productLikes.userId, userId)));
+    return !!like;
+  }
+
+  async likeProduct(productId: number, userId: number): Promise<ProductLike> {
+    const [like] = await db.insert(productLikes).values({ productId, userId }).returning();
+    return like;
+  }
+
+  async unlikeProduct(productId: number, userId: number): Promise<boolean> {
+    const result = await db.delete(productLikes)
+      .where(and(eq(productLikes.productId, productId), eq(productLikes.userId, userId)));
+    return result.rowCount > 0;
+  }
+
+  async getProductLikesCount(productId: number): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(productLikes)
+      .where(eq(productLikes.productId, productId));
+    return result.count;
+  }
+
+  async getProductReviewsCount(productId: number): Promise<number> {
+    const [result] = await db.select({ count: count() }).from(productReviews)
+      .where(eq(productReviews.productId, productId));
+    return result.count;
+  }
+
+  // Cart methods
+  async getCartItems(userId: number): Promise<CartItem[]> {
+    return await db.select().from(cartItems).where(eq(cartItems.userId, userId));
+  }
+
+  async addToCart(insertCartItem: InsertCartItem): Promise<CartItem> {
+    const [cartItem] = await db.insert(cartItems).values(insertCartItem).returning();
+    return cartItem;
+  }
+
+  async updateCartItem(id: number, quantity: number): Promise<CartItem | undefined> {
+    const [cartItem] = await db.update(cartItems).set({ quantity }).where(eq(cartItems.id, id)).returning();
+    return cartItem;
+  }
+
+  async removeFromCart(id: number): Promise<boolean> {
+    const result = await db.delete(cartItems).where(eq(cartItems.id, id));
+    return result.rowCount > 0;
+  }
+
+  async clearCart(userId: number): Promise<boolean> {
+    const result = await db.delete(cartItems).where(eq(cartItems.userId, userId));
+    return result.rowCount > 0;
+  }
+
+  // Order methods
+  async getOrders(userId: number): Promise<Order[]> {
+    return await db.select().from(orders).where(eq(orders.userId, userId));
+  }
+
+  async getOrder(id: number): Promise<Order | undefined> {
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    return order;
+  }
+
+  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    const [order] = await db.insert(orders).values(insertOrder).returning();
+    return order;
+  }
+
+  async updateOrderStatus(id: number, status: string): Promise<Order | undefined> {
+    const [order] = await db.update(orders).set({ status }).where(eq(orders.id, id)).returning();
+    return order;
+  }
+
+  // Community methods
+  async getCommunityPosts(): Promise<CommunityPost[]> {
+    return await db.select().from(communityPosts);
+  }
+
+  async getCommunityPost(id: number): Promise<CommunityPost | undefined> {
+    const [post] = await db.select().from(communityPosts).where(eq(communityPosts.id, id));
+    return post;
+  }
+
+  async createCommunityPost(insertPost: InsertCommunityPost): Promise<CommunityPost> {
+    const [post] = await db.insert(communityPosts).values(insertPost).returning();
+    return post;
+  }
+
+  async likeCommunityPost(id: number): Promise<CommunityPost | undefined> {
+    const [post] = await db.update(communityPosts)
+      .set({ likes: communityPosts.likes + 1 })
+      .where(eq(communityPosts.id, id))
+      .returning();
+    return post;
+  }
+
+  async getCommunityComments(postId: number): Promise<CommunityComment[]> {
+    return await db.select().from(communityComments).where(eq(communityComments.postId, postId));
+  }
+
+  async createCommunityComment(insertComment: InsertCommunityComment): Promise<CommunityComment> {
+    const [comment] = await db.insert(communityComments).values(insertComment).returning();
+    return comment;
+  }
+
+  // Template methods
+  async getBelugaTemplates(): Promise<BelugaTemplate[]> {
+    return await db.select().from(belugaTemplates);
+  }
+
+  async getBelugaTemplate(id: number): Promise<BelugaTemplate | undefined> {
+    const [template] = await db.select().from(belugaTemplates).where(eq(belugaTemplates.id, id));
+    return template;
+  }
+
+  async createBelugaTemplate(insertTemplate: InsertBelugaTemplate): Promise<BelugaTemplate> {
+    const [template] = await db.insert(belugaTemplates).values(insertTemplate).returning();
+    return template;
+  }
+
+  async updateBelugaTemplate(id: number, updates: Partial<InsertBelugaTemplate>): Promise<BelugaTemplate | undefined> {
+    const [template] = await db.update(belugaTemplates).set(updates).where(eq(belugaTemplates.id, id)).returning();
+    return template;
+  }
+
+  async deleteBelugaTemplate(id: number): Promise<boolean> {
+    const result = await db.delete(belugaTemplates).where(eq(belugaTemplates.id, id));
+    return result.rowCount > 0;
+  }
+
+  async reorderBelugaTemplates(templateIds: number[]): Promise<boolean> {
+    for (let i = 0; i < templateIds.length; i++) {
+      await db.update(belugaTemplates)
+        .set({ sortOrder: i })
+        .where(eq(belugaTemplates.id, templateIds[i]));
+    }
+    return true;
+  }
+}
+
+export const storage = new DatabaseStorage();
