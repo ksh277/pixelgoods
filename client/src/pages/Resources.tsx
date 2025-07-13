@@ -511,55 +511,86 @@ export default function Resources() {
             </Button>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {/* Template Cards Grid - 4 columns PC, 3 tablet, 2 mobile */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {belugaTemplates.map((template) => (
-              <Card key={template.id} className="group relative overflow-hidden bg-white shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                {template.featured && (
-                  <Badge className="absolute top-2 left-2 z-10 bg-yellow-500 text-white">
-                    <Star className="w-3 h-3 mr-1" />
-                    {t({ ko: "인기", en: "Popular", ja: "人気", zh: "热门" })}
-                  </Badge>
-                )}
-                {template.new && (
-                  <Badge className="absolute top-2 right-2 z-10 bg-green-500 text-white">
-                    {t({ ko: "NEW", en: "NEW", ja: "新着", zh: "新品" })}
-                  </Badge>
-                )}
-                
-                <div className="aspect-square bg-gray-50 p-4 flex items-center justify-center">
+              <Card key={template.id} className="group bg-white shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200">
+                {/* Badge Overlays */}
+                <div className="relative">
+                  {template.featured && (
+                    <Badge className="absolute top-2 left-2 z-10 bg-red-500 text-white text-xs px-2 py-1">
+                      {t({ ko: "인기", en: "HOT", ja: "人気", zh: "热门" })}
+                    </Badge>
+                  )}
+                  {template.new && (
+                    <Badge className="absolute top-2 right-2 z-10 bg-green-500 text-white text-xs px-2 py-1">
+                      {t({ ko: "NEW", en: "NEW", ja: "新着", zh: "新品" })}
+                    </Badge>
+                  )}
+                  
+                  {/* Image Placeholder - Ready for dynamic image insertion */}
                   <div 
-                    className="w-full h-full group-hover:scale-110 transition-transform duration-300"
-                    dangerouslySetInnerHTML={{ __html: createBelugaTemplate(template.id) }}
-                  />
+                    className="image-placeholder aspect-square bg-gray-100 border-b border-gray-200 flex items-center justify-center group-hover:bg-gray-50 transition-colors"
+                    data-template-id={template.id}
+                    data-src=""
+                  >
+                    <div className="text-gray-400 text-center">
+                      <Image className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <span className="text-xs">이미지 준비중</span>
+                    </div>
+                  </div>
                 </div>
                 
-                <CardContent className="p-4">
-                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <CardContent className="p-3 sm:p-4">
+                  {/* Template Name */}
+                  <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
                     {t(template.title)}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                  
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-gray-600 mb-2 line-clamp-2 leading-relaxed">
                     {t(template.description)}
                   </p>
                   
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="secondary" className="text-xs">
-                        {template.format}
-                      </Badge>
-                      <span className="text-xs text-gray-500">
-                        {template.size}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-xs text-gray-500">
-                      <Download className="w-3 h-3 mr-1" />
-                      {template.downloads.toLocaleString()}
-                    </div>
+                  {/* File Type & Resolution */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge variant="secondary" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border-blue-200">
+                      {template.format}
+                    </Badge>
+                    <span className="text-xs text-gray-500 font-medium">
+                      {template.size}
+                    </span>
                   </div>
                   
-                  <Button className="w-full" size="sm">
-                    <Download className="w-4 h-4 mr-2" />
+                  {/* Download Count */}
+                  <div className="flex items-center text-xs text-gray-500 mb-3">
+                    <Download className="w-3 h-3 mr-1" />
+                    <span>{template.downloads.toLocaleString()}</span>
+                  </div>
+                  
+                  {/* Download Button */}
+                  <Button 
+                    className="w-full text-sm py-2 bg-blue-600 hover:bg-blue-700 text-white" 
+                    size="sm"
+                    data-template-id={template.id}
+                    data-download-url=""
+                  >
+                    <Download className="w-4 h-4 mr-1" />
                     {t({ ko: "다운로드", en: "Download", ja: "ダウンロード", zh: "下载" })}
                   </Button>
+                  
+                  {/* Size Information Below Button */}
+                  <div className="text-center mt-2 pt-2 border-t border-gray-100">
+                    <span className="text-xs text-gray-500 font-medium">
+                      {template.id === 'keyring' && '50×50mm'}
+                      {template.id === 'stand' && '60×80mm'}
+                      {template.id === 'smarttok' && '40×40mm'}
+                      {template.id === 'photoholder' && '55×85mm'}
+                      {template.id === 'corot' && '40×60mm'}
+                      {template.id === 'badge' && '44×44mm'}
+                      {template.id === 'magnet' && '50×50mm'}
+                    </span>
+                  </div>
                 </CardContent>
               </Card>
             ))}
