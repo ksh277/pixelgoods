@@ -8,6 +8,9 @@ interface User {
   coupons: number;
   totalOrders: number;
   totalSpent: number;
+  isAdmin: boolean;
+  firstName: string;
+  lastName: string;
 }
 
 interface AuthContextType {
@@ -56,7 +59,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         points: 50000,
         coupons: 10,
         totalOrders: 50,
-        totalSpent: 1000000
+        totalSpent: 1000000,
+        isAdmin: true,
+        firstName: '관리자',
+        lastName: ''
       };
       
       setUser(userData);
@@ -73,7 +79,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         points: 100000,
         coupons: 20,
         totalOrders: 100,
-        totalSpent: 2000000
+        totalSpent: 2000000,
+        isAdmin: true,
+        firstName: '슈퍼관리자',
+        lastName: ''
+      };
+      
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+      setIsLoading(false);
+      return true;
+    }
+    
+    // Regular user accounts
+    if (username === 'user1' && password === '12345') {
+      const userData: User = {
+        id: '3',
+        name: '일반회원',
+        email: 'user1@example.com',
+        points: 5000,
+        coupons: 3,
+        totalOrders: 10,
+        totalSpent: 150000,
+        isAdmin: false,
+        firstName: '일반',
+        lastName: '회원'
       };
       
       setUser(userData);

@@ -36,6 +36,8 @@ import UserContentShowcase from "@/pages/UserContentShowcase";
 import CommunityQA from "@/pages/CommunityQA";
 import MyPage from "@/pages/MyPage";
 import Wishlist from "@/pages/Wishlist";
+import AdminDashboard from "@/pages/AdminDashboard";
+import AdditionalServices from "@/pages/AdditionalServices";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
@@ -110,6 +112,10 @@ function Router() {
         <Route path="/rewards" component={Rewards} />
         <Route path="/reviews/all" component={ReviewsAll} />
         <Route path="/design-service" component={DesignServiceProduct} />
+        <Route path="/additional-services" component={AdditionalServices} />
+        
+        {/* Admin route */}
+        <Route path="/admin" component={AdminDashboard} />
         
         {/* Category and section routes */}
         <Route path="/popular" component={Products} />
