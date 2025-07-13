@@ -96,14 +96,14 @@ function Router() {
         <Route path="/community/share" component={CommunityShare} />
         <Route path="/community/question" component={CommunityQuestion} />
         <Route path="/community/design-share" component={CommunityDesignShare} />
-        <Route path="/community/events" component={CommunityEvents} />
+        <Route path="/community/events" component={Events} />
         <Route path="/community/resources" component={CommunityResources} />
         <Route path="/community/qna" component={CommunityQA} />
         <Route path="/showcase" component={UserContentShowcase} />
         
         {/* Shortcut routes */}
         <Route path="/doan" component={CommunityDesignShare} />
-        <Route path="/event" component={CommunityEvents} />
+        <Route path="/event" component={Events} />
         <Route path="/editor" component={Editor} />
         <Route path="/inquiry" component={Inquiry} />
         <Route path="/support" component={Inquiry} />

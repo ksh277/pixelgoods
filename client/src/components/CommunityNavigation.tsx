@@ -34,8 +34,8 @@ const communityNavItems: CommunityNavItem[] = [
   },
   {
     id: "events",
-    label: { ko: "이벤트", en: "Events & Contests", ja: "イベント・コンテスト", zh: "活动与比赛" },
-    description: { ko: "다양한 이벤트 및 공모전 참여", en: "Join various events and contests", ja: "様々なイベントやコンテストに参加", zh: "参加各种活动和比赛" },
+    label: { ko: "행사/공모전", en: "Events & Contests", ja: "イベント・コンテスト", zh: "活动与比赛" },
+    description: { ko: "다양한 행사 및 공모전 참여", en: "Join various events and contests", ja: "様々なイベントやコンテストに参加", zh: "参加各种活动和比赛" },
     href: "/community/events",
     icon: Calendar,
     badge: "3"
