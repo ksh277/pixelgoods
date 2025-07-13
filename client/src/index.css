@@ -315,15 +315,39 @@
 
   /* Unified Mobile Card System */
   .unified-mobile-card {
-    @apply rounded-xl bg-white shadow-md p-2 h-[270px] flex flex-col justify-between cursor-pointer hover:shadow-lg transition-shadow;
+    @apply rounded-xl bg-white shadow-md p-3 min-h-[420px] max-h-[420px] flex flex-col justify-between cursor-pointer hover:shadow-lg transition-shadow overflow-hidden;
   }
   
   .unified-mobile-image {
-    @apply w-full h-[140px] object-cover rounded-md;
+    @apply w-full h-[140px] object-cover rounded-md flex-shrink-0;
   }
   
   .unified-mobile-grid {
-    @apply grid grid-cols-2 gap-4 px-4;
+    @apply grid grid-cols-2 gap-3 px-4;
+  }
+  
+  .unified-mobile-content {
+    @apply flex flex-col flex-grow;
+  }
+  
+  .unified-mobile-content h3 {
+    @apply text-sm font-bold text-gray-900;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .unified-mobile-content p {
+    @apply text-sm text-gray-700 leading-relaxed;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .unified-mobile-footer {
+    @apply mt-auto pt-2 text-xs text-gray-500;
   }
 
   /* Mobile-specific card styling */

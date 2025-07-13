@@ -188,7 +188,7 @@ export function BestReviewsSection() {
         </div>
 
         {/* Reviews Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="unified-mobile-grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
           {visibleReviews.map((review, index) => (
             <motion.div
               key={review.id}
@@ -196,20 +196,25 @@ export function BestReviewsSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className="group hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">
-                {/* Best Review Ribbon */}
-                <div className="absolute top-0 right-0 z-10">
-                  <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 text-xs font-bold transform rotate-12 translate-x-2 -translate-y-1 shadow-lg">
-                    BEST
+              <Link href={`/reviews/${review.id}`}>
+                <div className="unified-mobile-card relative">
+                  {/* Best Review Ribbon */}
+                  <div className="absolute top-2 right-2 z-10">
+                    <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-1 text-xs font-bold rounded shadow-lg">
+                      BEST
+                    </div>
                   </div>
-                </div>
 
-                <CardContent className="p-0">
+                  {/* Product Image */}
                   <div className="relative">
                     <img
                       src={review.reviewImage}
                       alt={review.productNameKo}
-                      className="w-full h-48 object-cover"
+                      className="unified-mobile-image"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+                      }}
                     />
                     
                     {/* Product Badge */}
@@ -220,9 +225,10 @@ export function BestReviewsSection() {
                     </div>
                   </div>
 
-                  <div className="p-4 space-y-3">
+                  {/* Content - Flexible grow area */}
+                  <div className="unified-mobile-content">
                     {/* Star Rating */}
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 mb-2">
                       {renderStars(review.rating)}
                       <span className="text-sm text-gray-600 ml-1">
                         ({review.rating}.0)
@@ -230,38 +236,38 @@ export function BestReviewsSection() {
                     </div>
 
                     {/* Review Text */}
-                    <p className="text-sm text-gray-700 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2 flex-grow">
                       {review.reviewText}
                     </p>
+                  </div>
 
+                  {/* Bottom Section - Always at bottom */}
+                  <div className="unified-mobile-footer space-y-2">
                     {/* User Info */}
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span>{review.userNickname}</span>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{review.userNickname}</span>
                       <span>{review.reviewDate}</span>
                     </div>
 
                     {/* Interaction Stats */}
-                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                    <div className="flex items-center justify-between pt-1 border-t border-gray-100">
                       <div className="flex items-center gap-3 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
-                          <Heart className="h-4 w-4" />
+                          <Heart className="h-3 w-3" />
                           <span>{review.likes}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <MessageCircle className="h-4 w-4" />
+                          <MessageCircle className="h-3 w-3" />
                           <span>{review.comments}</span>
                         </div>
                       </div>
-
-                      <Link href={`/reviews/${review.id}`}>
-                        <Button size="sm" variant="outline" className="text-xs">
-                          {t({ ko: "자세히", en: "Details", ja: "詳細", zh: "详情" })}
-                        </Button>
-                      </Link>
+                      <Button size="sm" variant="outline" className="text-xs py-1 px-2">
+                        {t({ ko: "자세히", en: "Details", ja: "詳細", zh: "详情" })}
+                      </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>

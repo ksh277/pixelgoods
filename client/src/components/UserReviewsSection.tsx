@@ -189,28 +189,30 @@ export function UserReviewsSection() {
                       </div>
                     </div>
 
-                    {/* Review Content */}
+                    {/* Review Content - Flexible grow area */}
                     <div className="unified-mobile-content">
                       {/* Product Name */}
-                      <h3 className="font-bold text-sm text-gray-900 truncate">
+                      <h3 className="font-bold text-sm text-gray-900 mb-2">
                         {language === 'ko' ? review.productNameKo : review.productName}
                       </h3>
 
                       {/* Rating */}
-                      <div className="flex items-center gap-1 mt-1">
+                      <div className="flex items-center gap-1 mb-2">
                         {renderStars(review.rating)}
                         <span className="text-sm text-gray-600 ml-1">
                           {review.rating}.0
                         </span>
                       </div>
 
-                      {/* Review Text */}
-                      <p className="text-sm text-gray-700 leading-relaxed mt-1 line-clamp-2">
-                        {truncateText(review.reviewText, 45)}
+                      {/* Review Text - Flexible area */}
+                      <p className="text-sm text-gray-700 leading-relaxed mb-2 flex-grow">
+                        {review.reviewText}
                       </p>
+                    </div>
 
-                      {/* Reviewer Info */}
-                      <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
+                    {/* Bottom Section - Always at bottom */}
+                    <div className="unified-mobile-footer">
+                      <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
                           <User className="h-3 w-3" />
                           <span>{review.reviewerNickname}</span>
