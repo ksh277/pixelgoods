@@ -252,9 +252,9 @@ export default function Home() {
             <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
           ) : (
             <motion.div 
-              className="grid grid-cols-2 gap-3 px-4 md:grid-cols-3 lg:grid-cols-4 md:gap-4 lg:gap-4"
+              className="product-grid"
               variants={containerVariants}
-              style={{ opacity: 1, gridAutoRows: 'minmax(420px, auto)' }}
+              style={{ opacity: 1 }}
             >
               {products?.slice(0, 4).map((product: Product) => (
                 <motion.div key={product.id} variants={itemVariants} style={{ opacity: 1 }}>

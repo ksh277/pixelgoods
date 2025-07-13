@@ -52,7 +52,7 @@ export function ProductCard({
         transition={{ duration: 0.5 }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        className="bg-white rounded-xl shadow-md p-3 hover:shadow-lg transition-shadow duration-200 h-[420px] flex flex-col"
+        className="product-card"
       >
         {/* Header: HOT badge and Like button */}
         <div className="flex justify-between items-start mb-2">
@@ -76,60 +76,50 @@ export function ProductCard({
           </motion.button>
         </div>
 
-        {/* Image Section */}
-        <div className="relative mb-3 flex-shrink-0">
+        {/* Product Image */}
+        <div className="product-card-image mb-3">
           {product.imageUrl ? (
-            <motion.img
-              src={product.imageUrl}
-              alt={language === 'ko' ? product.nameKo : product.name}
-              className="w-full h-[140px] object-cover rounded-md"
+            <img 
+              src={product.imageUrl} 
+              alt={product.name} 
+              className="w-full h-full object-cover rounded-md"
               loading="lazy"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
-              }}
             />
           ) : (
-            <div className="w-full h-[140px] bg-gray-200 rounded-md flex items-center justify-center">
-              <ImageIcon className="h-12 w-12 text-gray-400" />
+            <div className="w-full h-full bg-gray-100 rounded-md flex items-center justify-center">
+              <div className="text-center">
+                <ImageIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                <p className="text-xs text-gray-500">
+                  {t({ ko: "이미지 준비중", en: "Image Coming Soon" })}
+                </p>
+              </div>
             </div>
           )}
         </div>
 
-        {/* Info Section - Content Area */}
-        <div className="flex-grow flex flex-col">
-          {/* Product name and price */}
-          <div className="mb-3 flex-grow">
-            <h3 className="text-sm font-bold mb-1 text-korean line-clamp-1">
+        {/* Product Content */}
+        <div className="product-card-content">
+          <div className="flex-1">
+            <h3 className="product-card-name">
               {language === 'ko' ? product.nameKo : product.name}
             </h3>
-            <p className="text-sm font-medium text-gray-900">
+            <p className="product-card-price">
               ₩{formattedPrice}
             </p>
           </div>
-        </div>
 
-        {/* Stats Section - Fixed Bottom */}
-        <div className="mt-auto space-y-1">
-          {/* Reviews display */}
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-gray-600">
-              {t({ ko: "리뷰", en: "Reviews" })}:
-            </span>
-            <span className="text-xs font-medium text-gray-900">
-              {reviewCount}{t({ ko: "개", en: "" })}
-            </span>
-          </div>
-
-          {/* Likes display */}
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-gray-600">
-              {t({ ko: "찜", en: "Likes" })}:
-            </span>
-            <span className="text-xs font-medium text-gray-900">
-              {likeCount}{t({ ko: "회", en: "" })}
-            </span>
+          {/* Footer: Reviews and Likes */}
+          <div className="product-card-footer">
+            <div className="flex items-center justify-between text-xs text-gray-500">
+              <span className="flex items-center">
+                <Star className="h-3 w-3 mr-1" />
+                {t({ ko: "리뷰", en: "Reviews" })}: {reviewCount}
+              </span>
+              <span className="flex items-center">
+                <Heart className="h-3 w-3 mr-1" />
+                {t({ ko: "찜", en: "Likes" })}: {likeCount}
+              </span>
+            </div>
           </div>
         </div>
       </motion.div>

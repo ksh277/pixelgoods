@@ -76,6 +76,7 @@ export class MemStorage implements IStorage {
   private categories: Map<number, Category>;
   private products: Map<number, Product>;
   private productReviews: Map<number, ProductReview>;
+  private productLikes: Map<number, ProductLike>;
   private cartItems: Map<number, CartItem>;
   private orders: Map<number, Order>;
   private communityPosts: Map<number, CommunityPost>;
@@ -88,6 +89,7 @@ export class MemStorage implements IStorage {
     this.categories = new Map();
     this.products = new Map();
     this.productReviews = new Map();
+    this.productLikes = new Map();
     this.cartItems = new Map();
     this.orders = new Map();
     this.communityPosts = new Map();
@@ -447,6 +449,44 @@ export class MemStorage implements IStorage {
       }
     });
     return true;
+  }
+
+  // Product like methods
+  async isProductLiked(productId: number, userId: number): Promise<boolean> {
+    const likes = Array.from(this.productLikes.values());
+    return likes.some(like => like.productId === productId && like.userId === userId);
+  }
+
+  async likeProduct(productId: number, userId: number): Promise<ProductLike> {
+    const id = this.currentId++;
+    const like: ProductLike = {
+      id,
+      productId,
+      userId,
+      createdAt: new Date(),
+    };
+    this.productLikes.set(id, like);
+    return like;
+  }
+
+  async unlikeProduct(productId: number, userId: number): Promise<boolean> {
+    const likes = Array.from(this.productLikes.entries());
+    const likeEntry = likes.find(([_, like]) => like.productId === productId && like.userId === userId);
+    if (likeEntry) {
+      this.productLikes.delete(likeEntry[0]);
+      return true;
+    }
+    return false;
+  }
+
+  async getProductLikesCount(productId: number): Promise<number> {
+    const likes = Array.from(this.productLikes.values());
+    return likes.filter(like => like.productId === productId).length;
+  }
+
+  async getProductReviewsCount(productId: number): Promise<number> {
+    const reviews = Array.from(this.productReviews.values());
+    return reviews.filter(review => review.productId === productId).length;
   }
 }
 
