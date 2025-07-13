@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, ShoppingCart, Star, Eye, Plus, Minus, ImageIcon } from "lucide-react";
+import { Heart, ShoppingCart, Star, Eye, ImageIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -22,8 +22,6 @@ export function ProductCard({
   isFavorite = false 
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [likes, setLikes] = useState(product.likeCount || 0);
-  const [reviews, setReviews] = useState(product.reviewCount || 0);
   const [isLiked, setIsLiked] = useState(isFavorite);
   const { language, t } = useLanguage();
 
@@ -40,31 +38,11 @@ export function ProductCard({
     onAddToCart?.(product);
   };
 
-  const increaseLikes = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setLikes(prev => prev + 1);
-  };
-
-  const decreaseLikes = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setLikes(prev => Math.max(0, prev - 1));
-  };
-
-  const increaseReviews = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setReviews(prev => prev + 1);
-  };
-
-  const decreaseReviews = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setReviews(prev => Math.max(0, prev - 1));
-  };
-
   const formattedPrice = parseInt(product.basePrice).toLocaleString();
+  
+  // Use actual database values
+  const reviewCount = product.reviewCount || 0;
+  const likeCount = product.likeCount || 0;
 
   return (
     <Link href={`/product/${product.id}`} className="block">
@@ -131,54 +109,26 @@ export function ProductCard({
             </p>
           </div>
 
-          {/* Counters Section */}
-          <div className="space-y-2">
-            {/* Reviews counter */}
+          {/* Stats Section - Read-only display */}
+          <div className="space-y-1">
+            {/* Reviews display */}
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-600">
                 {t({ ko: "리뷰", en: "Reviews" })}:
               </span>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={decreaseReviews}
-                  className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
-                >
-                  <Minus className="h-3 w-3" />
-                </button>
-                <span className="text-xs font-medium min-w-[20px] text-center">
-                  {reviews}
-                </span>
-                <button
-                  onClick={increaseReviews}
-                  className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
-                >
-                  <Plus className="h-3 w-3" />
-                </button>
-              </div>
+              <span className="text-xs font-medium text-gray-900">
+                {reviewCount}{t({ ko: "개", en: "" })}
+              </span>
             </div>
 
-            {/* Likes counter */}
+            {/* Likes display */}
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-600">
                 {t({ ko: "찜", en: "Likes" })}:
               </span>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={decreaseLikes}
-                  className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
-                >
-                  <Minus className="h-3 w-3" />
-                </button>
-                <span className="text-xs font-medium min-w-[20px] text-center">
-                  {likes}
-                </span>
-                <button
-                  onClick={increaseLikes}
-                  className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
-                >
-                  <Plus className="h-3 w-3" />
-                </button>
-              </div>
+              <span className="text-xs font-medium text-gray-900">
+                {likeCount}{t({ ko: "회", en: "" })}
+              </span>
             </div>
           </div>
         </div>
