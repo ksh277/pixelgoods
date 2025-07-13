@@ -676,3 +676,21 @@ Preferred communication style: Simple, everyday language.
   - Responsive grid layout (4-column PC, 2-column mobile)
 - **Route Integration**: Accessible via `/additional-services` with proper navigation
 - **Mobile Responsiveness**: Optimized touch targets and card sizing for mobile devices
+
+### 2025-01-13: Mobile-First Hero Banner Redesign
+- **Simplified Mobile Design**: Completely redesigned Hero component for mobile-first approach
+- **Gradient Background**: Implemented indigo-to-purple gradient (#6B5BD2 ~ #9D50BB) for modern visual appeal
+- **Centered Layout**: Clean center-aligned text with optimized mobile typography
+  - 2xl font size for main heading with proper line-height
+  - Smaller subtitle text with appropriate spacing
+  - Break-keep class for Korean text line breaks
+- **Enhanced Button Layout**: Two-row button arrangement with sufficient touch targets
+  - Primary white button: "디자인 시작하기" linking to /editor
+  - Secondary outline button: "도안작업 서비스" linking to /additional-services
+  - Full-width buttons with proper padding and hover states
+- **Slide Indicators**: Redesigned with 12px circular indicators and 8px spacing
+  - Active state: 90% opacity with scale-up animation
+  - Inactive state: 40% opacity with hover effects
+  - Smooth transitions between slide states
+- **Removed Complex Elements**: Eliminated desktop-focused features for cleaner mobile experience
+- **Performance Optimization**: Simplified animations and reduced component complexity

@@ -44,180 +44,60 @@ export function Hero() {
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-  };
-
   return (
-    <section className="relative h-[50vh] min-h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-blue-900">
+    <section className="w-full px-4 py-12 bg-gradient-to-br from-indigo-500 to-purple-500 text-white text-center">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.7 }}
-          className={`absolute inset-0 bg-gradient-to-br ${heroSlides[currentSlide].bgColor}`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5 }}
         >
-          <div className="absolute inset-0 bg-black/20" />
-          
-          <div className="relative h-full flex items-center justify-center">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                {/* Content */}
-                <motion.div
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  className="text-white z-10 px-2 sm:px-0"
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.6 }}
-                    className="flex items-center gap-2 mb-4 flex-wrap"
-                  >
-                    <Sparkles className="h-6 w-6 text-yellow-300 flex-shrink-0" />
-                    <span className="text-sm font-medium text-yellow-300 text-korean mobile-hero-text break-keep">
-                      {t({ ko: "올댓프린팅 특별 서비스", en: "AllThatPrinting Special Service" })}
-                    </span>
-                  </motion.div>
+          <h1 className="text-2xl font-bold leading-snug mb-2 break-keep">
+            {t(heroSlides[currentSlide].title)}
+          </h1>
+          <p className="text-sm mt-2 mb-6 text-white/90">
+            {t(heroSlides[currentSlide].subtitle)}
+          </p>
 
-                  <motion.h1
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.6 }}
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-korean text-tight leading-tight break-keep mobile-hero-text"
-                  >
-                    {t(heroSlides[currentSlide].title)}
-                  </motion.h1>
-
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 0.6 }}
-                    className="text-lg md:text-xl mb-6 text-white/90 text-korean leading-relaxed break-keep mobile-hero-text"
-                  >
-                    {t(heroSlides[currentSlide].subtitle)}
-                  </motion.p>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6, duration: 0.6 }}
-                    className="flex flex-col sm:flex-row gap-4"
-                  >
-                    <Button
-                      size="lg"
-                      className="bg-white text-gray-900 hover:bg-gray-100 font-bold py-3 px-6 rounded-xl text-base hover-scale text-korean shadow-lg border-0"
-                      style={{ color: '#1a1a1a' }}
-                    >
-                      <span className="text-gray-900 font-bold">
-                        {t(heroSlides[currentSlide].ctaText)}
-                      </span>
-                    </Button>
-                    <Link href="/design-service">
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="border-white border-2 text-white hover:bg-white hover:text-gray-900 font-semibold py-3 px-6 rounded-xl text-base text-korean shadow-lg bg-transparent"
-                        style={{ color: 'white', borderColor: 'white' }}
-                      >
-                        <Puzzle className="h-4 w-4 mr-2 text-white" />
-                        <span className="text-white font-semibold">
-                          {t({ ko: "도안작업 서비스", en: "Design Service" })}
-                        </span>
-                      </Button>
-                    </Link>
-                  </motion.div>
-                </motion.div>
-
-                {/* Image */}
-                <motion.div
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="relative"
-                >
-                  <motion.img
-                    src={heroSlides[currentSlide].image}
-                    alt="Hero"
-                    className="w-full h-60 md:h-72 object-cover rounded-2xl shadow-2xl"
-                    whileHover={{ scale: 1.05, rotate: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-2xl" />
-                </motion.div>
-              </div>
-            </div>
+          <div className="mt-6 space-y-3 max-w-sm mx-auto">
+            <Link href="/editor">
+              <Button className="w-full py-3 bg-white text-indigo-600 font-semibold rounded shadow hover:bg-gray-100 transition-colors">
+                <span className="text-indigo-600 font-semibold">
+                  {t({ ko: "디자인 시작하기", en: "Start Designing" })}
+                </span>
+              </Button>
+            </Link>
+            <Link href="/additional-services">
+              <Button 
+                variant="outline" 
+                className="w-full py-3 border border-white rounded text-white hover:bg-white hover:text-indigo-600 transition-colors bg-transparent"
+                style={{ borderColor: 'white', color: 'white' }}
+              >
+                <span className="font-semibold">
+                  {t({ ko: "도안작업 서비스", en: "Design Service" })}
+                </span>
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-4 z-20">
-        <button
-          onClick={prevSlide}
-          className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-
-        <div className="flex gap-2">
-          {heroSlides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentSlide ? 'bg-white' : 'bg-white/50'
-              }`}
-            />
-          ))}
-        </div>
-
-        <button
-          onClick={nextSlide}
-          className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
+      {/* Slide Indicators */}
+      <div className="flex justify-center mt-6 space-x-2">
+        {heroSlides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentSlide 
+                ? 'bg-white opacity-90 scale-110' 
+                : 'bg-white opacity-40 hover:opacity-60'
+            }`}
+          />
+        ))}
       </div>
-
-      {/* Floating elements */}
-      <motion.div
-        animate={{ 
-          y: [0, -20, 0],
-          rotate: [0, 5, 0]
-        }}
-        transition={{ 
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute top-16 right-16 hidden lg:block"
-      >
-        <div className="w-20 h-20 bg-white/10 rounded-full backdrop-blur-sm" />
-      </motion.div>
-
-      <motion.div
-        animate={{ 
-          y: [0, 15, 0],
-          rotate: [0, -3, 0]
-        }}
-        transition={{ 
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1
-        }}
-        className="absolute bottom-24 left-16 hidden lg:block"
-      >
-        <div className="w-16 h-16 bg-white/10 rounded-full backdrop-blur-sm" />
-      </motion.div>
     </section>
   );
 }
