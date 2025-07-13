@@ -30,7 +30,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Products
   app.get("/api/products", async (req, res) => {
     try {
-      const { category, featured } = req.query;
+      const { category, featured, search } = req.query;
       let products;
       
       if (category) {
@@ -41,9 +41,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
         products = await storage.getProducts();
       }
       
+      // Search filtering
+      if (search) {
+        const searchTerm = (search as string).toLowerCase();
+        products = products.filter(product => 
+          product.name.toLowerCase().includes(searchTerm) ||
+          product.nameKo.toLowerCase().includes(searchTerm) ||
+          product.description.toLowerCase().includes(searchTerm) ||
+          (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+        );
+      }
+      
       res.json(products);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products" });
+    }
+  });
+
+  // Search products endpoint
+  app.get("/api/products/search", async (req, res) => {
+    try {
+      const { q, category, priceRange, sortBy } = req.query;
+      
+      let products = await storage.getProducts();
+      
+      // Text search
+      if (q) {
+        const searchTerm = (q as string).toLowerCase();
+        products = products.filter(product => 
+          product.name.toLowerCase().includes(searchTerm) ||
+          product.nameKo.toLowerCase().includes(searchTerm) ||
+          product.description.toLowerCase().includes(searchTerm) ||
+          (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+        );
+      }
+      
+      // Category filter
+      if (category && category !== "all") {
+        products = products.filter(product => 
+          product.categoryId.toString() === category
+        );
+      }
+      
+      // Price range filter
+      if (priceRange && priceRange !== "all") {
+        products = products.filter(product => {
+          const price = product.price;
+          switch (priceRange) {
+            case "under10": return price < 10000;
+            case "10to30": return price >= 10000 && price < 30000;
+            case "30to50": return price >= 30000 && price < 50000;
+            case "over50": return price >= 50000;
+            default: return true;
+          }
+        });
+      }
+      
+      // Sorting
+      if (sortBy) {
+        products.sort((a, b) => {
+          switch (sortBy) {
+            case "latest": return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            case "oldest": return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+            case "priceLow": return a.price - b.price;
+            case "priceHigh": return b.price - a.price;
+            case "name": return a.nameKo.localeCompare(b.nameKo);
+            case "popular": return (b.reviews || 0) - (a.reviews || 0);
+            default: return 0;
+          }
+        });
+      }
+      
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to search products" });
     }
   });
 

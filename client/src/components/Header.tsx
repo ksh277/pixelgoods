@@ -13,6 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export function Header() {
   const [location] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [, setLocation] = useLocation();
   const [expandedSections, setExpandedSections] = useState<string[]>(['customer', 'participation', 'goods']);
   const [cartItemCount, setCartItemCount] = useState(0);
   const { theme, toggleTheme } = useThemeContext();
@@ -58,6 +59,18 @@ export function Header() {
         ? prev.filter(id => id !== sectionId)
         : [...prev, sectionId]
     );
+  };
+
+  const handleSearch = (query: string) => {
+    if (query.trim()) {
+      setLocation(`/search?query=${encodeURIComponent(query.trim())}`);
+    }
+  };
+
+  const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch(searchQuery);
+    }
   };
 
   const languages = [
@@ -235,11 +248,22 @@ export function Header() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder={t({ ko: "검색...", en: "Search...", ja: "検索...", zh: "搜索..." })}
+                  placeholder={t({ ko: "상품명을 입력하세요", en: "Enter product name", ja: "商品名を入力", zh: "输入商品名称" })}
                   className="pl-10 w-64"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
                 />
+                {searchQuery && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleSearch(searchQuery)}
+                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                )}
               </div>
 
               {/* Theme Toggle */}
@@ -349,15 +373,25 @@ export function Header() {
               <SheetContent side="right" className="w-80 overflow-y-auto">
                 <div className="flex flex-col space-y-4 mt-6">
                   {/* Mobile Search */}
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      type="search"
-                      placeholder={t({ ko: "검색...", en: "Search...", ja: "検索...", zh: "搜索..." })}
-                      className="pl-10"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                  <div className="flex space-x-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="search"
+                        placeholder={t({ ko: "상품명을 입력하세요", en: "Enter product name", ja: "商品名を入力", zh: "输入商品名称" })}
+                        className="pl-10"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyPress={handleSearchKeyPress}
+                      />
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => handleSearch(searchQuery)}
+                      className="px-3"
+                    >
+                      <Search className="h-4 w-4" />
+                    </Button>
                   </div>
 
                   {/* Mobile Menu Sections */}

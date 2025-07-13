@@ -38,6 +38,7 @@ import MyPage from "@/pages/MyPage";
 import Wishlist from "@/pages/Wishlist";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdditionalServices from "@/pages/AdditionalServices";
+import SearchResults from "@/pages/SearchResults";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
@@ -60,6 +61,7 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/products" component={Products} />
         <Route path="/product/:id" component={ProductDetail} />
+        <Route path="/search" component={SearchResults} />
         
         {/* Category routes */}
         <Route path="/category/:category/:subcategory" component={CategoryPage} />
