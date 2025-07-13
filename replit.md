@@ -556,3 +556,9 @@ Preferred communication style: Simple, everyday language.
 - **Status Integration**: Available products show full-color illustrations, unavailable products use reduced opacity
 - **Card Layout Enhancement**: Maintained existing size information (50×50mm, etc.) and blue CTA buttons
 - **Korean E-commerce Pattern**: Complete 4×2 grid layout with proper spacing and hover effects
+
+### 2025-01-12: Inquiry Button Size Optimization
+- **Size Reduction**: Reduced inquiry button size from 64px to 48px (approximately 25% reduction)
+- **Improved Proportions**: Button now has better visual balance and is less overwhelming
+- **Maintained Functionality**: Kept all existing functionality including hover effects, character image, and overlay text
+- **Enhanced User Experience**: More comfortable size while maintaining visibility and accessibility
