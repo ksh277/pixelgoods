@@ -203,21 +203,20 @@ body {
     -webkit-text-fill-color: transparent;
   }
 
-  /* 통일된 카드 시스템 - 모든 섹션에 적용 */
+  /* 완전히 통일된 카드 시스템 - 모바일 최적화 */
   .unified-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    max-width: 170px;
-    aspect-ratio: 3 / 4.2;
-    padding: 12px;
-    border-radius: 12px;
+    min-height: 340px;
     background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    padding: 12px;
     position: relative;
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .unified-card:hover {
@@ -225,50 +224,69 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   }
 
-  /* 뱃지 영역 (HOT, NEW, 할인율 등) */
-  .unified-card-badge {
+  /* 상단 요소 (HOT 배지 + 찜 하트) */
+  .unified-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     position: absolute;
     top: 8px;
     left: 8px;
-    z-index: 10;
-  }
-
-  .unified-card-heart {
-    position: absolute;
-    top: 8px;
     right: 8px;
     z-index: 10;
   }
 
+  .unified-card-badge {
+    background-color: #ff4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .unified-card-heart {
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .unified-card-heart:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+
   /* 이미지 영역 고정 */
   .unified-card-image {
-    height: 120px;
+    height: 130px;
     width: 100%;
     background-color: #f0f0f0;
-    background-position: center;
-    background-size: cover;
     border-radius: 8px;
-    object-fit: cover;
     flex-shrink: 0;
+    overflow: hidden;
+    margin-bottom: 10px;
   }
 
-  /* 정보 영역 */
-  .unified-card-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 8px;
-    margin-bottom: 8px;
+  .unified-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
+  /* 제품명 영역 */
   .unified-card-title {
     font-weight: 600;
     font-size: 15px;
     line-height: 1.3;
-    margin-top: 8px;
+    min-height: 40px;
     margin-bottom: 4px;
-    height: 42px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -276,17 +294,7 @@ body {
     text-overflow: ellipsis;
   }
 
-  .unified-card-desc {
-    font-size: 14px;
-    color: #444;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
+  /* 가격 영역 */
   .unified-card-price {
     font-size: 14px;
     color: #333;
@@ -297,39 +305,48 @@ body {
     text-overflow: ellipsis;
   }
 
-  /* 하단 푸터 영역 */
+  /* 하단 메타 정보 (리뷰, 찜) */
   .unified-card-footer {
     margin-top: auto;
     padding-top: 8px;
     font-size: 13px;
     color: #888;
-    line-height: 1.4;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 8px;
   }
 
-  /* 통일된 그리드 시스템 */
+  /* 모바일 최적화 그리드 */
   .unified-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
     padding: 0 16px;
-    justify-items: center;
+  }
+
+  .unified-grid .unified-card {
+    flex: 0 0 48%;
+    max-width: 48%;
   }
 
   /* 반응형 조정 */
   @media (min-width: 768px) {
     .unified-grid {
-      grid-template-columns: repeat(3, 1fr);
       padding: 0;
+    }
+    
+    .unified-grid .unified-card {
+      flex: 0 0 32%;
+      max-width: 32%;
     }
   }
 
   @media (min-width: 1024px) {
-    .unified-grid {
-      grid-template-columns: repeat(4, 1fr);
+    .unified-grid .unified-card {
+      flex: 0 0 24%;
+      max-width: 24%;
     }
   }
 

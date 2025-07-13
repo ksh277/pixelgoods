@@ -54,25 +54,26 @@ export function ProductCard({
         onHoverEnd={() => setIsHovered(false)}
         className="unified-card"
       >
-        {/* 뱃지 영역 */}
-        {product.isFeatured && (
-          <div className="unified-card-badge">
-            <Badge className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+        {/* 상단 HOT 배지 + 찜 하트 */}
+        <div className="unified-card-top">
+          {/* HOT 배지 */}
+          {product.isFeatured && (
+            <div className="unified-card-badge">
               HOT
-            </Badge>
-          </div>
-        )}
-        
-        {/* 하트 버튼 */}
-        <motion.button
-          className={`unified-card-heart p-1.5 rounded-full ${
-            isLiked ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-700'
-          } shadow-sm transition-all duration-200 active:scale-95`}
-          onClick={handleLike}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Heart className={`h-3 w-3 ${isLiked ? 'fill-current' : ''}`} />
-        </motion.button>
+            </div>
+          )}
+          
+          {/* 찜 하트 */}
+          <motion.button
+            className={`unified-card-heart ${
+              isLiked ? 'bg-red-500 text-white' : 'bg-white text-gray-600'
+            }`}
+            onClick={handleLike}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Heart className={`h-3 w-3 ${isLiked ? 'fill-current' : ''}`} />
+          </motion.button>
+        </div>
 
         {/* 이미지 영역 */}
         <div className="unified-card-image">
@@ -80,38 +81,34 @@ export function ProductCard({
             <img 
               src={product.imageUrl} 
               alt={product.name} 
-              className="w-full h-full object-cover rounded-md"
+              className="w-full h-full object-cover"
               loading="lazy"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-                (e.target as HTMLImageElement).parentElement!.style.backgroundColor = '#f0f0f0';
-              }}
             />
-          ) : null}
+          ) : (
+            <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+              <ImageIcon className="h-8 w-8 text-gray-400" />
+            </div>
+          )}
         </div>
 
-        {/* 정보 영역 */}
-        <div className="unified-card-info">
-          <h3 className="unified-card-title">
-            {language === 'ko' ? product.nameKo : product.name}
-          </h3>
-          <p className="unified-card-price">
-            ₩{formattedPrice}
-          </p>
+        {/* 제품명 */}
+        <div className="unified-card-title">
+          {language === 'ko' ? product.nameKo : product.name}
         </div>
 
-        {/* 푸터 영역 */}
+        {/* 가격 */}
+        <div className="unified-card-price">
+          ₩{formattedPrice}
+        </div>
+
+        {/* 하단 메타 정보 */}
         <div className="unified-card-footer">
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span className="flex items-center">
-              <Star className="h-3 w-3 mr-1" />
-              {t({ ko: "리뷰", en: "Reviews" })}: {reviewCount}
-            </span>
-            <span className="flex items-center">
-              <Heart className="h-3 w-3 mr-1" />
-              {t({ ko: "찜", en: "Likes" })}: {likeCount}
-            </span>
-          </div>
+          <span>
+            {t({ ko: "리뷰", en: "Reviews" })}: {reviewCount}
+          </span>
+          <span>
+            {t({ ko: "찜", en: "Likes" })}: {likeCount}
+          </span>
         </div>
       </motion.div>
     </Link>
