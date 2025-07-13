@@ -69,12 +69,16 @@ export default function Login() {
             
             {/* Demo credentials info */}
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-              <p className="text-sm font-medium text-blue-900 mb-2">
-                {t({ ko: "테스트 계정:", en: "Demo Account:" })}
+              <p className="text-sm font-medium text-blue-900 mb-2 flex items-center">
+                <Shield className="w-4 h-4 mr-1" />
+                {t({ ko: "테스트 계정", en: "Demo Account", ja: "テストアカウント", zh: "测试账号" })}
               </p>
-              <div className="text-sm text-blue-800">
-                <p>아이디: admin</p>
-                <p>비밀번호: 12345</p>
+              <div className="text-sm text-blue-800 space-y-1">
+                <p>• {t({ ko: "관리자", en: "Admin", ja: "管理者", zh: "管理员" })}: <span className="font-mono bg-blue-100 px-2 py-1 rounded">admin</span> / <span className="font-mono bg-blue-100 px-2 py-1 rounded">12345</span></p>
+                <p>• {t({ ko: "사용자", en: "User", ja: "ユーザー", zh: "用户" })}: <span className="font-mono bg-blue-100 px-2 py-1 rounded">user1</span> / <span className="font-mono bg-blue-100 px-2 py-1 rounded">12345</span></p>
+                <p className="text-xs text-red-600 mt-2">
+                  ⚠️ {t({ ko: "실제 배포 시 이 안내는 제거됩니다.", en: "This guide will be removed in production.", ja: "本番環境では削除されます。", zh: "正式部署时将删除此指南。" })}
+                </p>
               </div>
             </div>
             

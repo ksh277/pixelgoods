@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, ShoppingCart, Moon, Sun, Menu, User, Heart, ChevronDown, ChevronRight, ChevronUp, Globe } from "lucide-react";
+import { Search, ShoppingCart, Moon, Sun, Menu, User, Heart, ChevronDown, ChevronRight, ChevronUp, Globe, Settings } from "lucide-react";
 import { useThemeContext } from "./ThemeProvider";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/contexts/AuthContext";
@@ -87,8 +87,17 @@ export function Header() {
         { id: 'community', label: { ko: "커뮤니티", en: "Community", ja: "コミュニティ", zh: "社区" }, href: "/community" },
         { id: 'editor', label: { ko: "굿즈 에디터", en: "Goods Editor", ja: "グッズエディタ", zh: "商品编辑器" }, href: "/editor" },
         { id: 'cart', label: { ko: "장바구니", en: "Shopping Cart", ja: "ショッピングカート", zh: "购物车" }, href: "/cart" },
-        { id: 'login', label: { ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" }, href: "/login" },
-        { id: 'register', label: { ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" }, href: "/register" }
+        ...(user 
+          ? [
+              { id: 'mypage', label: { ko: "마이페이지", en: "My Page", ja: "マイページ", zh: "我的页面" }, href: "/mypage" },
+              ...(user.isAdmin ? [{ id: 'admin', label: { ko: "관리자 모드", en: "Admin Mode", ja: "管理者モード", zh: "管理员模式" }, href: "/admin" }] : []),
+              { id: 'logout', label: { ko: "로그아웃", en: "Logout", ja: "ログアウト", zh: "登出" }, href: "/logout", onClick: logout }
+            ]
+          : [
+              { id: 'login', label: { ko: "로그인", en: "Login", ja: "ログイン", zh: "登录" }, href: "/login" },
+              { id: 'register', label: { ko: "회원가입", en: "Sign Up", ja: "会員登録", zh: "注册" }, href: "/register" }
+            ]
+        )
       ]
     },
     {
@@ -276,6 +285,14 @@ export function Header() {
                         {t({ ko: "찜한 상품", en: "Favorites", ja: "お気に入り", zh: "收藏" })}
                       </Link>
                     </DropdownMenuItem>
+                    {user.isAdmin && (
+                      <DropdownMenuItem>
+                        <Link href="/admin" className="flex items-center w-full">
+                          <Settings className="mr-2 h-4 w-4" />
+                          {t({ ko: "관리자 모드", en: "Admin Mode", ja: "管理者モード", zh: "管理员模式" })}
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem onClick={logout}>
                       <span className="mr-2">🚪</span>
                       {t({ ko: "로그아웃", en: "Logout", ja: "ログアウト", zh: "登出" })}
@@ -368,17 +385,28 @@ export function Header() {
                             {section.items.map((item) => (
                               <div key={item.id}>
                                 {/* Main Item */}
-                                <Link
-                                  href={item.href}
-                                  className="flex items-center justify-between py-2 px-6 text-foreground hover:bg-muted rounded-md transition-colors"
-                                >
-                                  <span className="text-sm">
-                                    {t(item.label)}
-                                  </span>
-                                  {item.subItems && (
-                                    <ChevronRight className="h-3 w-3 text-muted-foreground" />
-                                  )}
-                                </Link>
+                                {item.onClick ? (
+                                  <button
+                                    onClick={item.onClick}
+                                    className="flex items-center justify-between py-2 px-6 text-foreground hover:bg-muted rounded-md transition-colors w-full text-left"
+                                  >
+                                    <span className="text-sm">
+                                      {t(item.label)}
+                                    </span>
+                                  </button>
+                                ) : (
+                                  <Link
+                                    href={item.href}
+                                    className="flex items-center justify-between py-2 px-6 text-foreground hover:bg-muted rounded-md transition-colors"
+                                  >
+                                    <span className="text-sm">
+                                      {t(item.label)}
+                                    </span>
+                                    {item.subItems && (
+                                      <ChevronRight className="h-3 w-3 text-muted-foreground" />
+                                    )}
+                                  </Link>
+                                )}
 
                                 {/* Sub Items */}
                                 {item.subItems && (
