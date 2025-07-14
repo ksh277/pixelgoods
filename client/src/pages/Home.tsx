@@ -342,17 +342,15 @@ export default function Home() {
 
           {/* Mobile 2x2 Grid Layout for Creator Reviews */}
           <div className="px-4 md:px-6 lg:px-8">
-            <div className="flex flex-wrap justify-between gap-3 mb-4 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
+            <div className="mobile-2x2-grid">
               {creatorReviews.map((review) => (
                 <motion.div 
                   key={review.id} 
                   variants={itemVariants}
-                  className="w-[48%] mb-4 md:w-full md:mb-0"
                 >
-                  <Link href={`/product/${review.id}`} className="block">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 h-full flex flex-col">
-                      {/* Image Area */}
-                      <div className="relative h-28 mb-3 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
+                  <Link href={`/product/${review.id}`}>
+                    <div className="mobile-2x2-card">
+                      <div className="mobile-2x2-image">
                         <img
                           src={review.productImage}
                           alt={review.productName}
@@ -371,8 +369,7 @@ export default function Home() {
                         </div>
                       </div>
                       
-                      {/* Text Content */}
-                      <div className="flex-1 flex flex-col justify-between">
+                      <div className="mobile-2x2-content">
                         <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
                           {review.productName}
                         </h3>
@@ -418,19 +415,12 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Mobile 2x2 Grid Layout for Community Showcase */}
-          <div className="px-4 md:px-6 lg:px-8">
-            <div className="flex flex-wrap justify-between gap-3 mb-4 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
-              {communityShowcase.map((item) => (
-                <motion.div 
-                  key={item.id} 
-                  variants={itemVariants}
-                  className="w-[48%] mb-4 md:w-full md:mb-0"
-                >
-                  <Link href={`/community/${item.id}`} className="block">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 h-full flex flex-col">
-                      {/* Image Area */}
-                      <div className="relative h-28 mb-3 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
+          <div className="mobile-2x2-grid">
+            {communityShowcase.map((item) => (
+              <motion.div key={item.id} variants={itemVariants}>
+                <Link href={`/community/${item.id}`}>
+                  <div className="mobile-2x2-card">
+                    <div className="mobile-2x2-image">
                         <img
                           src={item.image}
                           alt={item.title}
@@ -449,23 +439,21 @@ export default function Home() {
                         </div>
                       </div>
                       
-                      {/* Text Content */}
-                      <div className="flex-1 flex flex-col justify-between">
-                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
-                          {item.title}
-                        </h3>
-                        <p className="text-gray-500 text-sm mb-1 truncate">
-                          @{item.author}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          리뷰 {item.comments} / LIKE {item.likes}
-                        </p>
-                      </div>
+                    <div className="mobile-2x2-content">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-500 text-sm mb-1 truncate">
+                        @{item.author}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        리뷰 {item.comments} / LIKE {item.likes}
+                      </p>
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </motion.section>
 

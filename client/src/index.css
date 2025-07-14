@@ -39,6 +39,66 @@ body {
   max-width: 100vw;
 }
 
+/* Mobile 2x2 Grid CSS */
+.mobile-2x2-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .mobile-2x2-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-2x2-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 0 32px;
+  }
+}
+
+.mobile-2x2-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dark .mobile-2x2-card {
+  background: #1f2937;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-2x2-image {
+  width: 100%;
+  height: 112px;
+  background: #f3f4f6;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .mobile-2x2-image {
+  background: #374151;
+}
+
+.mobile-2x2-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 /* 전역 다크모드 스타일 */
 .dark {
   color-scheme: dark;
