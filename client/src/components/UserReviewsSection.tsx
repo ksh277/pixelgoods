@@ -145,54 +145,59 @@ export function UserReviewsSection() {
             </Link>
           </div>
 
-          {/* Review Cards */}
-          <div className="allprint-grid">
-            {displayedReviews.map((review, index) => (
-              <motion.div key={review.id} variants={itemVariants}>
-                <Link href={`/reviews/${review.id}`}>
-                  <div className="allprint-card">
-                    {/* 상단 이미지 영역 (70%) */}
-                    <div className="allprint-card-image">
-                      <img
-                        src={review.productImage}
-                        alt={language === 'ko' ? review.productNameKo : review.productName}
-                        loading="lazy"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
-                        }}
-                      />
-                      
-                      {/* HOT 배지 (왼쪽 상단 절대 위치) */}
-                      {review.isHot && (
-                        <div className="allprint-card-hot-badge">
-                          HOT
+          {/* Mobile 2x2 Grid Layout for User Reviews */}
+          <div className="px-4 md:px-6 lg:px-8">
+            <div className="flex flex-wrap justify-between gap-3 mb-4 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
+              {displayedReviews.map((review, index) => (
+                <motion.div 
+                  key={review.id} 
+                  variants={itemVariants}
+                  className="w-[48%] mb-4 md:w-full md:mb-0"
+                >
+                  <Link href={`/reviews/${review.id}`}>
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 h-full flex flex-col">
+                      {/* Image Area */}
+                      <div className="relative h-28 mb-3 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
+                        <img
+                          src={review.productImage}
+                          alt={language === 'ko' ? review.productNameKo : review.productName}
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+                          }}
+                        />
+                        
+                        {/* HOT Badge */}
+                        {review.isHot && (
+                          <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold z-10">
+                            HOT
+                          </div>
+                        )}
+                        
+                        {/* LIKE Badge */}
+                        <div className="absolute top-2 right-2 text-xs text-gray-500 dark:text-gray-400 z-10">
+                          LIKE {review.rating * 50 + 200}
                         </div>
-                      )}
+                      </div>
                       
-                      {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
-                      <div className="allprint-card-like-badge">
-                        LIKE {review.rating * 50 + 200}
+                      {/* Text Content */}
+                      <div className="flex-1 flex flex-col justify-between">
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                          {language === 'ko' ? review.productNameKo : review.productName}
+                        </h3>
+                        <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                          ₩ {(review.rating * 1000 + 3000).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          리뷰 {review.totalReviews?.toLocaleString()} / LIKE {review.rating * 50 + 200}
+                        </p>
                       </div>
                     </div>
-
-                    {/* 하단 텍스트 영역 (30%) */}
-                    <div className="allprint-card-content">
-                      <div className="allprint-card-title">
-                        {language === 'ko' ? review.productNameKo : review.productName}
-                      </div>
-                      
-                      <div className="allprint-card-price">
-                        ₩ {(review.rating * 1000 + 3000).toLocaleString()}
-                      </div>
-                      
-                      <div className="allprint-card-stats">
-                        리뷰 {review.totalReviews?.toLocaleString()} / LIKE {review.rating * 50 + 200}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
 

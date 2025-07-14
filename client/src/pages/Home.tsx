@@ -418,52 +418,55 @@ export default function Home() {
             </Link>
           </div>
 
-          <motion.div 
-            className="allprint-grid"
-            variants={containerVariants}
-          >
-            {communityShowcase.map((item) => (
-              <motion.div key={item.id} variants={itemVariants}>
-                <Link href={`/community/${item.id}`} className="block">
-                  <div className="allprint-card">
-                    {/* 상단 이미지 영역 (70%) */}
-                    <div className="allprint-card-image">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        loading="lazy"
-                      />
-                      
-                      {/* HOT 배지 (왼쪽 상단 절대 위치) */}
-                      <div className="allprint-card-hot-badge">
-                        인기
+          {/* Mobile 2x2 Grid Layout for Community Showcase */}
+          <div className="px-4 md:px-6 lg:px-8">
+            <div className="flex flex-wrap justify-between gap-3 mb-4 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
+              {communityShowcase.map((item) => (
+                <motion.div 
+                  key={item.id} 
+                  variants={itemVariants}
+                  className="w-[48%] mb-4 md:w-full md:mb-0"
+                >
+                  <Link href={`/community/${item.id}`} className="block">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 h-full flex flex-col">
+                      {/* Image Area */}
+                      <div className="relative h-28 mb-3 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                        />
+                        
+                        {/* HOT Badge */}
+                        <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold z-10">
+                          인기
+                        </div>
+                        
+                        {/* LIKE Badge */}
+                        <div className="absolute top-2 right-2 text-xs text-gray-500 dark:text-gray-400 z-10">
+                          LIKE {item.likes}
+                        </div>
                       </div>
                       
-                      {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
-                      <div className="allprint-card-like-badge">
-                        LIKE {item.likes}
+                      {/* Text Content */}
+                      <div className="flex-1 flex flex-col justify-between">
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-500 text-sm mb-1 truncate">
+                          @{item.author}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          리뷰 {item.comments} / LIKE {item.likes}
+                        </p>
                       </div>
                     </div>
-                    
-                    {/* 하단 텍스트 영역 (30%) */}
-                    <div className="allprint-card-content">
-                      <div className="allprint-card-title">
-                        {item.title}
-                      </div>
-                      
-                      <div className="allprint-card-price">
-                        @{item.author}
-                      </div>
-                      
-                      <div className="allprint-card-stats">
-                        리뷰 {item.comments} / LIKE {item.likes}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </motion.section>
 
         {/* Material Recommendations */}
@@ -493,53 +496,55 @@ export default function Home() {
             </Link>
           </div>
 
-          <motion.div 
-            className="allprint-grid"
-            variants={containerVariants}
-          >
-            {materialRecommendations.map((item) => (
-              <motion.div key={item.id} variants={itemVariants}>
-                <Link href={`/product/${item.id}`} className="block">
-                  <div className="allprint-card">
-                    {/* 상단 이미지 영역 (70%) */}
-                    <div className="allprint-card-image">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      
-                      {/* HOT 배지 (왼쪽 상단 절대 위치) */}
-                      <div className="allprint-card-hot-badge">
-                        {item.badge}
+          {/* Mobile 2x2 Grid Layout for Material Recommendations */}
+          <div className="px-4 md:px-6 lg:px-8">
+            <div className="flex flex-wrap justify-between gap-3 mb-4 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
+              {materialRecommendations.map((item) => (
+                <motion.div 
+                  key={item.id} 
+                  variants={itemVariants}
+                  className="w-[48%] mb-4 md:w-full md:mb-0"
+                >
+                  <Link href={`/product/${item.id}`} className="block">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 h-full flex flex-col">
+                      {/* Image Area */}
+                      <div className="relative h-28 mb-3 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                        />
+                        
+                        {/* HOT Badge */}
+                        <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold z-10">
+                          {item.badge}
+                        </div>
+                        
+                        {/* LIKE Badge */}
+                        <div className="absolute top-2 right-2 text-xs text-gray-500 dark:text-gray-400 z-10">
+                          LIKE {Math.floor(item.reviewCount * 0.6)}
+                        </div>
                       </div>
                       
-                      {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
-                      <div className="allprint-card-like-badge">
-                        LIKE {Math.floor(item.reviewCount * 0.6)}
+                      {/* Text Content */}
+                      <div className="flex-1 flex flex-col justify-between">
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                          {item.title}
+                        </h3>
+                        <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                          ₩{item.price.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          리뷰 {item.reviewCount} / LIKE {Math.floor(item.reviewCount * 0.6)}
+                        </p>
                       </div>
                     </div>
-                    
-                    {/* 하단 텍스트 영역 (30%) */}
-                    <div className="allprint-card-content">
-                      <div className="allprint-card-title">
-                        {item.title}
-                      </div>
-                      
-                      <div className="allprint-card-price">
-                        ₩{item.price.toLocaleString()}
-                      </div>
-                      
-                      <div className="allprint-card-stats">
-                        리뷰 {item.reviewCount} / LIKE {Math.floor(item.reviewCount * 0.6)}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </motion.section>
 
         {/* User Reviews Section */}
@@ -566,55 +571,58 @@ export default function Home() {
             </div>
           </div>
 
-          <motion.div 
-            className="allprint-grid"
-            variants={containerVariants}
-          >
-            {instagramFeed.map((post) => (
-              <motion.div key={post.id} variants={itemVariants}>
-                <div className="allprint-card">
-                  {/* 상단 이미지 영역 (70%) */}
-                  <div className="allprint-card-image">
-                    <img
-                      src={post.image}
-                      alt={`Instagram post ${post.id}`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    
-                    {/* HOT 배지 (왼쪽 상단 절대 위치) */}
-                    <div className="allprint-card-hot-badge">
-                      인기
+          {/* Mobile 2x2 Grid Layout for Instagram Feed */}
+          <div className="px-4 md:px-6 lg:px-8">
+            <div className="flex flex-wrap justify-between gap-3 mb-4 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
+              {instagramFeed.map((post) => (
+                <motion.div 
+                  key={post.id} 
+                  variants={itemVariants}
+                  className="w-[48%] mb-4 md:w-full md:mb-0"
+                >
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 h-full flex flex-col">
+                    {/* Image Area */}
+                    <div className="relative h-28 mb-3 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
+                      <img
+                        src={post.image}
+                        alt={`Instagram post ${post.id}`}
+                        className="w-full h-full object-contain"
+                        loading="lazy"
+                      />
+                      
+                      {/* HOT Badge */}
+                      <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold z-10">
+                        인기
+                      </div>
+                      
+                      {/* LIKE Badge */}
+                      <div className="absolute top-2 right-2 text-xs text-gray-500 dark:text-gray-400 z-10">
+                        LIKE {post.likes}
+                      </div>
                     </div>
                     
-                    {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
-                    <div className="allprint-card-like-badge">
-                      LIKE {post.likes}
+                    {/* Text Content */}
+                    <div className="flex-1 flex flex-col justify-between">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                        Instagram Post #{post.id}
+                      </h3>
+                      <p className="text-gray-500 text-sm mb-1 truncate">
+                        @allthatprinting_
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        리뷰 {post.comments} / LIKE {post.likes}
+                      </p>
                     </div>
                   </div>
-                  
-                  {/* 하단 텍스트 영역 (30%) */}
-                  <div className="allprint-card-content">
-                    <div className="allprint-card-title">
-                      Instagram Post #{post.id}
-                    </div>
-                    
-                    <div className="allprint-card-price">
-                      @allthatprinting_
-                    </div>
-                    
-                    <div className="allprint-card-stats">
-                      리뷰 {post.comments} / LIKE {post.likes}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </motion.section>
       </div>
 
-
+      {/* Bottom spacing to prevent floating button overlap */}
+      <div className="h-24"></div>
     </div>
   );
 }
