@@ -371,27 +371,58 @@ body {
     transition: transform 0.2s ease;
   }
 
-  /* 다크 모드 지원 */
+  /* 다크 모드 지원 - 강화된 텍스트 대비 */
   @media (prefers-color-scheme: dark) {
     .allprint-card {
-      background-color: #1e1e1e;
-      box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
+      background-color: #1e1e1e !important;
+      box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1) !important;
     }
     
     .allprint-card-title {
-      color: #fff;
+      color: #ffffff !important;
     }
     
     .allprint-card-price {
-      color: #fff;
+      color: #f9f9f9 !important;
     }
     
     .allprint-card-stats {
-      color: #ccc;
+      color: #cccccc !important;
+    }
+    
+    .allprint-card-like-badge {
+      color: #bbbbbb !important;
+      background: rgba(40, 40, 40, 0.8) !important;
+    }
+    
+    .allprint-card-hot-badge {
+      background: #FF3B30 !important;
+      color: #fff !important;
     }
     
     .allprint-card-image {
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #333 !important;
+    }
+    
+    /* 추가 텍스트 색상 지원 */
+    .text-gray-900 {
+      color: #ffffff !important;
+    }
+    
+    .text-gray-600 {
+      color: #cccccc !important;
+    }
+    
+    .text-gray-500 {
+      color: #bbbbbb !important;
+    }
+    
+    .text-gray-700 {
+      color: #dddddd !important;
+    }
+    
+    .text-black {
+      color: #ffffff !important;
     }
   }
 
