@@ -351,9 +351,9 @@ body {
   .allprint-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 20px;
+    column-gap: 16px;
     row-gap: 20px;
-    padding: 0 20px;
+    padding: 0 16px;
     background-color: transparent;
   }
 
@@ -361,12 +361,16 @@ body {
   @media (min-width: 768px) {
     .allprint-grid {
       grid-template-columns: repeat(3, 1fr);
+      column-gap: 18px;
+      padding: 0 18px;
     }
   }
 
   @media (min-width: 1024px) {
     .allprint-grid {
       grid-template-columns: repeat(4, 1fr);
+      column-gap: 16px;
+      padding: 0 16px;
     }
   }
 
