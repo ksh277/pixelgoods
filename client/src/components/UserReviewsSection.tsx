@@ -138,7 +138,7 @@ export function UserReviewsSection() {
                 </p>
               </div>
             </div>
-            <Link href="/reviews/all">
+            <Link href="/reviews">
               <button className="text-sm text-blue-500 hover:underline flex items-center">
                 {t({ ko: "더보기", en: "View More", ja: "もっと見る", zh: "查看更多" })} <ChevronRight className="w-4 h-4 ml-1" />
               </button>
