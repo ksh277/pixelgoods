@@ -25,6 +25,11 @@ export default function Products() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000]);
   const [sortBy, setSortBy] = useState<string>("popular");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [priceFilters, setPriceFilters] = useState({
+    under10k: false,
+    between10k20k: false,
+    over20k: false
+  });
   
   // Get page title based on current route
   const getPageTitle = () => {
@@ -66,11 +71,31 @@ export default function Products() {
     });
   };
 
+  const handlePriceFilterChange = (filterType: string, checked: boolean) => {
+    setPriceFilters(prev => ({
+      ...prev,
+      [filterType]: checked
+    }));
+  };
+
   const filteredProducts = products?.filter((product: Product) => {
     const matchesSearch = product.nameKo.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesPrice = parseInt(product.basePrice) >= priceRange[0] && 
-                        parseInt(product.basePrice) <= priceRange[1];
+    
+    // 가격 필터 적용
+    const price = parseInt(product.basePrice);
+    let matchesPrice = true;
+    
+    // 어떤 가격 필터도 선택되지 않았으면 모든 상품 표시
+    const hasAnyPriceFilter = priceFilters.under10k || priceFilters.between10k20k || priceFilters.over20k;
+    
+    if (hasAnyPriceFilter) {
+      matchesPrice = false;
+      if (priceFilters.under10k && price < 10000) matchesPrice = true;
+      if (priceFilters.between10k20k && price >= 10000 && price <= 20000) matchesPrice = true;
+      if (priceFilters.over20k && price > 20000) matchesPrice = true;
+    }
+    
     return matchesSearch && matchesPrice;
   });
 
@@ -179,19 +204,31 @@ export default function Products() {
                   </Label>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="price-under-10k" />
+                      <Checkbox 
+                        id="price-under-10k" 
+                        checked={priceFilters.under10k}
+                        onCheckedChange={(checked) => handlePriceFilterChange('under10k', checked as boolean)}
+                      />
                       <Label htmlFor="price-under-10k" className="text-sm">
                         10,000원 미만
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="price-10k-20k" />
+                      <Checkbox 
+                        id="price-10k-20k" 
+                        checked={priceFilters.between10k20k}
+                        onCheckedChange={(checked) => handlePriceFilterChange('between10k20k', checked as boolean)}
+                      />
                       <Label htmlFor="price-10k-20k" className="text-sm">
                         10,000원 - 20,000원
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="price-over-20k" />
+                      <Checkbox 
+                        id="price-over-20k" 
+                        checked={priceFilters.over20k}
+                        onCheckedChange={(checked) => handlePriceFilterChange('over20k', checked as boolean)}
+                      />
                       <Label htmlFor="price-over-20k" className="text-sm">
                         20,000원 이상
                       </Label>
