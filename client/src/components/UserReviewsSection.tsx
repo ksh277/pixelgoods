@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Calendar, User, Heart } from "lucide-react";
+import { ArrowRight, Calendar, User, Heart, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -116,11 +116,11 @@ export function UserReviewsSection() {
           className="space-y-8"
         >
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between section-header">
+            <div className="flex items-center space-x-2">
               <span className="text-2xl">😊</span>
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground">
                   {t({
                     ko: "창작자들의 진짜 후기",
                     en: "Real Reviews from Our Creators",
@@ -128,7 +128,7 @@ export function UserReviewsSection() {
                     zh: "创作者们的真实评价"
                   })}
                 </h2>
-                <p className="text-gray-600 mt-1">
+                <p className="text-sm text-muted-foreground hidden sm:block">
                   {t({
                     ko: "우리 서비스를 이용한 창작자들이 남긴 실제 후기를 확인해보세요",
                     en: "Check out real reviews left by creators who have used our service",
@@ -139,10 +139,9 @@ export function UserReviewsSection() {
               </div>
             </div>
             <Link href="/reviews/all">
-              <Button variant="outline" className="hidden md:flex items-center gap-2">
-                {t({ ko: "더보기", en: "See More", ja: "もっと見る", zh: "查看更多" })}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              <button className="text-sm text-blue-500 hover:underline flex items-center">
+                {t({ ko: "더보기", en: "View More", ja: "もっと見る", zh: "查看更多" })} <ChevronRight className="w-4 h-4 ml-1" />
+              </button>
             </Link>
           </div>
 
@@ -196,15 +195,7 @@ export function UserReviewsSection() {
             ))}
           </div>
 
-          {/* Mobile See More Button */}
-          <div className="md:hidden text-center">
-            <Link href="/reviews/all">
-              <Button className="w-full max-w-sm bg-blue-600 hover:bg-blue-700 text-white">
-                {t({ ko: "전체 후기 보기", en: "See All Reviews", ja: "すべてのレビューを見る", zh: "查看所有评价" })}
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
+
         </motion.div>
       </div>
     </section>
