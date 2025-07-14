@@ -306,44 +306,48 @@ export default function Home() {
             {creatorReviews.map((review) => (
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/product/${review.id}`} className="block">
-                  <div className="unified-card">
-                    {/* HOT 배지 (절대 위치) */}
-                    <div className="unified-card-badge">
-                      HOT
-                    </div>
-                    
-                    {/* 찜 하트 (절대 위치) */}
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      className="unified-card-heart">
-                      <Heart className="h-3 w-3 text-gray-600" />
-                    </button>
-                    
-                    {/* 상단 이미지 영역 (2/3) */}
-                    <div className="unified-card-image">
+                  <div className="allprint-card">
+                    {/* 상단 이미지 영역 (70%) */}
+                    <div className="allprint-card-image">
                       <img
                         src={review.productImage}
                         alt={review.productName}
                         loading="lazy"
                       />
+                      
+                      {/* HOT 배지 (왼쪽 상단 절대 위치) */}
+                      <div className="allprint-card-hot-badge">
+                        HOT
+                      </div>
+                      
+                      {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
+                      <div className="allprint-card-like-badge">
+                        LIKE {review.rating * 40 + 120}
+                      </div>
                     </div>
                     
-                    {/* 하단 텍스트 영역 (1/3) */}
-                    <div className="unified-card-content">
-                      <div className="unified-card-title">
+                    {/* 하단 텍스트 영역 (30%) */}
+                    <div className="allprint-card-content">
+                      <div className="allprint-card-title">
                         {review.productName}
                       </div>
-                      {/* 별점 */}
-                      <div className="flex items-center justify-center space-x-1 mt-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                          />
-                        ))}
+                      
+                      <div className="allprint-card-price">
+                        ₩ {(review.rating * 1200 + 3500).toLocaleString()}
+                      </div>
+                      
+                      <div className="allprint-card-stats">
+                        <div className="flex items-center space-x-1">
+                          <div className="flex">
+                            {[...Array(5)].map((_, i) => (
+                              <Star 
+                                key={i} 
+                                className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs">({review.rating * 25 + 45})</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -387,38 +391,41 @@ export default function Home() {
             {communityShowcase.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
                 <Link href={`/community/${item.id}`} className="block">
-                  <div className="unified-card">
-                    {/* HOT 배지 (절대 위치) */}
-                    <div className="unified-card-badge">
-                      인기
-                    </div>
-                    
-                    {/* 찜 하트 (절대 위치) */}
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      className="unified-card-heart">
-                      <Heart className="h-3 w-3 text-gray-600" />
-                    </button>
-                    
-                    {/* 상단 이미지 영역 (60%) */}
-                    <div className="unified-card-image">
+                  <div className="allprint-card">
+                    {/* 상단 이미지 영역 (70%) */}
+                    <div className="allprint-card-image">
                       <img
                         src={item.image}
                         alt={item.title}
                         loading="lazy"
                       />
+                      
+                      {/* HOT 배지 (왼쪽 상단 절대 위치) */}
+                      <div className="allprint-card-hot-badge">
+                        인기
+                      </div>
+                      
+                      {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
+                      <div className="allprint-card-like-badge">
+                        LIKE {item.likes}
+                      </div>
                     </div>
                     
-                    {/* 하단 텍스트 영역 (40%) */}
-                    <div className="unified-card-content">
-                      <div className="unified-card-title">
+                    {/* 하단 텍스트 영역 (30%) */}
+                    <div className="allprint-card-content">
+                      <div className="allprint-card-title">
                         {item.title}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        {item.author}
+                      
+                      <div className="allprint-card-price">
+                        @{item.author}
+                      </div>
+                      
+                      <div className="allprint-card-stats">
+                        <div className="flex items-center space-x-1">
+                          <span className="text-xs">조회 {item.views}</span>
+                          <span className="text-xs">댓글 {item.comments}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -462,50 +469,42 @@ export default function Home() {
             {materialRecommendations.map((item) => (
               <motion.div key={item.id} variants={itemVariants}>
                 <Link href={`/product/${item.id}`} className="block">
-                  <div className="unified-card">
-                    {/* 상단 HOT 배지 + 찜 하트 */}
-                    <div className="unified-card-top">
-                      <div className="unified-card-badge">
-                        {item.badge}
-                      </div>
-                      <button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
-                        className="unified-card-heart">
-                        <Heart className="h-3 w-3 text-gray-600" />
-                      </button>
-                    </div>
-                    
-                    {/* 이미지 영역 */}
-                    <div className="unified-card-image">
+                  <div className="allprint-card">
+                    {/* 상단 이미지 영역 (70%) */}
+                    <div className="allprint-card-image">
                       <img
                         src={item.image}
                         alt={item.title}
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
+                      
+                      {/* HOT 배지 (왼쪽 상단 절대 위치) */}
+                      <div className="allprint-card-hot-badge">
+                        {item.badge}
+                      </div>
+                      
+                      {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
+                      <div className="allprint-card-like-badge">
+                        LIKE {Math.floor(item.reviewCount * 0.6)}
+                      </div>
                     </div>
                     
-                    {/* 제품명 */}
-                    <div className="unified-card-title">
-                      {item.title}
-                    </div>
-                    
-                    {/* 가격 */}
-                    <div className="unified-card-price">
-                      ₩{item.price.toLocaleString()}
-                    </div>
-                    
-                    {/* 푸터 영역 */}
-                    <div className="unified-card-footer">
-                      <span className="text-xs text-gray-500">
-                        {t({ ko: "리뷰", en: "Reviews" })}: {item.reviewCount}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {t({ ko: "찜", en: "Likes" })}: {Math.floor(item.reviewCount * 0.6)}
-                      </span>
+                    {/* 하단 텍스트 영역 (30%) */}
+                    <div className="allprint-card-content">
+                      <div className="allprint-card-title">
+                        {item.title}
+                      </div>
+                      
+                      <div className="allprint-card-price">
+                        ₩{item.price.toLocaleString()}
+                      </div>
+                      
+                      <div className="allprint-card-stats">
+                        <div className="flex items-center space-x-1">
+                          <span className="text-xs">{t({ ko: "리뷰", en: "Reviews" })} {item.reviewCount}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -544,45 +543,42 @@ export default function Home() {
           >
             {instagramFeed.map((post) => (
               <motion.div key={post.id} variants={itemVariants}>
-                <div className="unified-card">
-                  {/* 상단 HOT 배지 + 찜 하트 */}
-                  <div className="unified-card-top">
-                    <div className="unified-card-badge">
-                      인기
-                    </div>
-                    <button className="unified-card-heart">
-                      <Heart className="h-3 w-3 text-gray-600" />
-                    </button>
-                  </div>
-                  
-                  {/* 이미지 영역 */}
-                  <div className="unified-card-image">
+                <div className="allprint-card">
+                  {/* 상단 이미지 영역 (70%) */}
+                  <div className="allprint-card-image">
                     <img
                       src={post.image}
                       alt={`Instagram post ${post.id}`}
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
+                    
+                    {/* HOT 배지 (왼쪽 상단 절대 위치) */}
+                    <div className="allprint-card-hot-badge">
+                      인기
+                    </div>
+                    
+                    {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
+                    <div className="allprint-card-like-badge">
+                      LIKE {post.likes}
+                    </div>
                   </div>
                   
-                  {/* 제품명 */}
-                  <div className="unified-card-title">
-                    Instagram Post #{post.id}
-                  </div>
-                  
-                  {/* 가격 */}
-                  <div className="unified-card-price">
-                    인스타그램 피드
-                  </div>
-                  
-                  {/* 하단 메타 정보 */}
-                  <div className="unified-card-footer">
-                    <span>
-                      {t({ ko: "리뷰", en: "Reviews" })}: {post.comments}
-                    </span>
-                    <span>
-                      {t({ ko: "찜", en: "Likes" })}: {post.likes}
-                    </span>
+                  {/* 하단 텍스트 영역 (30%) */}
+                  <div className="allprint-card-content">
+                    <div className="allprint-card-title">
+                      Instagram Post #{post.id}
+                    </div>
+                    
+                    <div className="allprint-card-price">
+                      @allthatprinting_
+                    </div>
+                    
+                    <div className="allprint-card-stats">
+                      <div className="flex items-center space-x-1">
+                        <span className="text-xs">댓글 {post.comments}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>

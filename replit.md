@@ -724,22 +724,22 @@ Preferred communication style: Simple, everyday language.
 - **Responsive Breakpoints**: Maintained desktop responsiveness with md:grid-cols-3 lg:grid-cols-4 patterns
 - **Visual Consistency**: Preserved all Korean e-commerce design patterns while ensuring mobile layout uniformity
 
-### 2025-01-14: AllThatPrinting 4-Column Card Layout & Dark Mode Enhancement
-- **Complete AllThatPrinting Card System Redesign**: Implemented Korean e-commerce standard layout
+### 2025-01-14: Unified AllThatPrinting Card System - Site-Wide Implementation
+- **Complete Card System Standardization**: Implemented unified Korean e-commerce card design across entire site
   - **4-Column Grid System**: PC (4 columns), Tablet (3 columns), Mobile (2 columns)
-  - **Card Dimensions**: 260px fixed height (30% increase), 16px border radius
-  - **Image/Text Ratio**: 65% image area, 35% text area with proper flex-basis
-  - **Typography**: 14px product name (600 weight), 15px price (bold), 12px stats
-  - **Spacing**: 24px column gap, 32px row gap, 10px-12px card padding
-  - **Badges**: HOT (top-left), LIKE count (top-right) with absolute positioning
+  - **Card Dimensions**: 280px fixed height, 12px border radius
+  - **Image/Text Ratio**: 70% image area, 30% text area with proper flex-basis
+  - **Typography**: 14px product name (600 weight), 15px price (bold), 12px stats (#777)
+  - **Spacing**: 20px column gap, 20px row gap, 10px card padding
+  - **Badges**: HOT (top-left #FF3B30), LIKE count (top-right #555) with absolute positioning
   - **Hover Effects**: 1.02 scale transform for interactive feedback
-- **Dark Mode Support**: Added comprehensive dark mode compatibility
-  - **Grid Containers**: Removed white background from .allprint-grid (now transparent)
-  - **Card Backgrounds**: #fff (light) / #1e1e1e (dark) with automatic detection
-  - **Text Colors**: White text in dark mode, proper contrast ratios
-  - **Shadow Effects**: Inverted shadow colors for dark mode visibility
-  - **Border Colors**: Adjusted border colors for dark theme compatibility
-- **Applied to All Sections**: Popular products, creator reviews, community showcase sections all use unified AllThatPrinting layout
+- **Fixed Light Theme**: Removed dark mode support for consistent bright appearance
+  - **Card Backgrounds**: Fixed #ffffff background regardless of system theme
+  - **Text Colors**: Fixed dark text colors (#111, #000, #777) for optimal readability
+  - **Shadow Effects**: 0 2px 6px rgba(0, 0, 0, 0.08) for subtle depth
+  - **Border Colors**: #eee for image separators
+- **Applied to All Components**: Popular products, creator reviews, community showcase, user reviews, and all product listing pages use unified AllThatPrinting layout
+- **CSS Cleanup**: Removed all legacy unified-card CSS classes and replaced with allprint-card system throughout homepage sections
 
 ### 2025-01-13: User Reviews Section Mobile Card Layout Fix
 - **Unified Mobile Card System Enhancement**: Fixed height inconsistency issues in review cards across all sections
