@@ -156,14 +156,14 @@ export function UserReviewsSection() {
           </div>
 
           {/* Review Cards */}
-          <div className="unified-grid">
+          <div className="allprint-grid">
             {displayedReviews.map((review, index) => (
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/reviews/${review.id}`}>
-                  <div className="unified-card">
+                  <div className="allprint-card">
                     {/* HOT 배지 (절대 위치) */}
                     {review.isHot && (
-                      <div className="unified-card-badge">
+                      <div className="allprint-card-badge">
                         HOT
                       </div>
                     )}
@@ -174,12 +174,12 @@ export function UserReviewsSection() {
                         e.preventDefault();
                         e.stopPropagation();
                       }}
-                      className="unified-card-heart">
+                      className="allprint-card-heart">
                       <Heart className="h-3 w-3 text-gray-600" />
                     </button>
                     
                     {/* 상단 이미지 영역 (60%) */}
-                    <div className="unified-card-image">
+                    <div className="allprint-card-image">
                       <img
                         src={review.productImage}
                         alt={language === 'ko' ? review.productNameKo : review.productName}
@@ -191,13 +191,13 @@ export function UserReviewsSection() {
                     </div>
 
                     {/* 하단 텍스트 영역 (40%) */}
-                    <div className="unified-card-content">
-                      <div className="unified-card-title">
+                    <div className="allprint-card-content">
+                      <div className="allprint-card-title">
                         {language === 'ko' ? review.productNameKo : review.productName}
                       </div>
                       
                       {/* 별점 표시 */}
-                      <div className="unified-card-rating">
+                      <div className="allprint-card-rating">
                         {renderStars(review.rating)}
                       </div>
                       

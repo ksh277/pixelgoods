@@ -253,7 +253,7 @@ export default function Home() {
             <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
           ) : (
             <motion.div 
-              className="unified-grid"
+              className="allprint-grid"
               variants={containerVariants}
               style={{ opacity: 1 }}
             >
@@ -300,7 +300,7 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="unified-grid"
+            className="allprint-grid"
             variants={containerVariants}
           >
             {creatorReviews.map((review) => (
@@ -381,7 +381,7 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="unified-grid"
+            className="allprint-grid"
             variants={containerVariants}
           >
             {communityShowcase.map((item) => (
@@ -456,7 +456,7 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="unified-grid"
+            className="allprint-grid"
             variants={containerVariants}
           >
             {materialRecommendations.map((item) => (
@@ -539,7 +539,7 @@ export default function Home() {
           </div>
 
           <motion.div 
-            className="unified-grid"
+            className="allprint-grid"
             variants={containerVariants}
           >
             {instagramFeed.map((post) => (

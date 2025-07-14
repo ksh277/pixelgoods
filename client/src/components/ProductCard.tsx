@@ -52,28 +52,10 @@ export function ProductCard({
         transition={{ duration: 0.5 }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        className="unified-card"
+        className="allprint-card"
       >
-        {/* HOT 배지 (절대 위치) */}
-        {product.isFeatured && (
-          <div className="unified-card-badge">
-            HOT
-          </div>
-        )}
-        
-        {/* 찜 하트 (절대 위치) */}
-        <motion.button
-          className={`unified-card-heart ${
-            isLiked ? 'bg-red-500 text-white' : 'bg-white text-gray-600'
-          }`}
-          onClick={handleLike}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Heart className={`h-3 w-3 ${isLiked ? 'fill-current' : ''}`} />
-        </motion.button>
-
-        {/* 상단 이미지 영역 (60%) */}
-        <div className="unified-card-image">
+        {/* 상단 이미지 영역 (정사각형) */}
+        <div className="allprint-card-image">
           {product.imageUrl ? (
             <img 
               src={product.imageUrl} 
@@ -81,28 +63,35 @@ export function ProductCard({
               loading="lazy"
             />
           ) : (
-            <div className="unified-card-image-placeholder">
+            <div className="allprint-card-image-placeholder">
               <ImageIcon />
             </div>
           )}
-        </div>
-
-        {/* 하단 텍스트 영역 (40%) */}
-        <div className="unified-card-content">
-          <div className="unified-card-title">
-            {language === 'ko' ? product.nameKo : product.name}
-          </div>
-          {/* 별점 표시 (리뷰가 있는 경우) */}
-          {reviewCount > 0 && (
-            <div className="unified-card-rating">
-              {[...Array(5)].map((_, i) => (
-                <Star 
-                  key={i} 
-                  className={`${i < 4 ? 'fill-current' : ''}`}
-                />
-              ))}
+          
+          {/* HOT 배지 (왼쪽 상단 절대 위치) */}
+          {product.isFeatured && (
+            <div className="allprint-card-hot-badge">
+              HOT
             </div>
           )}
+          
+          {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
+          <div className="allprint-card-like-badge">
+            LIKE {likeCount || 295}
+          </div>
+        </div>
+
+        {/* 하단 텍스트 영역 */}
+        <div className="allprint-card-content">
+          <div className="allprint-card-title">
+            {language === 'ko' ? product.nameKo : product.name}
+          </div>
+          <div className="allprint-card-price">
+            ₩ {formattedPrice}
+          </div>
+          <div className="allprint-card-stats">
+            리뷰 {reviewCount?.toLocaleString() || '11,390'} / LIKE {likeCount || 295}
+          </div>
         </div>
       </motion.div>
     </Link>
