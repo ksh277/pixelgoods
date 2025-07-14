@@ -147,17 +147,16 @@ export function UserReviewsSection() {
           </div>
 
           {/* Review Cards */}
-          <div className="creator-review-grid">
+          <div className="allprint-grid">
             {displayedReviews.map((review, index) => (
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/reviews/${review.id}`}>
-                  <div className="creator-review-card">
-                    {/* 상단 이미지 영역 */}
-                    <div className="card-image-wrapper">
+                  <div className="allprint-card">
+                    {/* 상단 이미지 영역 (70%) */}
+                    <div className="allprint-card-image">
                       <img
                         src={review.productImage}
                         alt={language === 'ko' ? review.productNameKo : review.productName}
-                        className="card-image"
                         loading="lazy"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
@@ -177,17 +176,17 @@ export function UserReviewsSection() {
                       </div>
                     </div>
 
-                    {/* 하단 텍스트 영역 */}
-                    <div className="card-content">
-                      <div className="card-title">
+                    {/* 하단 텍스트 영역 (30%) */}
+                    <div className="allprint-card-content">
+                      <div className="allprint-card-title">
                         {language === 'ko' ? review.productNameKo : review.productName}
                       </div>
                       
-                      <div className="card-price">
+                      <div className="allprint-card-price">
                         ₩ {(review.rating * 1000 + 3000).toLocaleString()}
                       </div>
                       
-                      <div className="card-stats">
+                      <div className="allprint-card-stats">
                         리뷰 {review.totalReviews?.toLocaleString()} / LIKE {review.rating * 50 + 200}
                       </div>
                     </div>
