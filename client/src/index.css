@@ -370,25 +370,6 @@ body {
     }
   }
 
-  /* 창작자들의 진짜 후기 섹션 전용 카드 너비 조정 */
-  .user-review-card {
-    min-width: 240px;
-    max-width: 100%;
-  }
-
-  /* 반응형에서 최소 너비 유지 */
-  @media (min-width: 768px) {
-    .user-review-card {
-      min-width: 260px;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .user-review-card {
-      min-width: 280px;
-    }
-  }
-
 
 
   .btn-primary {

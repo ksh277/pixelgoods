@@ -150,7 +150,7 @@ export function UserReviewsSection() {
             {displayedReviews.map((review, index) => (
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/reviews/${review.id}`}>
-                  <div className="allprint-card user-review-card">
+                  <div className="allprint-card">
                     {/* 상단 이미지 영역 (70%) */}
                     <div className="allprint-card-image">
                       <img
