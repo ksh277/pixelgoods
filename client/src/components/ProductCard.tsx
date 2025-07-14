@@ -54,61 +54,44 @@ export function ProductCard({
         onHoverEnd={() => setIsHovered(false)}
         className="unified-card"
       >
-        {/* 상단 HOT 배지 + 찜 하트 */}
-        <div className="unified-card-top">
-          {/* HOT 배지 */}
-          {product.isFeatured && (
-            <div className="unified-card-badge">
-              HOT
-            </div>
-          )}
-          
-          {/* 찜 하트 */}
-          <motion.button
-            className={`unified-card-heart ${
-              isLiked ? 'bg-red-500 text-white' : 'bg-white text-gray-600'
-            }`}
-            onClick={handleLike}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Heart className={`h-3 w-3 ${isLiked ? 'fill-current' : ''}`} />
-          </motion.button>
-        </div>
+        {/* HOT 배지 (절대 위치) */}
+        {product.isFeatured && (
+          <div className="unified-card-badge">
+            HOT
+          </div>
+        )}
+        
+        {/* 찜 하트 (절대 위치) */}
+        <motion.button
+          className={`unified-card-heart ${
+            isLiked ? 'bg-red-500 text-white' : 'bg-white text-gray-600'
+          }`}
+          onClick={handleLike}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Heart className={`h-3 w-3 ${isLiked ? 'fill-current' : ''}`} />
+        </motion.button>
 
-        {/* 이미지 영역 */}
+        {/* 상단 이미지 영역 (2/3) */}
         <div className="unified-card-image">
           {product.imageUrl ? (
             <img 
               src={product.imageUrl} 
               alt={product.name} 
-              className="w-full h-full object-cover"
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-md">
-              <ImageIcon className="h-8 w-8 text-gray-400" />
+            <div className="unified-card-image-placeholder">
+              <ImageIcon />
             </div>
           )}
         </div>
 
-        {/* 제품명 */}
-        <div className="unified-card-title">
-          {language === 'ko' ? product.nameKo : product.name}
-        </div>
-
-        {/* 가격 */}
-        <div className="unified-card-price">
-          ₩{formattedPrice}
-        </div>
-
-        {/* 하단 메타 정보 */}
-        <div className="unified-card-footer">
-          <span>
-            {t({ ko: "리뷰", en: "Reviews" })}: {reviewCount}
-          </span>
-          <span>
-            {t({ ko: "찜", en: "Likes" })}: {likeCount}
-          </span>
+        {/* 하단 텍스트 영역 (1/3) */}
+        <div className="unified-card-content">
+          <div className="unified-card-title">
+            {language === 'ko' ? product.nameKo : product.name}
+          </div>
         </div>
       </motion.div>
     </Link>

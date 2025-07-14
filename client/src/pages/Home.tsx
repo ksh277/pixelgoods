@@ -227,8 +227,8 @@ export default function Home() {
           animate="visible"
           viewport={{ once: true, margin: "-50px" }}
         >
-          {/* Mobile-Optimized Section Header */}
-          <div className="flex items-center justify-between mb-2">
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🔥</span>
               <div>
@@ -241,9 +241,9 @@ export default function Home() {
               </div>
             </div>
             <Link href="/products">
-              <Button variant="ghost" size="sm" className="text-primary">
+              <button className="text-sm text-blue-500 hover:underline flex items-center">
                 {t({ ko: "더보기", en: "View More" })} <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+              </button>
             </Link>
           </div>
 
@@ -277,8 +277,8 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {/* Mobile-Optimized Section Header */}
-          <div className="flex items-center justify-between mb-2">
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🤗</span>
               <div>
@@ -291,9 +291,9 @@ export default function Home() {
               </div>
             </div>
             <Link href="/reviews">
-              <Button variant="ghost" size="sm" className="text-primary">
+              <button className="text-sm text-blue-500 hover:underline flex items-center">
                 {t({ ko: "더보기", en: "View More" })} <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+              </button>
             </Link>
           </div>
 
@@ -305,54 +305,44 @@ export default function Home() {
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/product/${review.id}`} className="block">
                   <div className="unified-card">
-                    {/* 상단 HOT 배지 + 찜 하트 */}
-                    <div className="unified-card-top">
-                      <div className="unified-card-badge">
-                        HOT
-                      </div>
-                      <button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
-                        className="unified-card-heart">
-                        <Heart className="h-3 w-3 text-gray-600" />
-                      </button>
+                    {/* HOT 배지 (절대 위치) */}
+                    <div className="unified-card-badge">
+                      HOT
                     </div>
                     
-                    {/* 이미지 영역 */}
+                    {/* 찜 하트 (절대 위치) */}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="unified-card-heart">
+                      <Heart className="h-3 w-3 text-gray-600" />
+                    </button>
+                    
+                    {/* 상단 이미지 영역 (2/3) */}
                     <div className="unified-card-image">
                       <img
                         src={review.productImage}
                         alt={review.productName}
-                        className="w-full h-full object-cover"
                         loading="lazy"
                       />
                     </div>
                     
-                    {/* 제품명 */}
-                    <div className="unified-card-title">
-                      {review.productName}
-                    </div>
-                    
-                    {/* 별점 */}
-                    <div className="flex items-center mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                        />
-                      ))}
-                    </div>
-                    
-                    {/* 하단 메타 정보 */}
-                    <div className="unified-card-footer">
-                      <span>
-                        {t({ ko: "리뷰", en: "Reviews" })}: {review.reviewCount}
-                      </span>
-                      <span>
-                        {t({ ko: "찜", en: "Likes" })}: {Math.floor(review.reviewCount * 0.3)}
-                      </span>
+                    {/* 하단 텍스트 영역 (1/3) */}
+                    <div className="unified-card-content">
+                      <div className="unified-card-title">
+                        {review.productName}
+                      </div>
+                      {/* 별점 */}
+                      <div className="flex items-center justify-center space-x-1 mt-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -368,7 +358,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🔥</span>
               <div>
@@ -381,9 +371,9 @@ export default function Home() {
               </div>
             </div>
             <Link href="/community">
-              <Button variant="ghost" size="sm" className="text-primary">
+              <button className="text-sm text-blue-500 hover:underline flex items-center">
                 {t({ ko: "더보기", en: "View More" })} <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+              </button>
             </Link>
           </div>
 
