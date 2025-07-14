@@ -77,7 +77,7 @@ export function ProductCard({
           
           {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
           <div className="allprint-card-like-badge">
-            LIKE {likeCount || 295}
+            LIKE {likeCount || 15}
           </div>
         </div>
 
@@ -90,7 +90,7 @@ export function ProductCard({
             ₩ {formattedPrice}
           </div>
           <div className="allprint-card-stats">
-            리뷰 {reviewCount?.toLocaleString() || '11,390'} / LIKE {likeCount || 295}
+            리뷰 {reviewCount?.toLocaleString() || '11,390'} / LIKE {likeCount || 15}
           </div>
         </div>
       </motion.div>
