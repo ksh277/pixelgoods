@@ -371,6 +371,30 @@ body {
     transition: transform 0.2s ease;
   }
 
+  /* 다크 모드 지원 */
+  @media (prefers-color-scheme: dark) {
+    .allprint-card {
+      background-color: #1e1e1e;
+      box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
+    }
+    
+    .allprint-card-title {
+      color: #fff;
+    }
+    
+    .allprint-card-price {
+      color: #fff;
+    }
+    
+    .allprint-card-stats {
+      color: #ccc;
+    }
+    
+    .allprint-card-image {
+      border-bottom: 1px solid #333;
+    }
+  }
+
   .allprint-card:hover {
     transform: scale(1.02);
   }
@@ -453,7 +477,7 @@ body {
     column-gap: 24px;
     row-gap: 32px;
     padding: 0 24px;
-    background-color: #ffffff;
+    background-color: transparent;
   }
 
   /* 반응형 조정 */
