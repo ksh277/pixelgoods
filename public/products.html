@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아크릴 굿즈 - AllThatPrinting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #4f46e5;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 20px 0;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb-nav a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumb-nav a:hover {
+            color: #4f46e5;
+        }
+
+        .breadcrumb-nav span {
+            color: #999;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 40px 0;
+            background: white;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filter-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .product-count {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        @media (min-width: 640px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+            }
+        }
+
+        /* Product Card */
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-image-container {
+            position: relative;
+            height: 200px;
+            background: #f8f9fa;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 112px;
+            object-fit: contain;
+            margin: 0 auto;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .product-like {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            color: #666;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        .product-info {
+            padding: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1f2937;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .product-stats {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #0f0f0f;
+                color: #f2f2f2;
+            }
+
+            .header, .breadcrumb, .page-header {
+                background: #1f2937;
+                color: white;
+            }
+
+            .product-card {
+                background: #1f2937;
+                color: white;
+            }
+
+            .product-name, .product-price {
+                color: white;
+            }
+
+            .filter-select {
+                background: #1f2937;
+                color: white;
+                border-color: #374151;
+            }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 640px) {
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-left, .filter-right {
+                justify-content: center;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">AllThatPrinting</a>
+                <nav class="nav-menu">
+                    <a href="/products.html">상품</a>
+                    <a href="#community">커뮤니티</a>
+                    <a href="#editor">굿즈에디터</a>
+                    <a href="#support">고객지원</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="/">홈</a>
+                <span>></span>
+                <a href="/products">상품</a>
+                <span>></span>
+                <span>아크릴 굿즈</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">아크릴 굿즈</h1>
+            <p class="page-subtitle">투명하고 깔끔한 아크릴 소재로 만든 다양한 커스텀 굿즈를 만나보세요</p>
+            
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-left">
+                    <span class="product-count">총 <strong id="product-count">0</strong>개 상품</span>
+                </div>
+                <div class="filter-right">
+                    <select class="filter-select" id="sort-select">
+                        <option value="popular">인기순</option>
+                        <option value="newest">최신순</option>
+                        <option value="price-low">가격 낮은순</option>
+                        <option value="price-high">가격 높은순</option>
+                        <option value="reviews">리뷰 많은순</option>
+                    </select>
+                    <select class="filter-select" id="category-select">
+                        <option value="all">전체</option>
+                        <option value="keychain">키링</option>
+                        <option value="stand">스탠드</option>
+                        <option value="smarttok">스마트톡</option>
+                        <option value="badge">뱃지</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section class="container">
+        <div class="product-grid" id="product-grid">
+            <div class="loading">상품을 불러오는 중...</div>
+        </div>
+    </section>
+
+    <script>
+        // Sample product data
+        const products = [
+            {
+                id: 1,
+                name: "투명 아크릴 키링",
+                price: 3500,
+                originalPrice: 4000,
+                image: "/api/placeholder/300/300",
+                category: "keychain",
+                likes: 128,
+                reviews: 45,
+                isHot: true,
+                isNew: false,
+                rating: 4.8
+            },
+            {
+                id: 2,
+                name: "하프미러 아크릴 키링",
+                price: 4200,
+                originalPrice: 4800,
+                image: "/api/placeholder/300/300",
+                category: "keychain",
+                likes: 96,
+                reviews: 32,
+                isHot: true,
+                isNew: true,
+                rating: 4.7
+            },
+            {
+                id: 3,
+                name: "글리터 아크릴 키링",
+                price: 4800,
+                originalPrice: 5500,
+                image: "/api/placeholder/300/300",
+                category: "keychain",
+                likes: 84,
+                reviews: 28,
+                isHot: false,
+                isNew: true,
+                rating: 4.6
+            },
+            {
+                id: 4,
+                name: "유색 아크릴 키링",
+                price: 3800,
+                originalPrice: 4300,
+                image: "/api/placeholder/300/300",
+                category: "keychain",
+                likes: 156,
+                reviews: 67,
+                isHot: true,
+                isNew: false,
+                rating: 4.9
+            },
+            {
+                id: 5,
+                name: "자개 아크릴 키링",
+                price: 5200,
+                originalPrice: 6000,
+                image: "/api/placeholder/300/300",
+                category: "keychain",
+                likes: 73,
+                reviews: 21,
+                isHot: false,
+                isNew: true,
+                rating: 4.5
+            },
+            {
+                id: 6,
+                name: "거울 아크릴 키링",
+                price: 4600,
+                originalPrice: 5200,
+                image: "/api/placeholder/300/300",
+                category: "keychain",
+                likes: 112,
+                reviews: 38,
+                isHot: true,
+                isNew: false,
+                rating: 4.8
+            },
+            {
+                id: 7,
+                name: "홀로그램 아크릴 키링",
+                price: 5500,
+                originalPrice: 6200,
+                image: "/api/placeholder/300/300",
+                category: "keychain",
+                likes: 89,
+                reviews: 25,
+                isHot: false,
+                isNew: true,
+                rating: 4.7
+            },
+            {
+                id: 8,
+                name: "야광 아크릴 키링",
+                price: 6000,
+                originalPrice: 7000,
+                image: "/api/placeholder/300/300",
+                category: "keychain",
+                likes: 134,
+                reviews: 42,
+                isHot: true,
+                isNew: false,
+                rating: 4.9
+            },
+            {
+                id: 9,
+                name: "아크릴 스탠드 (일반)",
+                price: 4500,
+                originalPrice: 5000,
+                image: "/api/placeholder/300/300",
+                category: "stand",
+                likes: 98,
+                reviews: 33,
+                isHot: false,
+                isNew: false,
+                rating: 4.6
+            },
+            {
+                id: 10,
+                name: "아크릴 스탠드 (라미)",
+                price: 5800,
+                originalPrice: 6500,
+                image: "/api/placeholder/300/300",
+                category: "stand",
+                likes: 76,
+                reviews: 19,
+                isHot: false,
+                isNew: true,
+                rating: 4.5
+            },
+            {
+                id: 11,
+                name: "아크릴 스탠드 (대형)",
+                price: 7200,
+                originalPrice: 8000,
+                image: "/api/placeholder/300/300",
+                category: "stand",
+                likes: 54,
+                reviews: 15,
+                isHot: false,
+                isNew: true,
+                rating: 4.4
+            },
+            {
+                id: 12,
+                name: "아크릴 스마트톡",
+                price: 3200,
+                originalPrice: 3800,
+                image: "/api/placeholder/300/300",
+                category: "smarttok",
+                likes: 145,
+                reviews: 58,
+                isHot: true,
+                isNew: false,
+                rating: 4.8
+            }
+        ];
+
+        let currentProducts = [...products];
+        let currentSort = 'popular';
+        let currentCategory = 'all';
+
+        // Create product card HTML
+        function createProductCard(product) {
+            const badgeText = product.isHot ? 'HOT' : product.isNew ? 'NEW' : '';
+            const badgeClass = product.isHot ? 'product-badge' : 'product-badge';
+            
+            return `
+                <div class="product-card" onclick="goToProduct(${product.id})">
+                    <div class="product-image-container">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
+                        ${badgeText ? `<div class="${badgeClass}">${badgeText}</div>` : ''}
+                        <div class="product-like">LIKE ${product.likes}</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-price">₩${product.price.toLocaleString()}</p>
+                        <p class="product-stats">리뷰 ${product.reviews} / LIKE ${product.likes}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Sort products
+        function sortProducts(products, sortBy) {
+            const sorted = [...products];
+            
+            switch(sortBy) {
+                case 'popular':
+                    return sorted.sort((a, b) => b.likes - a.likes);
+                case 'newest':
+                    return sorted.sort((a, b) => b.id - a.id);
+                case 'price-low':
+                    return sorted.sort((a, b) => a.price - b.price);
+                case 'price-high':
+                    return sorted.sort((a, b) => b.price - a.price);
+                case 'reviews':
+                    return sorted.sort((a, b) => b.reviews - a.reviews);
+                default:
+                    return sorted;
+            }
+        }
+
+        // Filter products by category
+        function filterProducts(products, category) {
+            if (category === 'all') {
+                return products;
+            }
+            return products.filter(product => product.category === category);
+        }
+
+        // Render products
+        function renderProducts() {
+            let filtered = filterProducts(products, currentCategory);
+            let sorted = sortProducts(filtered, currentSort);
+            
+            const grid = document.getElementById('product-grid');
+            const count = document.getElementById('product-count');
+            
+            count.textContent = sorted.length;
+            
+            if (sorted.length === 0) {
+                grid.innerHTML = '<div class="loading">해당 조건에 맞는 상품이 없습니다.</div>';
+                return;
+            }
+            
+            grid.innerHTML = sorted.map(createProductCard).join('');
+            currentProducts = sorted;
+        }
+
+        // Event listeners
+        document.getElementById('sort-select').addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            renderProducts();
+        });
+
+        document.getElementById('category-select').addEventListener('change', (e) => {
+            currentCategory = e.target.value;
+            renderProducts();
+        });
+
+        // Navigation function
+        function goToProduct(id) {
+            console.log('Going to product:', id);
+            // Add actual navigation logic here
+            // window.location.href = `/product/${id}`;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+        });
+    </script>
+</body>
+</html>
