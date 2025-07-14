@@ -39,46 +39,46 @@ body {
   max-width: 100vw;
 }
 
-/* Mobile 2x2 Grid CSS */
-.mobile-2x2-grid {
+/* Unified Grid Layout - PIXELGOODS Style */
+.unified-mobile-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
   padding: 0 16px;
 }
 
-@media (min-width: 768px) {
-  .mobile-2x2-grid {
+@media (min-width: 640px) {
+  .unified-mobile-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    padding: 0 24px;
   }
 }
 
 @media (min-width: 1024px) {
-  .mobile-2x2-grid {
+  .unified-mobile-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    padding: 0 32px;
   }
 }
 
-.mobile-2x2-card {
+/* Product Card Styling */
+.product-card {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 12px;
-  height: 280px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
-.dark .mobile-2x2-card {
+.dark .product-card {
   background: #1f2937;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.mobile-2x2-image {
+.product-card-image {
   width: 100%;
   height: 112px;
   background: #f3f4f6;
@@ -86,17 +86,86 @@ body {
   margin-bottom: 12px;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.dark .mobile-2x2-image {
+.dark .product-card-image {
   background: #374151;
 }
 
-.mobile-2x2-content {
+.product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-card-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.product-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark .product-card-title {
+  color: #ffffff;
+}
+
+.product-card-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.dark .product-card-price {
+  color: #ffffff;
+}
+
+.product-card-stats {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.dark .product-card-stats {
+  color: #9ca3af;
+}
+
+.product-card-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #ef4444;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  z-index: 10;
+}
+
+.product-card-like {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  z-index: 10;
+}
+
+.dark .product-card-like {
+  color: #9ca3af;
 }
 
 /* 전역 다크모드 스타일 */
