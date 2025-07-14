@@ -769,3 +769,12 @@ Preferred communication style: Simple, everyday language.
 - **Code Cleanup**: Removed unused Star imports from Home.tsx, ProductCard.tsx, and UserReviewsSection.tsx
 - **Consistent Design Language**: All cards now follow AllThatPrinting design patterns with uniform footer formatting
 - **Fixed Bright White Theme**: Maintained fixed white background across all cards with no dark mode support
+
+### 2025-01-14: Creator Reviews Card Size Fix & Text Visibility
+- **Card Height Standardization**: Fixed creator review cards to match allprint-card 280px height
+- **Image/Text Ratio**: Updated to 70% image area, 30% text area (flex-basis) matching other sections
+- **Text Visibility Enhancement**: Improved text contrast and spacing for better readability
+- **Border Consistency**: Added bottom border (#eee) between image and text areas
+- **Typography Alignment**: Matched font weights and sizes with allprint-card system
+- **Dark Mode Override**: Applied bright white theme (!important) to maintain consistency across all cards
+- **Layout Structure**: Fixed flex-direction and justify-content for proper card proportions
