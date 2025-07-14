@@ -218,26 +218,29 @@ export default function Rewards() {
               <motion.div key={index} variants={itemVariants}>
                 <Card className="h-full hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                   <div className={`${coupon.color} p-4 text-white`}>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-2">
                       {coupon.icon}
                       <Badge className="bg-white/20 text-white">
                         {t({ ko: "즉시 지급", en: "Instant", ja: "即時", zh: "即时" })}
                       </Badge>
                     </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="font-bold text-lg mb-2">
+                    <h3 className="font-bold text-lg text-white">
                       {language === 'ko' ? coupon.title.ko : coupon.title.en}
                     </h3>
-                    <div className="text-3xl font-bold text-gray-900 mb-2">
+                    <div className="text-2xl font-bold text-white">
                       ₩{coupon.amount}
                     </div>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-white/80 text-sm">
                       {language === 'ko' ? coupon.description.ko : coupon.description.en}
                     </p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {t({ ko: "유효기간:", en: "Valid for:", ja: "有効期限:", zh: "有效期:" })} {language === 'ko' ? coupon.validity.ko : coupon.validity.en}
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {t({ ko: "유효기간:", en: "Valid for:", ja: "有効期限:", zh: "有效期:" })} {language === 'ko' ? coupon.validity.ko : coupon.validity.en}
+                      </div>
+                      <Check className="w-4 h-4 text-green-500" />
                     </div>
                   </CardContent>
                 </Card>
