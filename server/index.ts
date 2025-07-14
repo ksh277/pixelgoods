@@ -39,12 +39,7 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  // Serve HTML file for root path
-  app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: './public' });
-  });
-
-  // Serve static files from public directory
+  // Serve static files from public directory first
   app.use(express.static('public'));
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
