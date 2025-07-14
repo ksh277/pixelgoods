@@ -248,30 +248,68 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* 모바일 2x2 그리드 시스템 */}
-          {isLoading ? (
-            <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
-          ) : (
-            <div className="px-4">
-              <div className="flex flex-wrap justify-between gap-3 sm:grid sm:grid-cols-3 lg:grid-cols-4 sm:gap-4 lg:gap-5">
+          {/* Mobile 2x2 Grid Layout */}
+          <div className="px-4 md:px-6 lg:px-8">
+            {isLoading ? (
+              <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
+            ) : (
+              <div className="flex flex-wrap justify-between gap-3 mb-4 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
                 {products?.slice(0, 4).map((product: Product, index: number) => (
                   <motion.div 
                     key={product.id} 
                     variants={itemVariants} 
                     style={{ opacity: 1 }}
-                    className="w-[48%] mb-4 sm:w-full sm:mb-0"
+                    className="w-[48%] mb-4 md:w-full md:mb-0"
                   >
-                    <ProductCard
-                      product={product}
-                      isFavorite={favorites.includes(product.id)}
-                      onToggleFavorite={handleToggleFavorite}
-                      onAddToCart={handleAddToCart}
-                    />
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 h-full flex flex-col">
+                      {/* Image Area */}
+                      <div className="relative h-28 mb-3 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
+                        {product.imageUrl ? (
+                          <img 
+                            src={product.imageUrl} 
+                            alt={product.name} 
+                            className="w-full h-full object-contain"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400">
+                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                        )}
+                        
+                        {/* HOT Badge */}
+                        {product.isFeatured && (
+                          <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">
+                            HOT
+                          </div>
+                        )}
+                        
+                        {/* LIKE Badge */}
+                        <div className="absolute top-2 right-2 text-xs text-gray-500 dark:text-gray-400">
+                          LIKE {product.likeCount || 15}
+                        </div>
+                      </div>
+                      
+                      {/* Text Content */}
+                      <div className="flex-1 flex flex-col justify-between">
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                          {language === 'ko' ? product.nameKo : product.name}
+                        </h3>
+                        <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                          ₩ {parseInt(product.basePrice).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          리뷰 {product.reviewCount?.toLocaleString() || '11,390'} / LIKE {product.likeCount || 15}
+                        </p>
+                      </div>
+                    </div>
                   </motion.div>
                 ))}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </motion.section>
 
         {/* Creator Reviews Section */}
@@ -302,52 +340,55 @@ export default function Home() {
             </Link>
           </div>
 
-          <motion.div 
-            className="allprint-grid"
-            variants={containerVariants}
-          >
-            {creatorReviews.map((review) => (
-              <motion.div key={review.id} variants={itemVariants}>
-                <Link href={`/product/${review.id}`} className="block">
-                  <div className="allprint-card">
-                    {/* 상단 이미지 영역 (70%) */}
-                    <div className="allprint-card-image">
-                      <img
-                        src={review.productImage}
-                        alt={review.productName}
-                        loading="lazy"
-                      />
-                      
-                      {/* HOT 배지 (왼쪽 상단 절대 위치) */}
-                      <div className="allprint-card-hot-badge">
-                        HOT
+          {/* Mobile 2x2 Grid Layout for Creator Reviews */}
+          <div className="px-4 md:px-6 lg:px-8">
+            <div className="flex flex-wrap justify-between gap-3 mb-4 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-6">
+              {creatorReviews.map((review) => (
+                <motion.div 
+                  key={review.id} 
+                  variants={itemVariants}
+                  className="w-[48%] mb-4 md:w-full md:mb-0"
+                >
+                  <Link href={`/product/${review.id}`} className="block">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 h-full flex flex-col">
+                      {/* Image Area */}
+                      <div className="relative h-28 mb-3 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
+                        <img
+                          src={review.productImage}
+                          alt={review.productName}
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                        />
+                        
+                        {/* HOT Badge */}
+                        <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">
+                          HOT
+                        </div>
+                        
+                        {/* LIKE Badge */}
+                        <div className="absolute top-2 right-2 text-xs text-gray-500 dark:text-gray-400">
+                          LIKE {review.rating * 40 + 120}
+                        </div>
                       </div>
                       
-                      {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
-                      <div className="allprint-card-like-badge">
-                        LIKE {review.rating * 40 + 120}
+                      {/* Text Content */}
+                      <div className="flex-1 flex flex-col justify-between">
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 truncate">
+                          {review.productName}
+                        </h3>
+                        <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                          ₩ {(review.rating * 1200 + 3500).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          리뷰 {review.rating * 25 + 45} / LIKE {review.rating * 40 + 120}
+                        </p>
                       </div>
                     </div>
-                    
-                    {/* 하단 텍스트 영역 (30%) */}
-                    <div className="allprint-card-content">
-                      <div className="allprint-card-title">
-                        {review.productName}
-                      </div>
-                      
-                      <div className="allprint-card-price">
-                        ₩ {(review.rating * 1200 + 3500).toLocaleString()}
-                      </div>
-                      
-                      <div className="allprint-card-stats">
-                        리뷰 {review.rating * 25 + 45} / LIKE {review.rating * 40 + 120}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </motion.section>
 
         {/* Community Showcase */}
