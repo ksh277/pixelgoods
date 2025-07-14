@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AllThatPrinting - 커스텀 굿즈 제작</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #4f46e5;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3f37c9;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn-white {
+            background: white;
+            color: #4f46e5;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        /* Section Headers */
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .section-title .emoji {
+            font-size: 32px;
+        }
+
+        .more-btn {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .more-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* 2x2 Grid System */
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-2x2 {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid-2x2 {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+            }
+        }
+
+        /* Product Cards */
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            position: relative;
+            height: 180px;
+            background: #f3f4f6;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .like-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            color: #666;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .product-info {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .product-stats {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-large {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">AllThatPrinting</div>
+                <nav class="nav-menu">
+                    <a href="#products">상품</a>
+                    <a href="#community">커뮤니티</a>
+                    <a href="#editor">굿즈에디터</a>
+                    <a href="#support">고객지원</a>
+                </nav>
+                <div class="user-actions">
+                    <button class="btn btn-primary">로그인</button>
+                    <button class="btn">회원가입</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>나만의 특별한 굿즈를 만들어보세요</h1>
+            <p>키링, 스탠드, 스마트톡 등 다양한 커스텀 굿즈를 쉽고 빠르게 제작하세요</p>
+            <div class="hero-buttons">
+                <button class="btn btn-large btn-white">디자인 시작하기</button>
+                <button class="btn btn-large btn-outline">도안작업 서비스</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Products Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="emoji">🔥</span>
+                    <h2>인기상품</h2>
+                </div>
+                <a href="#" class="more-btn">더보기 →</a>
+            </div>
+            <div class="grid-2x2" id="popular-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Creator Reviews Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="emoji">🤗</span>
+                    <h2>창작자들의 소중한 리뷰</h2>
+                </div>
+                <a href="#" class="more-btn">더보기 →</a>
+            </div>
+            <div class="grid-2x2" id="creator-reviews">
+                <!-- Reviews will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Showcase Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="emoji">🔥</span>
+                    <h2>굿즈 자랑 커뮤니티</h2>
+                </div>
+                <a href="#" class="more-btn">더보기 →</a>
+            </div>
+            <div class="grid-2x2" id="community-showcase">
+                <!-- Community posts will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Material Recommendations Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="emoji">✨</span>
+                    <h2>자재별 추천</h2>
+                </div>
+                <a href="#" class="more-btn">더보기 →</a>
+            </div>
+            <div class="grid-2x2" id="material-recommendations">
+                <!-- Material recommendations will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Sample data for demonstration
+        const sampleProducts = [
+            {
+                id: 1,
+                name: "투명 아크릴 키링",
+                price: 3500,
+                image: "/api/placeholder/300/300",
+                likes: 128,
+                reviews: 45,
+                isHot: true
+            },
+            {
+                id: 2,
+                name: "홀로그램 스마트톡",
+                price: 4500,
+                image: "/api/placeholder/300/300",
+                likes: 96,
+                reviews: 32,
+                isHot: true
+            },
+            {
+                id: 3,
+                name: "미러 스탠드",
+                price: 5200,
+                image: "/api/placeholder/300/300",
+                likes: 84,
+                reviews: 28,
+                isHot: false
+            },
+            {
+                id: 4,
+                name: "글리터 뱃지",
+                price: 2800,
+                image: "/api/placeholder/300/300",
+                likes: 156,
+                reviews: 67,
+                isHot: true
+            }
+        ];
+
+        const sampleReviews = [
+            {
+                id: 1,
+                productName: "투명 키링",
+                rating: 5,
+                image: "/api/placeholder/300/300",
+                author: "김**",
+                content: "정말 만족스러워요!",
+                likes: 24,
+                reviews: 12
+            },
+            {
+                id: 2,
+                productName: "홀로그램 스마트톡",
+                rating: 5,
+                image: "/api/placeholder/300/300",
+                author: "이**",
+                content: "퀄리티가 좋네요",
+                likes: 18,
+                reviews: 8
+            },
+            {
+                id: 3,
+                productName: "미러 스탠드",
+                rating: 4,
+                image: "/api/placeholder/300/300",
+                author: "박**",
+                content: "배송도 빠르고 좋아요",
+                likes: 15,
+                reviews: 6
+            },
+            {
+                id: 4,
+                productName: "글리터 뱃지",
+                rating: 5,
+                image: "/api/placeholder/300/300",
+                author: "최**",
+                content: "너무 예뻐요!",
+                likes: 31,
+                reviews: 14
+            }
+        ];
+
+        // Function to create product card
+        function createProductCard(product) {
+            return `
+                <div class="product-card" onclick="goToProduct(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        ${product.isHot ? '<div class="badge">HOT</div>' : ''}
+                        <div class="like-badge">LIKE ${product.likes}</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-price">₩${product.price.toLocaleString()}</p>
+                        <p class="product-stats">리뷰 ${product.reviews} / LIKE ${product.likes}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to create review card
+        function createReviewCard(review) {
+            return `
+                <div class="product-card" onclick="goToReview(${review.id})">
+                    <div class="product-image">
+                        <img src="${review.image}" alt="${review.productName}" loading="lazy">
+                        <div class="badge">HOT</div>
+                        <div class="like-badge">LIKE ${review.likes}</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${review.productName}</h3>
+                        <p class="product-price">₩${(review.rating * 1200 + 3500).toLocaleString()}</p>
+                        <p class="product-stats">리뷰 ${review.reviews} / LIKE ${review.likes}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load products and reviews
+        function loadContent() {
+            // Load popular products
+            const popularContainer = document.getElementById('popular-products');
+            popularContainer.innerHTML = sampleProducts.map(createProductCard).join('');
+
+            // Load creator reviews
+            const reviewsContainer = document.getElementById('creator-reviews');
+            reviewsContainer.innerHTML = sampleReviews.map(createReviewCard).join('');
+
+            // Load community showcase (using products for demo)
+            const communityContainer = document.getElementById('community-showcase');
+            communityContainer.innerHTML = sampleProducts.map(product => 
+                createProductCard({...product, name: `커뮤니티 - ${product.name}`})
+            ).join('');
+
+            // Load material recommendations (using products for demo)
+            const materialContainer = document.getElementById('material-recommendations');
+            materialContainer.innerHTML = sampleProducts.map(product => 
+                createProductCard({...product, name: `자재별 - ${product.name}`})
+            ).join('');
+        }
+
+        // Navigation functions
+        function goToProduct(id) {
+            console.log('Going to product:', id);
+            // Add navigation logic here
+        }
+
+        function goToReview(id) {
+            console.log('Going to review:', id);
+            // Add navigation logic here
+        }
+
+        // Initialize content when page loads
+        document.addEventListener('DOMContentLoaded', loadContent);
+    </script>
+</body>
+</html>

@@ -15,11 +15,11 @@ interface ProductCardProps {
   isFavorite?: boolean;
 }
 
-export function ProductCard({ 
-  product, 
-  onAddToCart, 
-  onToggleFavorite, 
-  isFavorite = false 
+export function ProductCard({
+  product,
+  onAddToCart,
+  onToggleFavorite,
+  isFavorite = false,
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(isFavorite);
@@ -39,7 +39,7 @@ export function ProductCard({
   };
 
   const formattedPrice = parseInt(product.basePrice).toLocaleString();
-  
+
   // Use actual database values
   const reviewCount = product.reviewCount || 0;
   const likeCount = product.likeCount || 0;
@@ -57,40 +57,31 @@ export function ProductCard({
         {/* 상단 이미지 영역 (정사각형) */}
         <div className="allprint-card-image">
           {product.imageUrl ? (
-            <img 
-              src={product.imageUrl} 
-              alt={product.name} 
-              loading="lazy"
-            />
+            <img src={product.imageUrl} alt={product.name} loading="lazy" />
           ) : (
             <div className="allprint-card-image-placeholder">
-              <ImageIcon className="w-8 h-8" />
+              <ImageIcon />
             </div>
           )}
-          
+
           {/* HOT 배지 (왼쪽 상단 절대 위치) */}
           {product.isFeatured && (
-            <div className="allprint-card-hot-badge">
-              HOT
-            </div>
+            <div className="allprint-card-hot-badge">HOT</div>
           )}
-          
+
           {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
-          <div className="allprint-card-like-badge">
-            LIKE {likeCount || 15}
-          </div>
+          <div className="allprint-card-like-badge">LIKE {likeCount || 15}</div>
         </div>
 
         {/* 하단 텍스트 영역 */}
         <div className="allprint-card-content">
           <div className="allprint-card-title">
-            {language === 'ko' ? product.nameKo : product.name}
+            {language === "ko" ? product.nameKo : product.name}
           </div>
-          <div className="allprint-card-price">
-            ₩ {formattedPrice}
-          </div>
+          <div className="allprint-card-price">₩ {formattedPrice}</div>
           <div className="allprint-card-stats">
-            리뷰 {reviewCount?.toLocaleString() || '11,390'} / LIKE {likeCount || 15}
+            리뷰 {reviewCount?.toLocaleString() || "11,390"} / LIKE{" "}
+            {likeCount || 15}
           </div>
         </div>
       </motion.div>

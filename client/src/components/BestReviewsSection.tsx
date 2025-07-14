@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Star, Heart, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Star,
+  Heart,
+  MessageCircle,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,85 +34,91 @@ const mockBestReviews: BestReview[] = [
     productId: "1",
     productName: "Acrylic Keychain",
     productNameKo: "아크릴 키링",
-    reviewText: "정말 예쁘게 나왔어요! 품질이 너무 좋고 색감도 선명하네요. 다음에 또 주문할게요~",
+    reviewText:
+      "정말 예쁘게 나왔어요! 품질이 너무 좋고 색감도 선명하네요. 다음에 또 주문할게요~",
     reviewImage: "/api/placeholder/300/300",
     userNickname: "키링러버***",
     rating: 5,
     reviewDate: "2024.12.15",
     likes: 89,
     comments: 12,
-    isBestReview: true
+    isBestReview: true,
   },
   {
     id: "2",
     productId: "2",
     productName: "Hologram Sticker",
     productNameKo: "홀로그램 스티커",
-    reviewText: "홀로그램 효과가 정말 예뻐요! 각도에 따라 색이 바뀌는 게 신기해요. 친구들이 다 부러워해요!",
+    reviewText:
+      "홀로그램 효과가 정말 예뻐요! 각도에 따라 색이 바뀌는 게 신기해요. 친구들이 다 부러워해요!",
     reviewImage: "/api/placeholder/300/300",
     userNickname: "반짝이좋아***",
     rating: 5,
     reviewDate: "2024.12.14",
     likes: 156,
     comments: 23,
-    isBestReview: true
+    isBestReview: true,
   },
   {
     id: "3",
     productId: "3",
     productName: "Acrylic Stand",
     productNameKo: "아크릴 스탠드",
-    reviewText: "투명도가 좋고 두께감도 만족스러워요. 캐릭터가 정말 예쁘게 서있어요!",
+    reviewText:
+      "투명도가 좋고 두께감도 만족스러워요. 캐릭터가 정말 예쁘게 서있어요!",
     reviewImage: "/api/placeholder/300/300",
     userNickname: "스탠드마니아***",
     rating: 5,
     reviewDate: "2024.12.13",
     likes: 124,
     comments: 18,
-    isBestReview: true
+    isBestReview: true,
   },
   {
     id: "4",
     productId: "4",
     productName: "Smart Tok",
     productNameKo: "스마트톡",
-    reviewText: "휴대폰 거치할 때 정말 편하고 디자인도 마음에 들어요. 접착력도 좋아요!",
+    reviewText:
+      "휴대폰 거치할 때 정말 편하고 디자인도 마음에 들어요. 접착력도 좋아요!",
     reviewImage: "/api/placeholder/300/300",
     userNickname: "스마트유저***",
     rating: 5,
     reviewDate: "2024.12.12",
     likes: 98,
     comments: 15,
-    isBestReview: true
+    isBestReview: true,
   },
   {
     id: "5",
     productId: "5",
     productName: "Photo Card Holder",
     productNameKo: "포토카드 홀더",
-    reviewText: "포카 보관하기 정말 좋아요! 크기도 딱 맞고 투명도도 좋아서 포카가 잘 보여요.",
+    reviewText:
+      "포카 보관하기 정말 좋아요! 크기도 딱 맞고 투명도도 좋아서 포카가 잘 보여요.",
     reviewImage: "/api/placeholder/300/300",
     userNickname: "포카컬렉터***",
     rating: 5,
     reviewDate: "2024.12.11",
     likes: 167,
     comments: 21,
-    isBestReview: true
+    isBestReview: true,
   },
   {
     id: "6",
     productId: "6",
     productName: "Custom Badge",
     productNameKo: "커스텀 배지",
-    reviewText: "디자인이 너무 귀엽게 나왔어요! 크기도 적당하고 색상도 선명해서 만족합니다.",
+    reviewText:
+      "디자인이 너무 귀엽게 나왔어요! 크기도 적당하고 색상도 선명해서 만족합니다.",
     reviewImage: "/api/placeholder/300/300",
     userNickname: "배지마니아***",
     rating: 5,
     reviewDate: "2024.12.10",
     likes: 134,
     comments: 19,
-    isBestReview: true
-  }
+    isBestReview: true,
+  },
 ];
 
 export function BestReviewsSection() {
@@ -125,14 +137,23 @@ export function BestReviewsSection() {
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % Math.ceil(mockBestReviews.length / 3));
+    setCurrentIndex(
+      (prev) => (prev + 1) % Math.ceil(mockBestReviews.length / 3),
+    );
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + Math.ceil(mockBestReviews.length / 3)) % Math.ceil(mockBestReviews.length / 3));
+    setCurrentIndex(
+      (prev) =>
+        (prev - 1 + Math.ceil(mockBestReviews.length / 3)) %
+        Math.ceil(mockBestReviews.length / 3),
+    );
   };
 
-  const visibleReviews = mockBestReviews.slice(currentIndex * 3, (currentIndex + 1) * 3);
+  const visibleReviews = mockBestReviews.slice(
+    currentIndex * 3,
+    (currentIndex + 1) * 3,
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -148,7 +169,12 @@ export function BestReviewsSection() {
             Best Review 💌
           </h2>
           <p className="text-lg text-gray-600">
-            {t({ ko: "올댓프린팅이 직접 선별한 베스트 리뷰", en: "Selected directly by AllThatPrinting", ja: "オールザットプリンティングが直接選んだベストレビュー", zh: "AllThatPrinting直接精选的最佳评论" })}
+            {t({
+              ko: "올댓프린팅이 직접 선별한 베스트 리뷰",
+              en: "Selected directly by AllThatPrinting",
+              ja: "オールザットプリンティングが直接選んだベストレビュー",
+              zh: "AllThatPrinting直接精选的最佳评论",
+            })}
           </p>
         </div>
 
@@ -165,22 +191,26 @@ export function BestReviewsSection() {
           </Button>
 
           <div className="flex space-x-2">
-            {Array.from({ length: Math.ceil(mockBestReviews.length / 3) }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-blue-600' : 'bg-gray-300'
-                }`}
-              />
-            ))}
+            {Array.from({ length: Math.ceil(mockBestReviews.length / 3) }).map(
+              (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentIndex ? "bg-blue-600" : "bg-gray-300"
+                  }`}
+                />
+              ),
+            )}
           </div>
 
           <Button
             variant="outline"
             size="sm"
             onClick={nextSlide}
-            disabled={currentIndex === Math.ceil(mockBestReviews.length / 3) - 1}
+            disabled={
+              currentIndex === Math.ceil(mockBestReviews.length / 3) - 1
+            }
           >
             {t({ ko: "다음", en: "Next", ja: "次へ", zh: "下一个" })}
             <ChevronRight className="h-4 w-4 ml-1" />
@@ -213,10 +243,11 @@ export function BestReviewsSection() {
                       className="unified-mobile-image"
                       loading="lazy"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
+                        (e.target as HTMLImageElement).src =
+                          "/api/placeholder/300/300";
                       }}
                     />
-                    
+
                     {/* Product Badge */}
                     <div className="absolute bottom-2 left-2">
                       <Badge className="bg-white/90 text-gray-800 text-xs">
@@ -261,8 +292,17 @@ export function BestReviewsSection() {
                           <span>{review.comments}</span>
                         </div>
                       </div>
-                      <Button size="sm" variant="outline" className="text-xs py-1 px-2">
-                        {t({ ko: "자세히", en: "Details", ja: "詳細", zh: "详情" })}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs py-1 px-2"
+                      >
+                        {t({
+                          ko: "자세히",
+                          en: "Details",
+                          ja: "詳細",
+                          zh: "详情",
+                        })}
                       </Button>
                     </div>
                   </div>
@@ -276,7 +316,12 @@ export function BestReviewsSection() {
         <div className="text-center">
           <Link href="/reviews/all">
             <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-              {t({ ko: "모든 베스트 리뷰 보기", en: "View All Best Reviews", ja: "全てのベストレビューを見る", zh: "查看所有最佳评论" })}
+              {t({
+                ko: "모든 베스트 리뷰 보기",
+                en: "View All Best Reviews",
+                ja: "全てのベストレビューを見る",
+                zh: "查看所有最佳评论",
+              })}
             </Button>
           </Link>
         </div>
