@@ -352,6 +352,112 @@ body {
     }
   }
 
+  /* Creator Review Card Specific Styles */
+  .creator-review-card {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.2s ease;
+  }
+
+  .creator-review-card:hover {
+    transform: scale(1.02);
+  }
+
+  .card-image-wrapper {
+    height: 180px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .creator-review-card .card-content {
+    padding: 12px;
+    color: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+
+  .creator-review-card .card-content .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .creator-review-card .card-content .card-price {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .creator-review-card .card-content .card-stats {
+    font-size: 12px;
+    color: #777;
+    margin-top: auto;
+  }
+
+  /* Creator Review Grid */
+  .creator-review-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 0 20px;
+  }
+
+  @media (min-width: 768px) {
+    .creator-review-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .creator-review-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .creator-review-card .card-content {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+    
+    .creator-review-card .card-content .card-title {
+      color: #ffffff;
+    }
+    
+    .creator-review-card .card-content .card-price {
+      color: #ffffff;
+    }
+    
+    .creator-review-card .card-content .card-stats {
+      color: #aaa;
+    }
+  }
+
   .btn-primary {
     @apply bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-lg transition-colors duration-200;
   }
