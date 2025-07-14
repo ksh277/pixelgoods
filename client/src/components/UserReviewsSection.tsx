@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Star, ArrowRight, Calendar, User } from "lucide-react";
+import { Star, ArrowRight, Calendar, User, Heart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -156,52 +156,54 @@ export function UserReviewsSection() {
           </div>
 
           {/* Review Cards */}
-          <div className="unified-mobile-grid md:grid-cols-2 lg:grid-cols-4 md:gap-6">
+          <div className="unified-grid">
             {displayedReviews.map((review, index) => (
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/reviews/${review.id}`}>
-                  <div className="unified-mobile-card">
-                    {/* Product Image */}
-                    <div className="relative">
+                  <div className="unified-card">
+                    {/* HOT 배지 (절대 위치) */}
+                    {review.isHot && (
+                      <div className="unified-card-badge">
+                        HOT
+                      </div>
+                    )}
+                    
+                    {/* 찜 하트 (절대 위치) */}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="unified-card-heart">
+                      <Heart className="h-3 w-3 text-gray-600" />
+                    </button>
+                    
+                    {/* 상단 이미지 영역 (60%) */}
+                    <div className="unified-card-image">
                       <img
                         src={review.productImage}
                         alt={language === 'ko' ? review.productNameKo : review.productName}
-                        className="unified-mobile-image"
                         loading="lazy"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
                         }}
                       />
-                      
-                      {/* Badges */}
-                      <div className="absolute top-2 left-2 flex gap-2">
-                        {review.isHot && (
-                          <Badge className="bg-red-500 text-white text-xs font-bold">
-                            HOT
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <div className="absolute top-2 right-2">
-                        <Badge className="bg-black/70 text-white text-xs">
-                          {review.totalReviews} {t({ ko: "리뷰", en: "reviews", ja: "レビュー", zh: "评价" })}
-                        </Badge>
-                      </div>
                     </div>
 
-                    {/* Review Content - Flexible grow area */}
-                    <div className="unified-mobile-content">
-                      {/* Product Name */}
-                      <h3 className="font-bold text-sm text-gray-900 mb-2">
+                    {/* 하단 텍스트 영역 (40%) */}
+                    <div className="unified-card-content">
+                      <div className="unified-card-title">
                         {language === 'ko' ? review.productNameKo : review.productName}
-                      </h3>
-
-                      {/* Rating */}
-                      <div className="flex items-center gap-1 mb-2">
+                      </div>
+                      
+                      {/* 별점 표시 */}
+                      <div className="unified-card-rating">
                         {renderStars(review.rating)}
-                        <span className="text-sm text-gray-600 ml-1">
-                          {review.rating}.0
-                        </span>
+                      </div>
+                      
+                      {/* 리뷰 수 */}
+                      <div className="text-xs text-gray-500 mt-1">
+                        {t({ ko: "리뷰", en: "reviews", ja: "レビュー", zh: "评价" })} {review.totalReviews}
                       </div>
 
                       {/* Review Text - Flexible area */}

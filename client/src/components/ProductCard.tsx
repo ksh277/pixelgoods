@@ -72,7 +72,7 @@ export function ProductCard({
           <Heart className={`h-3 w-3 ${isLiked ? 'fill-current' : ''}`} />
         </motion.button>
 
-        {/* 상단 이미지 영역 (2/3) */}
+        {/* 상단 이미지 영역 (60%) */}
         <div className="unified-card-image">
           {product.imageUrl ? (
             <img 
@@ -87,11 +87,22 @@ export function ProductCard({
           )}
         </div>
 
-        {/* 하단 텍스트 영역 (1/3) */}
+        {/* 하단 텍스트 영역 (40%) */}
         <div className="unified-card-content">
           <div className="unified-card-title">
             {language === 'ko' ? product.nameKo : product.name}
           </div>
+          {/* 별점 표시 (리뷰가 있는 경우) */}
+          {reviewCount > 0 && (
+            <div className="unified-card-rating">
+              {[...Array(5)].map((_, i) => (
+                <Star 
+                  key={i} 
+                  className={`${i < 4 ? 'fill-current' : ''}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </motion.div>
     </Link>

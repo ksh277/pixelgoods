@@ -222,13 +222,14 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-4">
         {/* Popular Products Section */}
         <motion.section
+          className="section-spacing"
           variants={containerVariants}
           initial="visible"
           animate="visible"
           viewport={{ once: true, margin: "-50px" }}
         >
           {/* Section Header */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between section-header">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🔥</span>
               <div>
@@ -272,13 +273,14 @@ export default function Home() {
 
         {/* Creator Reviews Section */}
         <motion.section
+          className="section-spacing"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
           {/* Section Header */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between section-header">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🤗</span>
               <div>
@@ -353,12 +355,13 @@ export default function Home() {
 
         {/* Community Showcase */}
         <motion.section
+          className="section-spacing"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between section-header">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🔥</span>
               <div>
@@ -385,49 +388,38 @@ export default function Home() {
               <motion.div key={item.id} variants={itemVariants}>
                 <Link href={`/community/${item.id}`} className="block">
                   <div className="unified-card">
-                    {/* 상단 HOT 배지 + 찜 하트 */}
-                    <div className="unified-card-top">
-                      <div className="unified-card-badge">
-                        인기
-                      </div>
-                      <button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
-                        className="unified-card-heart">
-                        <Heart className="h-3 w-3 text-gray-600" />
-                      </button>
+                    {/* HOT 배지 (절대 위치) */}
+                    <div className="unified-card-badge">
+                      인기
                     </div>
                     
-                    {/* 이미지 영역 */}
+                    {/* 찜 하트 (절대 위치) */}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="unified-card-heart">
+                      <Heart className="h-3 w-3 text-gray-600" />
+                    </button>
+                    
+                    {/* 상단 이미지 영역 (60%) */}
                     <div className="unified-card-image">
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover"
                         loading="lazy"
                       />
                     </div>
                     
-                    {/* 제품명 */}
-                    <div className="unified-card-title">
-                      {item.title}
-                    </div>
-                    
-                    {/* 작성자 */}
-                    <div className="text-xs text-gray-500 mb-1">
-                      {item.author}
-                    </div>
-                    
-                    {/* 하단 메타 정보 */}
-                    <div className="unified-card-footer">
-                      <span>
-                        {t({ ko: "리뷰", en: "Reviews" })}: {item.comments}
-                      </span>
-                      <span>
-                        {t({ ko: "찜", en: "Likes" })}: {item.likes}
-                      </span>
+                    {/* 하단 텍스트 영역 (40%) */}
+                    <div className="unified-card-content">
+                      <div className="unified-card-title">
+                        {item.title}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {item.author}
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -438,12 +430,13 @@ export default function Home() {
 
         {/* Material Recommendations */}
         <motion.section
+          className="section-spacing"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between section-header">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">✨</span>
               <div>
@@ -456,9 +449,9 @@ export default function Home() {
               </div>
             </div>
             <Link href="/products">
-              <Button variant="ghost" size="sm" className="text-primary">
+              <button className="text-sm text-blue-500 hover:underline flex items-center">
                 {t({ ko: "더보기", en: "View More" })} <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+              </button>
             </Link>
           </div>
 
