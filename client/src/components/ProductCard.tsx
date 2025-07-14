@@ -64,7 +64,7 @@ export function ProductCard({
             />
           ) : (
             <div className="allprint-card-image-placeholder">
-              <ImageIcon />
+              <ImageIcon className="w-8 h-8" />
             </div>
           )}
           

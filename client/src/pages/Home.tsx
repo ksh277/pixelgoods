@@ -253,12 +253,20 @@ export default function Home() {
             <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
           ) : (
             <motion.div 
-              className="popular-products-grid"
+              className="flex flex-wrap justify-between gap-3 px-4 mb-16 
+                         sm:gap-4 md:grid md:grid-cols-3 lg:grid-cols-4 
+                         md:gap-5 lg:gap-6 md:px-5 lg:px-8"
               variants={containerVariants}
               style={{ opacity: 1 }}
             >
-              {products?.slice(0, 4).map((product: Product) => (
-                <motion.div key={product.id} variants={itemVariants} style={{ opacity: 1 }}>
+              {products?.slice(0, 4).map((product: Product, index: number) => (
+                <motion.div 
+                  key={product.id} 
+                  variants={itemVariants} 
+                  style={{ opacity: 1 }}
+                  className="w-[48%] mb-4 flex-shrink-0 
+                           md:w-full md:mb-0"
+                >
                   <ProductCard
                     product={product}
                     isFavorite={favorites.includes(product.id)}

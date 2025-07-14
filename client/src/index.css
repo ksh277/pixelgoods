@@ -488,28 +488,34 @@ body {
     gap: 12px;
     padding: 0 16px;
     background-color: transparent;
-    max-height: 600px; /* 2행 제한 */
-    overflow: hidden;
     margin-bottom: 80px; /* 플로팅 버튼과 겹치지 않도록 여백 */
   }
 
   .popular-products-grid > * {
-    flex-basis: 48%;
-    max-width: 48%;
+    flex-basis: calc(50% - 6px);
+    max-width: calc(50% - 6px);
     flex-shrink: 0;
+    margin-bottom: 16px;
   }
 
   /* 모바일에서 2x2 그리드 유지 */
   @media (max-width: 640px) {
     .popular-products-grid {
-      gap: 8px;
-      padding: 0 12px;
+      gap: 12px;
+      padding: 0 16px;
       margin-bottom: 100px; /* 모바일에서 더 많은 여백 */
+      justify-content: space-between;
     }
     
     .popular-products-grid > * {
-      flex-basis: 48%;
-      max-width: 48%;
+      flex-basis: calc(50% - 6px);
+      max-width: calc(50% - 6px);
+      margin-bottom: 16px;
+    }
+    
+    /* 2행 제한 - 4개 카드만 표시 */
+    .popular-products-grid > *:nth-child(n+5) {
+      display: none;
     }
   }
 
