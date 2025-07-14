@@ -17,19 +17,19 @@ export default function Resources() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4">
-            <Link href="/" className="hover:text-gray-700">홈</Link>
+            <Link href="/" className="hover:text-gray-700 dark:hover:text-gray-300">홈</Link>
             <ChevronRight className="w-4 h-4" />
-            <span className="text-gray-900 font-medium">자료실</span>
+            <span className="text-gray-900 dark:text-gray-100 font-medium">자료실</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             {t({ ko: "자료실", en: "Resources" })}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             {t({ 
               ko: "굿즈 제작에 필요한 다양한 자료를 다운로드하세요", 
               en: "Download various materials needed for goods production" 
@@ -67,7 +67,7 @@ export default function Resources() {
         {/* Beluga Templates Grid */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
               {t({ ko: "벨루가 굿즈 템플릿", en: "Beluga Goods Templates", ja: "ベルーガグッズテンプレート", zh: "白鲸商品模板" })}
             </h2>
             <Button variant="outline" size="sm" asChild>
@@ -95,7 +95,7 @@ export default function Resources() {
               ))
             ) : (
               templates.map((template) => (
-                <Card key={template.id} className="group bg-white shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200">
+                <Card key={template.id} className="group bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-gray-700">
                   {/* Badge Overlays */}
                   <div className="relative">
                     {template.status === "HOT" && (
@@ -116,11 +116,11 @@ export default function Resources() {
                     
                     {/* Image Placeholder - Ready for dynamic image insertion */}
                     <div 
-                      className="image-placeholder aspect-square bg-gray-100 border-b border-gray-200 flex items-center justify-center group-hover:bg-gray-50 transition-colors"
+                      className="image-placeholder aspect-square bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 flex items-center justify-center group-hover:bg-gray-50 dark:group-hover:bg-gray-600 transition-colors"
                       data-template-id={template.id}
                       data-src={template.imageUrl || ""}
                     >
-                      <div className="text-gray-400 text-center">
+                      <div className="text-gray-400 dark:text-gray-500 text-center">
                         <Image className="w-8 h-8 mx-auto mb-2 opacity-50" />
                         <span className="text-xs">이미지 준비중</span>
                       </div>
@@ -129,12 +129,12 @@ export default function Resources() {
                   
                   <CardContent className="p-3 sm:p-4">
                     {/* Template Name */}
-                    <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm sm:text-base mb-1 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {language === 'ko' ? template.titleKo : template.title}
                     </h3>
                     
                     {/* Description */}
-                    <p className="text-xs sm:text-sm text-gray-600 mb-2 line-clamp-2 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2 leading-relaxed">
                       {language === 'ko' ? template.descriptionKo : template.description}
                     </p>
                     

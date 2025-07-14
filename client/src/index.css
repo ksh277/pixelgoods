@@ -39,6 +39,93 @@ body {
   max-width: 100vw;
 }
 
+/* 전역 다크모드 스타일 */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #0f0f0f;
+  color: #f2f2f2;
+}
+
+/* 다크모드 카드 및 컴포넌트 스타일 */
+.dark .card, .dark .box, .dark .section {
+  background-color: #1c1c1c;
+  color: #fff;
+  border-color: #333;
+}
+
+.dark .coupon-box, .dark .coupon-card {
+  background-color: #1c1c1c !important;
+  color: #fff !important;
+}
+
+.dark .event-container, .dark .login-panel {
+  background-color: #1c1c1c;
+  color: #fff;
+}
+
+.dark .btn {
+  background-color: #333;
+  color: #fff;
+}
+
+.dark .btn:hover {
+  background-color: #444;
+}
+
+/* 다크모드 버튼 및 상호작용 요소 */
+.dark .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+.dark .text-gray-600 {
+  color: #6b7280 !important;
+}
+
+.dark .text-gray-700 {
+  color: #4b5563 !important;
+}
+
+.dark .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+/* 다크모드 테두리 */
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+.dark .border-gray-300 {
+  border-color: #4b5563 !important;
+}
+
+/* 다크모드 아이콘 */
+.dark .w-16.h-16.rounded-full.bg-white {
+  background-color: #374151 !important;
+}
+
+/* 다크모드 배지 */
+.dark .badge {
+  background-color: #1f2937;
+  color: #d1d5db;
+}
+
+/* 다크모드 카드 제목 */
+.dark .cardTitle {
+  color: #f9fafb;
+}
+
+/* 다크모드 링크 */
+.dark a {
+  color: #60a5fa;
+}
+
+.dark a:hover {
+  color: #93c5fd;
+}
+
 /* Scroll button animation */
 .scroll-button {
   animation: bounce 2s infinite;
@@ -215,9 +302,10 @@ body {
     margin-bottom: 12px;
   }
 
-  /* AllThatPrinting 상품 카드 - 밝은 테마 고정 */
+  /* AllThatPrinting 상품 카드 - 다크모드 대응 */
   .allprint-card {
     width: 100%;
+    min-width: 260px;
     height: 280px;
     background-color: #ffffff;
     border-radius: 12px;
@@ -229,29 +317,10 @@ body {
     transition: transform 0.2s ease;
   }
 
-  /* 다크모드에서도 밝은 테마 유지 */
-  @media (prefers-color-scheme: dark) {
-    .allprint-card {
-      background-color: #ffffff !important;
-      color: #111 !important;
-    }
-    
-    .allprint-card-title {
-      color: #111 !important;
-    }
-    
-    .allprint-card-price {
-      color: #000 !important;
-    }
-    
-    .allprint-card-stats {
-      color: #777 !important;
-    }
-    
-    .allprint-card-like-badge {
-      color: #555 !important;
-      background: transparent !important;
-    }
+  /* 다크모드 대응 */
+  .dark .allprint-card {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
   }
 
   .allprint-card:hover {
@@ -269,6 +338,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .dark .allprint-card-image {
+    border-bottom: 1px solid #333;
+    background-color: #2a2a2a;
   }
 
   .allprint-card-image img {
@@ -314,6 +388,10 @@ body {
     font-weight: 500;
   }
 
+  .dark .allprint-card-like-badge {
+    color: #bbb;
+  }
+
   /* 하단 텍스트 영역 - 고정 높이 */
   .allprint-card-content {
     height: 84px;
@@ -322,6 +400,10 @@ body {
     flex-direction: column;
     justify-content: space-between;
     background-color: #ffffff;
+  }
+
+  .dark .allprint-card-content {
+    background-color: #1a1a1a;
   }
 
   /* 상품명 */
@@ -334,6 +416,10 @@ body {
     white-space: nowrap;
   }
 
+  .dark .allprint-card-title {
+    color: #fff;
+  }
+
   /* 가격 */
   .allprint-card-price {
     font-size: 15px;
@@ -341,10 +427,18 @@ body {
     color: #000;
   }
 
+  .dark .allprint-card-price {
+    color: #fff;
+  }
+
   /* 리뷰/좋아요 정보 */
   .allprint-card-stats {
     font-size: 12px;
     color: #777;
+  }
+
+  .dark .allprint-card-stats {
+    color: #888;
   }
 
   /* AllThatPrinting 그리드 - 2/3/4 열 반응형 */

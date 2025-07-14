@@ -113,7 +113,7 @@ export default function Rewards() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
@@ -148,10 +148,10 @@ export default function Rewards() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-lg shadow-lg p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
         >
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
               {t({ 
                 ko: "픽셀굿즈 가입 시 즉시 혜택!",
                 en: "Instant Benefits When You Join PixelGoods!",
@@ -159,7 +159,7 @@ export default function Rewards() {
                 zh: "加入PixelGoods即享优惠！"
               })}
             </h2>
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
               {t({ 
                 ko: "픽셀굿즈에 가입하시면 ", 
                 en: "When you join PixelGoods, you receive ",
@@ -203,7 +203,7 @@ export default function Rewards() {
           className="space-y-8"
         >
           <div className="text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               {t({ 
                 ko: "지금 가입하고 3가지 리워드 쿠폰을 바로 받으세요!",
                 en: "Sign up now and get 3 reward coupons instantly!",
@@ -234,8 +234,8 @@ export default function Rewards() {
                       {language === 'ko' ? coupon.description.ko : coupon.description.en}
                     </p>
                   </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between text-sm text-gray-500">
+                  <CardContent className="p-6 bg-white dark:bg-white">
+                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-600">
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
                         {t({ ko: "유효기간:", en: "Valid for:", ja: "有効期限:", zh: "有效期:" })} {language === 'ko' ? coupon.validity.ko : coupon.validity.en}
@@ -248,7 +248,7 @@ export default function Rewards() {
             ))}
           </div>
 
-          <div className="text-center text-sm text-gray-500 mt-6">
+          <div className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
             <p>
               {t({ 
                 ko: "*쿠폰은 자동으로 지급됩니다. 유효기간은 쿠폰별로 다를 수 있습니다 (30~60일).",
@@ -270,7 +270,7 @@ export default function Rewards() {
           className="space-y-8"
         >
           <div className="text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               {t({ 
                 ko: "등급별 멤버십 혜택 비교",
                 en: "Compare Membership Benefits by Tier",
@@ -291,7 +291,7 @@ export default function Rewards() {
                   hoveredTier === tier.name.ko ? 'scale-105' : ''
                 }`}
               >
-                <Card className={`h-full ${tier.color} border-2 hover:shadow-lg transition-shadow duration-300`}>
+                <Card className={`h-full ${tier.color} border-2 hover:shadow-lg transition-shadow duration-300 bg-white dark:bg-gray-800 dark:border-gray-700`}>
                   <CardHeader className="text-center pb-4">
                     <div className={`w-16 h-16 mx-auto rounded-full bg-white flex items-center justify-center mb-4 ${tier.textColor}`}>
                       {tier.icon}
@@ -302,41 +302,41 @@ export default function Rewards() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
-                      <div className="bg-white/50 p-3 rounded-lg">
-                        <div className="text-xs text-gray-600 mb-1">
+                      <div className="bg-white/50 dark:bg-gray-700/50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 dark:text-gray-300 mb-1">
                           {t({ ko: "등급 조건", en: "Tier Requirement", ja: "等級条件", zh: "等级要求" })}
                         </div>
-                        <div className="font-semibold text-sm">
+                        <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                           {language === 'ko' ? tier.requirement.ko : tier.requirement.en}
                         </div>
                       </div>
                       
-                      <div className="bg-white/50 p-3 rounded-lg">
-                        <div className="text-xs text-gray-600 mb-1 flex items-center">
+                      <div className="bg-white/50 dark:bg-gray-700/50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 dark:text-gray-300 mb-1 flex items-center">
                           <Percent className="w-3 h-3 mr-1" />
                           {t({ ko: "포인트", en: "Points", ja: "ポイント", zh: "积分" })}
                         </div>
-                        <div className="font-semibold text-sm">
+                        <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                           {language === 'ko' ? tier.points.ko : tier.points.en}
                         </div>
                       </div>
                       
-                      <div className="bg-white/50 p-3 rounded-lg">
-                        <div className="text-xs text-gray-600 mb-1 flex items-center">
+                      <div className="bg-white/50 dark:bg-gray-700/50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 dark:text-gray-300 mb-1 flex items-center">
                           <Truck className="w-3 h-3 mr-1" />
-                          {t({ ko: "배송", en: "Shipping", ja: "配送", zh: "配送" })}
+                          {t({ ko: "배송", en: "Shipping", ja: "배송", zh: "配送" })}
                         </div>
-                        <div className="font-semibold text-sm">
+                        <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                           {language === 'ko' ? tier.shipping.ko : tier.shipping.en}
                         </div>
                       </div>
                       
-                      <div className="bg-white/50 p-3 rounded-lg">
-                        <div className="text-xs text-gray-600 mb-1 flex items-center">
+                      <div className="bg-white/50 dark:bg-gray-700/50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 dark:text-gray-300 mb-1 flex items-center">
                           <Gift className="w-3 h-3 mr-1" />
                           {t({ ko: "추가 혜택", en: "Benefits", ja: "追加特典", zh: "附加优惠" })}
                         </div>
-                        <div className="font-semibold text-sm">
+                        <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                           {language === 'ko' ? tier.benefits.ko : tier.benefits.en}
                         </div>
                       </div>
@@ -347,7 +347,7 @@ export default function Rewards() {
             ))}
           </div>
 
-          <div className="text-center text-sm text-gray-500 mt-8">
+          <div className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
             <p>
               {t({ 
                 ko: "*등급은 매년 1월 9일~12월 31일 기간 실제 결제 금액을 기준으로 산정됩니다.",
