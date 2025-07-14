@@ -357,13 +357,13 @@ body {
     margin-bottom: 12px;
   }
 
-  /* AllThatPrinting 상품 카드 */
+  /* AllThatPrinting 상품 카드 - 밝은 테마 고정 */
   .allprint-card {
     width: 100%;
-    height: 260px;
-    background-color: #fff;
-    border-radius: 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    height: 280px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -371,58 +371,28 @@ body {
     transition: transform 0.2s ease;
   }
 
-  /* 다크 모드 지원 - 강화된 텍스트 대비 */
+  /* 다크모드에서도 밝은 테마 유지 */
   @media (prefers-color-scheme: dark) {
     .allprint-card {
-      background-color: #1e1e1e !important;
-      box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1) !important;
+      background-color: #ffffff !important;
+      color: #111 !important;
     }
     
     .allprint-card-title {
-      color: #ffffff !important;
+      color: #111 !important;
     }
     
     .allprint-card-price {
-      color: #f9f9f9 !important;
+      color: #000 !important;
     }
     
     .allprint-card-stats {
-      color: #cccccc !important;
+      color: #777 !important;
     }
     
     .allprint-card-like-badge {
-      color: #bbbbbb !important;
-      background: rgba(40, 40, 40, 0.8) !important;
-    }
-    
-    .allprint-card-hot-badge {
-      background: #FF3B30 !important;
-      color: #fff !important;
-    }
-    
-    .allprint-card-image {
-      border-bottom: 1px solid #333 !important;
-    }
-    
-    /* 추가 텍스트 색상 지원 */
-    .text-gray-900 {
-      color: #ffffff !important;
-    }
-    
-    .text-gray-600 {
-      color: #cccccc !important;
-    }
-    
-    .text-gray-500 {
-      color: #bbbbbb !important;
-    }
-    
-    .text-gray-700 {
-      color: #dddddd !important;
-    }
-    
-    .text-black {
-      color: #ffffff !important;
+      color: #555 !important;
+      background: transparent !important;
     }
   }
 
@@ -430,9 +400,9 @@ body {
     transform: scale(1.02);
   }
 
-  /* 상단 이미지 영역 (65%) */
+  /* 상단 이미지 영역 (70%) */
   .allprint-card-image {
-    flex-basis: 65%;
+    flex-basis: 70%;
     overflow: hidden;
     position: relative;
     border-bottom: 1px solid #eee;
@@ -462,20 +432,20 @@ body {
     position: absolute;
     top: 8px;
     right: 8px;
-    font-size: 12px;
-    color: #333;
+    font-size: 11px;
+    color: #555;
     background: transparent;
     font-weight: 500;
   }
 
-  /* 하단 텍스트 영역 (35%) */
+  /* 하단 텍스트 영역 (30%) */
   .allprint-card-content {
-    flex-basis: 35%;
-    padding: 10px 12px;
+    flex-basis: 30%;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 4px;
+    justify-content: space-between;
+    background-color: #ffffff;
   }
 
   /* 상품명 */
@@ -498,16 +468,16 @@ body {
   /* 리뷰/좋아요 정보 */
   .allprint-card-stats {
     font-size: 12px;
-    color: #666;
+    color: #777;
   }
 
   /* AllThatPrinting 그리드 - 2/3/4 열 반응형 */
   .allprint-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 24px;
-    row-gap: 32px;
-    padding: 0 24px;
+    column-gap: 20px;
+    row-gap: 20px;
+    padding: 0 20px;
     background-color: transparent;
   }
 
