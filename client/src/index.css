@@ -370,23 +370,6 @@ body {
     }
   }
 
-  /* 창작자들의 진짜 후기 섹션 - 다른 섹션과 동일한 너비 */
-  .user-review-card {
-    min-width: 240px;
-  }
-
-  @media (min-width: 768px) {
-    .user-review-card {
-      min-width: 260px;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .user-review-card {
-      min-width: 280px;
-    }
-  }
-
 
 
   .btn-primary {
