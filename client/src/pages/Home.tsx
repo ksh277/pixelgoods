@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Heart, MessageCircle, ShoppingCart, Star, Eye, ArrowRight, ChevronRight, Puzzle, ChevronLeft } from "lucide-react";
+import { Heart, MessageCircle, ShoppingCart, Eye, ArrowRight, ChevronRight, Puzzle, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -337,17 +337,7 @@ export default function Home() {
                       </div>
                       
                       <div className="allprint-card-stats">
-                        <div className="flex items-center space-x-1">
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`h-3 w-3 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-xs">({review.rating * 25 + 45})</span>
-                        </div>
+                        리뷰 {review.rating * 25 + 45} / LIKE {review.rating * 40 + 120}
                       </div>
                     </div>
                   </div>
@@ -422,10 +412,7 @@ export default function Home() {
                       </div>
                       
                       <div className="allprint-card-stats">
-                        <div className="flex items-center space-x-1">
-                          <span className="text-xs">조회 {item.views}</span>
-                          <span className="text-xs">댓글 {item.comments}</span>
-                        </div>
+                        리뷰 {item.comments} / LIKE {item.likes}
                       </div>
                     </div>
                   </div>
@@ -501,9 +488,7 @@ export default function Home() {
                       </div>
                       
                       <div className="allprint-card-stats">
-                        <div className="flex items-center space-x-1">
-                          <span className="text-xs">{t({ ko: "리뷰", en: "Reviews" })} {item.reviewCount}</span>
-                        </div>
+                        리뷰 {item.reviewCount} / LIKE {Math.floor(item.reviewCount * 0.6)}
                       </div>
                     </div>
                   </div>
@@ -575,9 +560,7 @@ export default function Home() {
                     </div>
                     
                     <div className="allprint-card-stats">
-                      <div className="flex items-center space-x-1">
-                        <span className="text-xs">댓글 {post.comments}</span>
-                      </div>
+                      리뷰 {post.comments} / LIKE {post.likes}
                     </div>
                   </div>
                 </div>

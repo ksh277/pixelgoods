@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, ShoppingCart, Star, Eye, ImageIcon } from "lucide-react";
+import { Heart, ShoppingCart, Eye, ImageIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";

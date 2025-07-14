@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Star, ArrowRight, Calendar, User, Heart } from "lucide-react";
+import { ArrowRight, Calendar, User, Heart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -99,16 +99,7 @@ export function UserReviewsSection() {
     }
   };
 
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`h-4 w-4 ${
-          i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
-        }`}
-      />
-    ));
-  };
+
 
   const truncateText = (text: string, maxLength: number = 60) => {
     if (text.length <= maxLength) return text;
