@@ -248,12 +248,12 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* 통일된 그리드 시스템 */}
+          {/* 모바일 2x2 그리드 시스템 */}
           {isLoading ? (
             <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
           ) : (
             <motion.div 
-              className="allprint-grid"
+              className="popular-products-grid"
               variants={containerVariants}
               style={{ opacity: 1 }}
             >
