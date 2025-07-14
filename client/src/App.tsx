@@ -77,6 +77,13 @@ function Router() {
             </ProtectedRoute>
           )}
         </Route>
+        <Route path="/payment">
+          {() => (
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          )}
+        </Route>
         <Route path="/order-complete" component={OrderComplete} />
         <Route path="/mypage">
           {() => (
