@@ -161,24 +161,7 @@ export function UserReviewsSection() {
               <motion.div key={review.id} variants={itemVariants}>
                 <Link href={`/reviews/${review.id}`}>
                   <div className="allprint-card">
-                    {/* HOT 배지 (절대 위치) */}
-                    {review.isHot && (
-                      <div className="allprint-card-badge">
-                        HOT
-                      </div>
-                    )}
-                    
-                    {/* 찜 하트 (절대 위치) */}
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      className="allprint-card-heart">
-                      <Heart className="h-3 w-3 text-gray-600" />
-                    </button>
-                    
-                    {/* 상단 이미지 영역 (60%) */}
+                    {/* 상단 이미지 영역 (65%) */}
                     <div className="allprint-card-image">
                       <img
                         src={review.productImage}
@@ -188,41 +171,32 @@ export function UserReviewsSection() {
                           (e.target as HTMLImageElement).src = "/api/placeholder/300/300";
                         }}
                       />
+                      
+                      {/* HOT 배지 (왼쪽 상단 절대 위치) */}
+                      {review.isHot && (
+                        <div className="allprint-card-hot-badge">
+                          HOT
+                        </div>
+                      )}
+                      
+                      {/* LIKE 수 배지 (오른쪽 상단 절대 위치) */}
+                      <div className="allprint-card-like-badge">
+                        LIKE {review.rating * 50 + 200}
+                      </div>
                     </div>
 
-                    {/* 하단 텍스트 영역 (40%) */}
+                    {/* 하단 텍스트 영역 (35%) */}
                     <div className="allprint-card-content">
                       <div className="allprint-card-title">
                         {language === 'ko' ? review.productNameKo : review.productName}
                       </div>
                       
-                      {/* 별점 표시 */}
-                      <div className="allprint-card-rating">
-                        {renderStars(review.rating)}
+                      <div className="allprint-card-price">
+                        ₩ {(review.rating * 1000 + 3000).toLocaleString()}
                       </div>
                       
-                      {/* 리뷰 수 */}
-                      <div className="text-xs text-gray-500 mt-1">
-                        {t({ ko: "리뷰", en: "reviews", ja: "レビュー", zh: "评价" })} {review.totalReviews}
-                      </div>
-
-                      {/* Review Text - Flexible area */}
-                      <p className="text-sm text-gray-700 leading-relaxed mb-2 flex-grow">
-                        {review.reviewText}
-                      </p>
-                    </div>
-
-                    {/* Bottom Section - Always at bottom */}
-                    <div className="unified-mobile-footer">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <User className="h-3 w-3" />
-                          <span>{review.reviewerNickname}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          <span>{review.reviewDate}</span>
-                        </div>
+                      <div className="allprint-card-stats">
+                        리뷰 {review.totalReviews?.toLocaleString()} / LIKE {review.rating * 50 + 200}
                       </div>
                     </div>
                   </div>
