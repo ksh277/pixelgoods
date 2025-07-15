@@ -10,7 +10,7 @@ export default function AdminLogin() {
 
   useEffect(() => {
     if (localStorage.getItem("adminAuth") === "true") {
-      navigate("/admin/dashboard");
+      navigate("/admin");
     }
   }, [navigate]);
 
@@ -18,7 +18,7 @@ export default function AdminLogin() {
     e.preventDefault();
     if (password === "admin123") {
       localStorage.setItem("adminAuth", "true");
-      navigate("/admin/dashboard");
+      navigate("/admin");
     } else {
       setError("잘못된 비밀번호입니다.");
     }
