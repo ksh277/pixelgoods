@@ -8,7 +8,6 @@ import { Link } from "wouter";
 import { Hero } from "@/components/Hero";
 import { CategoryNav } from "@/components/CategoryNav";
 import { SectionHeader } from "@/components/SectionHeader";
-import { UserReviewsSection } from "@/components/UserReviewsSection";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
 import { ProductCard } from "@/components/ProductCard";
 import { useToast } from "@/hooks/use-toast";
@@ -505,9 +504,6 @@ export default function Home() {
             ))}
           </motion.div>
         </motion.section>
-
-        {/* User Reviews Section */}
-        <UserReviewsSection />
 
         {/* Instagram Feed */}
         <motion.section
