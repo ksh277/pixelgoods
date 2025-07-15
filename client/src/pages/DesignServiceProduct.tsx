@@ -389,15 +389,16 @@ export default function DesignServiceProduct() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {reviews.map((review) => (
                 <Card key={review.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-sm">{review.userName}</span>
-                      <span className="text-xs text-gray-500">{review.date}</span>
+                  <CardContent className="p-4 space-y-3">
+                    <div className="space-y-1 text-sm text-gray-800">
+                      <div className="flex items-center gap-1 text-yellow-500 text-sm">
+                        {renderStars(review.rating)}
+                      </div>
+                      <p className="text-sm text-gray-700">{review.comment}</p>
+                      <div className="text-xs text-gray-500">
+                        by {review.userName} ・ {review.date}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 mb-2">
-                      {renderStars(review.rating)}
-                    </div>
-                    <p className="text-sm text-gray-700 mb-3">{review.comment}</p>
                     {review.images.length > 0 && (
                       <div className="grid grid-cols-3 gap-2">
                         {review.images.map((image, index) => (

@@ -681,26 +681,17 @@ export default function ProductDetail() {
                   {/* Reviews List */}
                   <div className="space-y-6">
                     {mockReviews.map((review) => (
-                      <div key={review.id} className="border-b pb-6 last:border-b-0">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                              <User className="w-5 h-5 text-gray-600" />
-                            </div>
-                            <div>
-                              <div className="font-medium">{review.userName}</div>
-                              <div className="text-sm text-gray-500 flex items-center gap-2">
-                                <Calendar className="w-3 h-3" />
-                                {review.createdAt.toLocaleDateString()}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex">
+                      <div key={review.id} className="border-b pb-6 last:border-b-0 space-y-3">
+                        <div className="space-y-1 text-sm text-gray-800">
+                          <div className="flex items-center gap-1 text-yellow-500 text-sm">
                             {generateStars(review.rating)}
                           </div>
+                          <h4 className="font-medium">{review.title}</h4>
+                          <p className="text-gray-700">{review.content}</p>
+                          <div className="text-xs text-gray-500">
+                            by {review.userName} ・ {review.createdAt.toLocaleDateString()}
+                          </div>
                         </div>
-                        <h4 className="font-medium mb-2">{review.title}</h4>
-                        <p className="text-gray-700 mb-3">{review.content}</p>
                         {review.images && review.images.length > 0 && (
                           <div className="flex gap-2">
                             {review.images.map((img, index) => (
