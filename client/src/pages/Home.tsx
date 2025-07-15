@@ -248,9 +248,12 @@ export default function Home() {
           </div>
 
           {isLoading ? (
-            <ProductCardSkeleton count={4} className="gap-2 sm:gap-3 lg:gap-4" />
+            <ProductCardSkeleton
+              count={4}
+              gridClassName="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            />
           ) : (
-            <motion.div className="unified-mobile-grid">
+            <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {products?.slice(0, 4).map((product: Product, index: number) => (
                 <motion.div 
                   key={product.id} 
