@@ -36,7 +36,8 @@ import UserContentShowcase from "@/pages/UserContentShowcase";
 import CommunityQA from "@/pages/CommunityQA";
 import MyPage from "@/pages/MyPage";
 import Wishlist from "@/pages/Wishlist";
-import AdminDashboard from "@/pages/AdminDashboard";
+import AdminDashboard from "@/pages/admin/Dashboard";
+import AdminLogin from "@/pages/admin/Login";
 import AdditionalServices from "@/pages/AdditionalServices";
 import SearchResults from "@/pages/SearchResults";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -123,7 +124,9 @@ function Router() {
         <Route path="/design-service" component={DesignServiceProduct} />
         <Route path="/additional-services" component={AdditionalServices} />
         
-        {/* Admin route */}
+        {/* Admin routes */}
+        <Route path="/admin/login" component={AdminLogin} />
+        <Route path="/admin/dashboard" component={AdminDashboard} />
         <Route path="/admin" component={AdminDashboard} />
         
         {/* Category and section routes */}
